@@ -81,7 +81,7 @@
   <main class="main">
     <section class="hero">
       <div>
-        <span class="step-badge">STEP FUNERAL-9-R1 · SYSTEM CHECK</span>
+        <span class="step-badge">STEP FUNERAL-9-R2 · SYSTEM CHECK</span>
         <h2>営業前の確認を、<br>この1画面で完了</h2>
         <p>自動チェック、営業デモ準備、各画面の手動確認を順番に行います。</p>
       </div>
@@ -134,16 +134,18 @@
     </section>
   </main>
 
-  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-9-R1 / 営業前システムチェック</span></footer>
+  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-9-R2 / 営業前システムチェック</span></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <div class="gate hidden" id="loginGate">
     <div class="gate-card">
       <div class="gate-head"><span class="step-badge">INTERNAL CHECK</span><h2>管理コードを入力</h2><p>この画面は営業担当・管理者向けです。</p></div>
       <div class="gate-body">
-        <div class="field"><label for="adminCodeInput">管理コード</label><div class="field-line"><input id="adminCodeInput" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="管理コードを入力"><button class="btn" id="eraseInputBtn" type="button">消去</button></div></div>
-        <div class="gate-error" id="loginError"></div>
-        <button class="btn btn-primary" id="loginBtn" type="button" style="width:100%;margin-top:8px">システムチェックを開く</button>
+        <form id="loginForm" novalidate>
+          <div class="field"><label for="adminCodeInput">管理コード</label><div class="field-line"><input id="adminCodeInput" name="admin_code" type="password" inputmode="numeric" autocomplete="current-password" placeholder="管理コードを入力"><button class="btn" id="eraseInputBtn" type="button">消去</button></div></div>
+          <div class="gate-error" id="loginError"></div>
+          <button class="btn btn-primary" id="loginBtn" type="submit" style="width:100%;margin-top:8px">システムチェックを開く</button>
+        </form>
         <div class="gate-note">管理コード以外の個人情報は端末へ保存しません。営業デモURLでは管理コードを自動設定できます。</div>
       </div>
     </div>
@@ -152,10 +154,10 @@
 <script>
 (() => {
   'use strict';
-  const STEP = 'FUNERAL-9-R1';
+  const STEP = 'FUNERAL-9-R2';
   const API_BASE = 'https://dpro-funeral-line-api.dpromstk2000.workers.dev';
   const SITE_BASE = 'https://dpromstk2000-lab.github.io/dpro-funeral-line';
-  const EXPECTED_VERSION = 'FUNERAL-9-R1-WORKER-DEMO-RESET-20260714';
+  const EXPECTED_VERSION = 'FUNERAL-9-R2-WORKER-BULK-INSERT-NORMALIZE-20260714';
   const EXPECTED = {staff_count:3,service_count:7,family_count:4,case_count:4,consultation_count:3,open_task_count:6,memorial_count:1,aftercare_item_count:3};
   const MANUAL_KEY = 'dpro_funeral_system_check_manual_v1';
   const CODE_KEY = 'dpro_funeral_admin_code_session';
@@ -234,7 +236,7 @@
   async function checkHealth(){const d=await fetchJson(`${API_BASE}/api/health?t=${Date.now()}`);assert(d.ok&&d.database?.ok,'APIまたはDBがOKではありません。');assert(d.version===EXPECTED_VERSION,`Workerバージョンが不一致: ${d.version}`);assert(d.database.office_code==='dpro_funeral_demo','対象事業所が異なります。');assert(d.production_guard===true&&d.database.production_guard===true,'本番誤操作防止が無効です。');assert(d.features?.phone_normalization&&d.features?.memorial_publication_guard,'安全機能が無効です。');lastHealth=d;$('heroOffice').textContent=d.database.office_name||d.database.office_code;$('heroVersion').textContent=d.version;$('heroDate').textContent=d.jst_date||'—';return result('pass',`API・DB OK\n${d.database.office_name} / スタッフ${d.database.staff_count}名 / メニュー${d.database.service_count}件 / ご家族${d.database.family_count}件`,d);}
   async function checkConfig(){const d=await fetchJson(`${API_BASE}/api/public/config?t=${Date.now()}`);assert(d.ok,'公開設定を取得できません。');assert(d.office?.office_code==='dpro_funeral_demo','事業所コードが不一致です。');assert((d.halls||[]).length>=1,'会館が登録されていません。');assert((d.business_hours||[]).length>=7,'営業時間が不足しています。');assert(Number(d.settings?.default_slot_minutes)===30,'標準予約枠が30分ではありません。');assert(d.settings?.booking_enabled===true,'Web予約が停止しています。');return result('pass',`会館${d.halls.length}件 / 営業時間${d.business_hours.length}件\n予約枠30分 / 受付期間${d.settings.booking_horizon_days}日`,d);}
   async function checkOptions(){const d=await fetchJson(`${API_BASE}/api/public/consultation-options?t=${Date.now()}`);assert(d.ok,'相談メニューを取得できません。');assert((d.services||[]).length===7,`公開相談メニューが7件ではありません (${d.services?.length||0})`);assert((d.staff||[]).length>=2,'担当可能スタッフが不足しています。');const bad=(d.services||[]).filter(s=>s.requires_schedule&&Number(s.slot_minutes)!==30);assert(!bad.length,`30分単位でない相談があります: ${bad.map(x=>x.service_name).join('、')}`);return result('pass',`公開メニュー7件 / 担当可能スタッフ${d.staff.length}名\n日時予約が必要なメニューは30分単位`,d);}
-  async function checkAuth(){let rejected=false;try{await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`)}catch(e){rejected=e.status===401}assert(rejected,'管理コードなしのアクセスが拒否されませんでした。');const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok,'正しい管理コードで管理APIを取得できません。');return result('pass','未認証アクセス: 401で拒否\n管理コード認証: OK',d);}
+  async function checkAuth(){let rejected=false;try{await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`)}catch(e){rejected=e.status===401}assert(rejected,'管理コードなしのアクセスが拒否されませんでした。');const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok,'正しい管理コードで管理APIを取得できません。');return result('pass','未認証アクセス: 401で拒否（安全確認のため意図的に発生）\n管理コード認証: OK',d);}
   async function checkDashboard(){const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok&&d.summary,'管理ダッシュボードを取得できません。');['today_consultations','open_tasks','aftercare_due','memorial_due','product_requests'].forEach(k=>assert(Array.isArray(d[k]),`${k}が配列ではありません。`));const s=d.summary;return result('pass',`本日の相談${s.today_consultation_count}件 / 未完了タスク${s.open_task_count}件\n葬儀後${s.aftercare_due_count}件 / 法要${s.memorial_due_count}件 / 商品${s.active_product_request_count}件`,d);}
   async function checkAvailability(){let found=null;for(let i=0;i<15;i++){const date=ymdJp(i);const u=`${API_BASE}/api/public/availability?date=${encodeURIComponent(date)}&service_code=pre_consultation&hall_code=main_hall&t=${Date.now()}`;const d=await fetchJson(u);if(d.ok&&d.is_open&&(d.slots||[]).length){found=d;break;}}assert(found,'15日以内に予約可能な空き枠が見つかりません。');const times=(found.slots||[]).map(s=>s.start_time||s.time||s.label||'').filter(Boolean);assert(times.length>0,'空き時間が取得できません。');const minuteOk=times.every(t=>{const m=String(t).match(/(\d{1,2}):(\d{2})/);return m&&['00','30'].includes(m[2])});assert(minuteOk,'30分単位ではない空き枠があります。');return result('pass',`${found.date}：${found.slots.length}枠取得\n${times.slice(0,4).join(' / ')}${times.length>4?' …':''}`,found);}
   async function checkPhone(){const q1=await fetchJson(`${API_BASE}/api/admin/search?q=${encodeURIComponent('090-9999-0000')}&limit=10&t=${Date.now()}`,{headers:adminHeaders()});const q2=await fetchJson(`${API_BASE}/api/admin/search?q=${encodeURIComponent('+81 90-9999-0000')}&limit=10&t=${Date.now()}`,{headers:adminHeaders()});const a=(q1.families||[]).find(x=>x.customer_no==='FUNERAL-DEMO-999');const b=(q2.families||[]).find(x=>x.customer_no==='FUNERAL-DEMO-999');assert(a&&b,'ハイフン形式または+81形式でテスト家族を検索できません。');assert(a.id===b.id,'電話番号形式によって別のご家族へ一致しました。');return result('pass',`090-9999-0000 → ${a.customer_no}\n+81 90-9999-0000 → 同じご家族`,{q1,q2});}
@@ -255,7 +257,7 @@
 
   function initAfterLogin(){if(document.body.dataset.ready)return;document.body.dataset.ready='1';renderChecks();renderManual();renderUrls();$('runAllBtn').addEventListener('click',runAll);$('prepareDemoBtn').addEventListener('click',prepareDemo);$('resetManualBtn').addEventListener('click',()=>{if(confirm('手動チェック8項目を未確認へ戻しますか？')){localStorage.removeItem(MANUAL_KEY);renderManual();toast('手動チェックをリセットしました。')}});runAll()}
 
-  $('clearCodeBtn').addEventListener('click',clearCode);$('loginBtn').addEventListener('click',()=>verifyAndOpen($('adminCodeInput').value));$('eraseInputBtn').addEventListener('click',()=>{$('adminCodeInput').value='';$('adminCodeInput').focus()});$('adminCodeInput').addEventListener('keydown',e=>{if(e.key==='Enter')verifyAndOpen(e.currentTarget.value)});
+  $('clearCodeBtn').addEventListener('click',clearCode);$('loginForm').addEventListener('submit',e=>{e.preventDefault();verifyAndOpen($('adminCodeInput').value)});$('eraseInputBtn').addEventListener('click',()=>{$('adminCodeInput').value='';$('adminCodeInput').focus()});
   renderChecks();renderManual();renderUrls();
   if(adminCode){verifyAndOpen(adminCode)}else{$('loginGate').classList.remove('hidden');setTimeout(()=>$('adminCodeInput').focus(),50)}
 })();
