@@ -81,7 +81,7 @@
   <main class="main">
     <section class="hero">
       <div>
-        <span class="step-badge">STEP FUNERAL-10 · FINAL SYSTEM CHECK</span>
+        <span class="step-badge">STEP FUNERAL-10-R1 · FINAL SYSTEM CHECK</span>
         <h2>営業前の確認を、<br>この1画面で完了</h2>
         <p>自動チェック、営業デモ準備、各画面の手動確認を順番に行います。</p>
       </div>
@@ -134,7 +134,7 @@
     </section>
   </main>
 
-  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-10 / 最終・営業前システムチェック</span></footer>
+  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-10-R1 / 最終・営業前システムチェック</span></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <div class="gate hidden" id="loginGate">
@@ -154,10 +154,10 @@
 <script>
 (() => {
   'use strict';
-  const STEP = 'FUNERAL-10';
+  const STEP = 'FUNERAL-10-R1';
   const API_BASE = 'https://dpro-funeral-line-api.dpromstk2000.workers.dev';
   const SITE_BASE = 'https://dpromstk2000-lab.github.io/dpro-funeral-line';
-  const EXPECTED_VERSION = 'FUNERAL-9-R2-WORKER-BULK-INSERT-NORMALIZE-20260714';
+  const EXPECTED_VERSION = 'FUNERAL-10-R1-WORKER-DEMO-PREPARE-SUBREQUEST-FIX-20260714';
   const EXPECTED = {staff_count:3,service_count:7,family_count:4,case_count:4,consultation_count:3,open_task_count:6,memorial_count:1,aftercare_item_count:3};
   const MANUAL_KEY = 'dpro_funeral_system_check_manual_v1';
   const CODE_KEY = 'dpro_funeral_admin_code_session';
@@ -168,6 +168,7 @@
   let isRunning = false;
   let checkResults = {};
   let lastHealth = null;
+  let demoStatus = 'idle';
 
   const checkDefs = [
     {id:'health',icon:'心',title:'Worker・Supabase接続',desc:'API稼働、DB接続、事業所、バージョン、安全設定を確認します。'},
@@ -193,14 +194,14 @@
   ];
 
   const urls = [
-    {title:'ご家族向け相談受付',purpose:'事前相談・会館見学・資料請求',url:`${SITE_BASE}/?v=funeral-9-r1-check`},
-    {title:'相談予約マイページ',purpose:'テスト家族の相談・予約履歴',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_999&v=funeral-9-r1-check`},
-    {title:'葬儀後フォローマイページ',purpose:'田中美咲様のフォロー・非公開法要確認',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_002&v=funeral-9-r1-check`},
-    {title:'PC総合管理',purpose:'今日の仕事・電話受付・法要・設定',url:`${SITE_BASE}/owner.html?demo=1&v=funeral-9-r1-check`},
-    {title:'担当スタッフ画面',purpose:'田中担当者の今日の仕事',url:`${SITE_BASE}/staff.html?demo=1&staff=tanaka&v=funeral-9-r1-check`},
-    {title:'会館受付iPad',purpose:'来館受付・相談開始・電話受付',url:`${SITE_BASE}/owner-ipad.html?demo=1&v=funeral-9-r1-check`},
+    {title:'ご家族向け相談受付',purpose:'事前相談・会館見学・資料請求',url:`${SITE_BASE}/?v=funeral-10-r1-check`},
+    {title:'相談予約マイページ',purpose:'テスト家族の相談・予約履歴',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_999&v=funeral-10-r1-check`},
+    {title:'葬儀後フォローマイページ',purpose:'田中美咲様のフォロー・非公開法要確認',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_002&v=funeral-10-r1-check`},
+    {title:'PC総合管理',purpose:'今日の仕事・電話受付・法要・設定',url:`${SITE_BASE}/owner.html?demo=1&v=funeral-10-r1-check`},
+    {title:'担当スタッフ画面',purpose:'田中担当者の今日の仕事',url:`${SITE_BASE}/staff.html?demo=1&staff=tanaka&v=funeral-10-r1-check`},
+    {title:'会館受付iPad',purpose:'来館受付・相談開始・電話受付',url:`${SITE_BASE}/owner-ipad.html?demo=1&v=funeral-10-r1-check`},
     {title:'Workerヘルスチェック',purpose:'API・DBのJSON確認',url:`${API_BASE}/api/health`},
-    {title:'システムチェック',purpose:'この営業前確認画面',url:`${SITE_BASE}/system-check.html?demo=1&v=funeral-9-r1`}
+    {title:'システムチェック',purpose:'この営業前確認画面',url:`${SITE_BASE}/system-check.html?demo=1&v=funeral-10-r1`}
   ];
 
   function esc(v){return String(v ?? '').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
@@ -248,9 +249,97 @@
   async function runOne(id){updateCheck(id,'running','確認しています…');try{const r=await runners[id]();checkResults[id]=r;updateCheck(id,r.status,r.detail);return r}catch(e){const detail=e?.data?.details?`${e.message}\n${typeof e.data.details==='string'?e.data.details:JSON.stringify(e.data.details)}`:e.message||String(e);checkResults[id]=result('fail',detail);updateCheck(id,'fail',detail);return checkResults[id]}finally{updateSummary()}}
   async function runAll(){if(isRunning)return;isRunning=true;setBusy($('runAllBtn'),true,'確認中');checkResults={};checkDefs.forEach(d=>updateCheck(d.id,'idle','待機中'));try{for(const d of checkDefs){await runOne(d.id)}$('heroLast').textContent=nowJp();$('lastRunText').textContent=`最終自動チェック：${nowJp()}`;toast(Object.values(checkResults).every(r=>r.status==='pass')?'自動チェックはすべてOKです。':'NG項目を確認してください。')}finally{isRunning=false;setBusy($('runAllBtn'),false);updateSummary()}}
 
-  function updateSummary(){const autoPass=checkDefs.filter(d=>checkResults[d.id]?.status==='pass').length;const autoFail=checkDefs.filter(d=>checkResults[d.id]?.status==='fail').length;const manualState=loadManual();const manualDone=manualDefs.filter((_,i)=>manualState[i]).length;$('autoDone').textContent=autoPass;$('autoTotal').textContent=checkDefs.length;$('autoCountLabel').textContent=`${autoPass} / ${checkDefs.length} OK`;$('manualDone').textContent=manualDone;$('manualCountLabel').textContent=manualDone;$('autoNote').textContent=autoFail?`NG ${autoFail}件`:autoPass===checkDefs.length?'すべてOK':'確認待ち';const health=checkResults.health;$('apiDbValue').textContent=health?.status==='pass'?'OK':health?.status==='fail'?'NG':'—';$('apiDbNote').textContent=health?.status==='pass'?'Worker・Supabase接続済み':health?.status==='fail'?'接続を確認':'未確認';const allAuto=autoPass===checkDefs.length;const allManual=manualDone===manualDefs.length;const metric=$('overallMetric');metric.className='metric';if(autoFail){metric.classList.add('is-fail');$('overallIcon').textContent='×';$('overallValue').textContent='要修正';$('overallNote').textContent='自動チェックのNG項目があります。'}else if(allAuto&&allManual){metric.classList.add('is-ok');$('overallIcon').textContent='✓';$('overallValue').textContent='営業OK';$('overallNote').textContent='自動・手動チェックがすべて完了しました。'}else if(isRunning){metric.classList.add('is-running');$('overallIcon').textContent='…';$('overallValue').textContent='確認中';$('overallNote').textContent='自動チェックを実行しています。'}else{metric.classList.add('is-warn');$('overallIcon').textContent='!';$('overallValue').textContent=allAuto?'手動確認待ち':'確認待ち';$('overallNote').textContent=allAuto?`残り手動チェック ${manualDefs.length-manualDone}件`:'自動チェックを実行してください。'}}
+  function updateSummary(){
+    const autoPass=checkDefs.filter(d=>checkResults[d.id]?.status==='pass').length;
+    const autoFail=checkDefs.filter(d=>checkResults[d.id]?.status==='fail').length;
+    const manualState=loadManual();
+    const manualDone=manualDefs.filter((_,i)=>manualState[i]).length;
+    $('autoDone').textContent=autoPass;
+    $('autoTotal').textContent=checkDefs.length;
+    $('autoCountLabel').textContent=`${autoPass} / ${checkDefs.length} OK`;
+    $('manualDone').textContent=manualDone;
+    $('manualCountLabel').textContent=manualDone;
+    $('autoNote').textContent=autoFail?`NG ${autoFail}件`:autoPass===checkDefs.length?'すべてOK':'確認待ち';
+    const health=checkResults.health;
+    $('apiDbValue').textContent=health?.status==='pass'?'OK':health?.status==='fail'?'NG':'—';
+    $('apiDbNote').textContent=health?.status==='pass'?'Worker・Supabase接続済み':health?.status==='fail'?'接続を確認':'未確認';
+    const allAuto=autoPass===checkDefs.length;
+    const allManual=manualDone===manualDefs.length;
+    const demoOk=demoStatus==='pass';
+    const demoFail=demoStatus==='fail';
+    const metric=$('overallMetric');
+    metric.className='metric';
+    if(autoFail||demoFail){
+      metric.classList.add('is-fail');
+      $('overallIcon').textContent='×';
+      $('overallValue').textContent='要修正';
+      $('overallNote').textContent=autoFail?'自動チェックのNG項目があります。':'営業デモ再準備が完了していません。';
+    }else if(isRunning||demoStatus==='running'){
+      metric.classList.add('is-running');
+      $('overallIcon').textContent='…';
+      $('overallValue').textContent='確認中';
+      $('overallNote').textContent=demoStatus==='running'?'営業デモデータを準備しています。':'自動チェックを実行しています。';
+    }else if(allAuto&&allManual&&demoOk){
+      metric.classList.add('is-ok');
+      $('overallIcon').textContent='✓';
+      $('overallValue').textContent='営業OK';
+      $('overallNote').textContent='自動・手動チェックと営業デモ再準備がすべて完了しました。';
+    }else{
+      metric.classList.add('is-warn');
+      $('overallIcon').textContent='!';
+      if(allAuto&&allManual&&!demoOk){
+        $('overallValue').textContent='デモ準備待ち';
+        $('overallNote').textContent='「営業デモを再準備」を実行してください。';
+      }else{
+        $('overallValue').textContent=allAuto?'手動確認待ち':'確認待ち';
+        $('overallNote').textContent=allAuto?`残り手動チェック ${manualDefs.length-manualDone}件`:'自動チェックを実行してください。';
+      }
+    }
+  }
 
-  async function prepareDemo(){if(isRunning)return;if(!confirm('営業デモデータを本日基準で再準備します。\n\nデモ行だけを初期化します。続けますか？'))return;const btn=$('prepareDemoBtn');setBusy(btn,true,'準備中');$('demoResult').className='demo-result';$('demoResult').textContent='営業デモデータを準備しています…';try{const d=await fetchJson(`${API_BASE}/api/admin/demo/prepare`,{method:'POST',headers:adminHeaders(),body:JSON.stringify({step:STEP})});assert(d.ok,'営業デモ準備に失敗しました。');const c=d.counts||{};const exact=Object.entries(EXPECTED).every(([k,v])=>Number(c[k])===v);$('demoResult').className=`demo-result ${exact?'is-ok':'is-fail'}`;$('demoResult').textContent=`${d.message}\n基準日：${d.jst_date}\nスタッフ ${c.staff_count} / メニュー ${c.service_count} / ご家族 ${c.family_count} / 案件 ${c.case_count}\n相談 ${c.consultation_count} / 未完了タスク ${c.open_task_count} / 法要 ${c.memorial_count} / 葬儀後 ${c.aftercare_item_count}`;$('demoValue').textContent=exact?'OK':'注意';$('demoNote').textContent=exact?'期待件数と一致':'件数を確認';toast('営業デモデータを準備しました。');await runAll()}catch(e){const detail=e?.data?.details||null;const table=detail&&typeof detail==='object'?detail.table:null;const dbMessage=detail&&typeof detail==='object'?(detail.response?.message||detail.response?.details||detail.response?.hint||''):'';$('demoResult').className='demo-result is-fail';$('demoResult').textContent=`営業デモ準備に失敗しました。\n${e.message||e}${table?`\n確認テーブル：${table}`:''}${dbMessage?`\nDB詳細：${dbMessage}`:''}`;$('demoValue').textContent='NG';$('demoNote').textContent='デモ準備失敗';toast('営業デモ準備に失敗しました。')}finally{setBusy(btn,false)}}
+  async function prepareDemo(){
+    if(isRunning)return;
+    if(!confirm('営業デモデータを本日基準で再準備します。\n\nデモ行だけを初期化します。続けますか？'))return;
+    const btn=$('prepareDemoBtn');
+    demoStatus='running';
+    setBusy(btn,true,'準備中');
+    $('demoResult').className='demo-result';
+    $('demoResult').textContent='営業デモデータを準備しています…';
+    $('demoValue').textContent='…';
+    $('demoNote').textContent='準備中';
+    updateSummary();
+    try{
+      const d=await fetchJson(`${API_BASE}/api/admin/demo/prepare`,{
+        method:'POST',
+        headers:adminHeaders(),
+        body:JSON.stringify({step:STEP})
+      });
+      assert(d.ok,'営業デモ準備に失敗しました。');
+      const c=d.counts||{};
+      const exact=Object.entries(EXPECTED).every(([k,v])=>Number(c[k])===v);
+      demoStatus=exact?'pass':'fail';
+      $('demoResult').className=`demo-result ${exact?'is-ok':'is-fail'}`;
+      $('demoResult').textContent=`${d.message}\n基準日：${d.jst_date}\nスタッフ ${c.staff_count} / メニュー ${c.service_count} / ご家族 ${c.family_count} / 案件 ${c.case_count}\n相談 ${c.consultation_count} / 未完了タスク ${c.open_task_count} / 法要 ${c.memorial_count} / 葬儀後 ${c.aftercare_item_count}`;
+      $('demoValue').textContent=exact?'OK':'NG';
+      $('demoNote').textContent=exact?'期待件数と一致':'件数不一致';
+      toast(exact?'営業デモデータを準備しました。':'デモ件数を確認してください。');
+      await runAll();
+    }catch(e){
+      demoStatus='fail';
+      const detail=e?.data?.details||null;
+      const table=detail&&typeof detail==='object'?detail.table:null;
+      const dbMessage=detail&&typeof detail==='object'?(detail.response?.message||detail.response?.details||detail.response?.hint||''):'';
+      const rawDetail=typeof detail==='string'?detail:'';
+      $('demoResult').className='demo-result is-fail';
+      $('demoResult').textContent=`営業デモ準備に失敗しました。\n${e.message||e}${table?`\n確認テーブル：${table}`:''}${dbMessage?`\nDB詳細：${dbMessage}`:''}${rawDetail?`\n詳細：${rawDetail}`:''}`;
+      $('demoValue').textContent='NG';
+      $('demoNote').textContent='デモ準備失敗';
+      toast('営業デモ準備に失敗しました。');
+    }finally{
+      setBusy(btn,false);
+      updateSummary();
+    }
+  }
 
   async function verifyAndOpen(code){adminCode=String(code||'').trim();if(!adminCode){$('loginError').textContent='管理コードを入力してください。';return}setBusy($('loginBtn'),true,'確認中');$('loginError').textContent='';try{const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok,'管理画面を取得できません。');sessionStorage.setItem(CODE_KEY,adminCode);$('loginGate').classList.add('hidden');initAfterLogin()}catch(e){$('loginError').textContent=e.message||'管理コードを確認してください。'}finally{setBusy($('loginBtn'),false)}}
   function clearCode(){sessionStorage.removeItem(CODE_KEY);adminCode='';$('adminCodeInput').value='';$('loginGate').classList.remove('hidden');$('loginError').textContent='';toast('管理コードを消去しました。')}
