@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#075f53">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>DPRO葬祭サポート｜営業前システムチェック</title>
+  <style>
+    :root{
+      --ink:#15231f;--muted:#61716c;--line:#d9e3df;--bg:#f2f6f4;--paper:#fff;
+      --green:#075f53;--green-2:#0c7869;--green-3:#e5f3ef;--navy:#073a35;
+      --gold:#a86b13;--gold-bg:#fff6e7;--red:#b63b3b;--red-bg:#fff0f0;
+      --blue:#246a8d;--blue-bg:#edf7fc;--shadow:0 14px 40px rgba(17,45,38,.10);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;font-size:16px;line-height:1.65}
+    button,input{font:inherit}
+    button,a{touch-action:manipulation}
+    .hidden{display:none!important}
+    .topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .topbar-inner{max-width:1460px;margin:auto;min-height:76px;padding:10px 22px;display:flex;align-items:center;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:250px}
+    .brand-mark{width:44px;height:44px;border-radius:13px;background:linear-gradient(145deg,#15aa94,#075f53);display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 8px 20px rgba(7,95,83,.25)}
+    .brand strong{display:block;font-size:17px;line-height:1.25}.brand small{display:block;color:var(--muted);font-size:12px}
+    .top-title{flex:1}.top-title h1{font-size:22px;line-height:1.25;margin:0}.top-title p{margin:2px 0 0;color:var(--muted);font-size:13px}
+    .top-actions{display:flex;align-items:center;gap:9px}
+    .btn{min-height:46px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);padding:9px 16px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:.18s ease;white-space:nowrap}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(17,45,38,.10)}
+    .btn:disabled{opacity:.52;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn-primary{background:var(--green);border-color:var(--green);color:#fff}.btn-soft{background:var(--green-3);border-color:#c7e5dc;color:var(--green)}
+    .btn-gold{background:var(--gold-bg);border-color:#efce95;color:#84520b}.btn-danger{background:#fff;border-color:#efb9b9;color:var(--red)}
+    .btn-sm{min-height:38px;padding:7px 12px;font-size:14px}.btn-wide{min-width:180px}
+    .main{max-width:1460px;margin:0 auto;padding:24px 22px 60px}
+    .hero{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(135deg,#0a7768 0%,#075f53 54%,#06483f 100%);color:#fff;padding:34px 38px;box-shadow:var(--shadow);display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:28px;align-items:center}
+    .hero:after{content:"";position:absolute;width:330px;height:330px;border:54px solid rgba(255,255,255,.07);border-radius:50%;right:-105px;top:-130px}
+    .step-badge{display:inline-flex;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:4px 12px;font-weight:900;font-size:12px;letter-spacing:.03em}
+    .hero h2{font-size:34px;line-height:1.28;margin:12px 0 8px}.hero p{margin:0;font-weight:700;opacity:.94}
+    .hero-side{position:relative;z-index:1;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);border-radius:17px;padding:20px}
+    .hero-side dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:8px 14px}.hero-side dt{opacity:.76;font-size:13px}.hero-side dd{margin:0;font-weight:900;text-align:right}
+    .status-strip{margin-top:18px;display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:12px}
+    .metric{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:17px 18px;box-shadow:0 6px 20px rgba(17,45,38,.05)}
+    .metric-main{display:flex;align-items:center;gap:14px}.metric-icon{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-size:23px;font-weight:900;background:#eef2f1;color:#6a7975}
+    .metric.is-ok .metric-icon{background:var(--green-3);color:var(--green)}.metric.is-warn .metric-icon{background:var(--gold-bg);color:var(--gold)}.metric.is-fail .metric-icon{background:var(--red-bg);color:var(--red)}.metric.is-running .metric-icon{background:var(--blue-bg);color:var(--blue);animation:pulse 1.2s infinite}
+    .metric-label{color:var(--muted);font-size:13px;font-weight:800}.metric-value{font-size:27px;line-height:1.15;font-weight:950;margin-top:3px}.metric-note{font-size:12px;color:var(--muted);margin-top:5px}
+    @keyframes pulse{50%{opacity:.45}}
+    .actionbar{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 5px 18px rgba(17,45,38,.04)}
+    .actionbar .spacer{flex:1}.last-run{font-size:13px;color:var(--muted);font-weight:700}
+    .section{margin-top:25px}.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:12px}.section-head h3{font-size:23px;margin:0}.section-head p{margin:2px 0 0;color:var(--muted);font-size:14px}.section-count{font-weight:900;color:var(--green);background:var(--green-3);border-radius:999px;padding:5px 12px;white-space:nowrap}
+    .checks-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .check-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 5px 18px rgba(17,45,38,.045);display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:13px;align-items:start;min-height:150px}
+    .check-icon{width:44px;height:44px;border-radius:13px;background:#eef2f1;display:grid;place-items:center;font-size:20px;font-weight:950;color:#6a7975}.check-card[data-status="pass"] .check-icon{background:var(--green-3);color:var(--green)}.check-card[data-status="warn"] .check-icon{background:var(--gold-bg);color:var(--gold)}.check-card[data-status="fail"] .check-icon{background:var(--red-bg);color:var(--red)}.check-card[data-status="running"] .check-icon{background:var(--blue-bg);color:var(--blue);animation:pulse 1.2s infinite}
+    .check-title{font-size:17px;font-weight:900;margin:0}.check-desc{font-size:13px;color:var(--muted);margin:3px 0 10px}.check-detail{font-size:13px;border-top:1px dashed var(--line);padding-top:9px;white-space:pre-line;word-break:break-word}.status-pill{border-radius:999px;padding:5px 10px;font-size:12px;font-weight:900;background:#eef2f1;color:#6a7975}.check-card[data-status="pass"] .status-pill{background:var(--green-3);color:var(--green)}.check-card[data-status="warn"] .status-pill{background:var(--gold-bg);color:var(--gold)}.check-card[data-status="fail"] .status-pill{background:var(--red-bg);color:var(--red)}.check-card[data-status="running"] .status-pill{background:var(--blue-bg);color:var(--blue)}
+    .manual-panel{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden;box-shadow:0 5px 18px rgba(17,45,38,.045)}
+    .manual-row{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}.manual-row:last-child{border-bottom:0}.manual-no{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#eef2f1;color:var(--muted);font-weight:950}.manual-title{font-weight:900}.manual-help{font-size:13px;color:var(--muted);margin-top:2px}.manual-toggle{min-width:114px}.manual-toggle.is-done{background:var(--green);border-color:var(--green);color:#fff}.manual-row.is-done{background:#fbfefd}.manual-row.is-done .manual-no{background:var(--green-3);color:var(--green)}
+    .urls-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.url-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}.url-title{font-weight:900}.url-purpose{font-size:13px;color:var(--muted)}.url-text{margin-top:7px;background:#f5f8f7;border:1px solid #e4ebe8;border-radius:8px;padding:8px 10px;font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;word-break:break-all;color:#3d4e49}.url-actions{display:flex;gap:7px;flex-direction:column}
+    .demo-result{margin-top:13px;border-radius:13px;padding:15px 17px;background:#f7faf9;border:1px solid var(--line);font-size:14px;white-space:pre-line}.demo-result.is-ok{background:var(--green-3);border-color:#b9dfd5}.demo-result.is-fail{background:var(--red-bg);border-color:#efb9b9}
+    .notice{background:var(--gold-bg);border:1px solid #edcf9c;border-radius:14px;padding:14px 16px;color:#68430b;font-size:14px}.notice strong{display:block;margin-bottom:2px}
+    .footer{max-width:1460px;margin:auto;padding:0 22px 32px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:20px}
+    .toast{position:fixed;right:22px;bottom:22px;z-index:100;background:#163b34;color:#fff;border-radius:12px;padding:13px 17px;box-shadow:0 16px 36px rgba(0,0,0,.2);font-weight:800;max-width:min(440px,calc(100vw - 44px));opacity:0;transform:translateY(14px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:none}
+    .gate{position:fixed;inset:0;z-index:200;background:rgba(9,28,24,.58);backdrop-filter:blur(8px);display:grid;place-items:center;padding:20px}.gate-card{width:min(610px,100%);background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.28)}.gate-head{background:linear-gradient(135deg,#0a7768,#075f53);color:#fff;padding:27px 30px}.gate-head h2{font-size:27px;margin:8px 0 5px}.gate-head p{margin:0;opacity:.9}.gate-body{padding:27px 30px}.field label{font-weight:900;display:block;margin-bottom:7px}.field-line{display:flex;gap:8px}.field input{width:100%;min-height:51px;border:1px solid #cbd8d3;border-radius:10px;padding:10px 13px;font-size:18px}.gate-error{color:var(--red);font-weight:800;margin-top:8px;min-height:1.5em}.gate-note{margin-top:17px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+    .spinner{width:17px;height:17px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:1050px){.hero{grid-template-columns:1fr}.hero-side{max-width:520px}.status-strip{grid-template-columns:repeat(2,1fr)}.status-strip .metric:first-child{grid-column:1/-1}.checks-grid,.urls-grid{grid-template-columns:1fr}}
+    @media(max-width:720px){body{font-size:15px}.topbar-inner{padding:9px 13px;min-height:65px}.brand{min-width:auto}.brand-mark{width:39px;height:39px}.brand div{display:none}.top-title h1{font-size:17px}.top-title p{display:none}.top-actions .btn span.long{display:none}.main{padding:14px 12px 42px}.hero{padding:25px 21px;border-radius:18px}.hero h2{font-size:27px}.status-strip{grid-template-columns:1fr 1fr;gap:9px}.metric{padding:14px}.metric-value{font-size:22px}.actionbar{align-items:stretch}.actionbar .btn{flex:1}.actionbar .spacer{display:none}.last-run{width:100%}.checks-grid{gap:10px}.check-card{grid-template-columns:42px minmax(0,1fr);min-height:auto;padding:15px}.check-card .status-pill{grid-column:2;justify-self:start}.manual-row{grid-template-columns:40px minmax(0,1fr);padding:14px}.manual-toggle{grid-column:2;width:100%}.url-card{grid-template-columns:1fr}.url-actions{flex-direction:row}.footer{padding:0 13px 24px;display:block}.gate-head,.gate-body{padding:23px 20px}.field-line{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><div class="brand-mark">D</div><div><strong>DPRO葬祭サポート</strong><small>Funeral System Check</small></div></div>
+      <div class="top-title"><h1>営業前システムチェック</h1><p>API・DB・デモデータ・全画面をまとめて確認します。</p></div>
+      <div class="top-actions">
+        <a class="btn btn-sm" href="owner.html?demo=1" target="_blank" rel="noopener"><span class="long">PC管理画面</span><span>を開く</span></a>
+        <button class="btn btn-sm btn-danger" id="clearCodeBtn" type="button">管理コードを消去</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <div>
+        <span class="step-badge">STEP FUNERAL-9 · SYSTEM CHECK</span>
+        <h2>営業前の確認を、<br>この1画面で完了</h2>
+        <p>自動チェック、営業デモ準備、各画面の手動確認を順番に行います。</p>
+      </div>
+      <div class="hero-side">
+        <dl>
+          <dt>対象システム</dt><dd>DPRO 葬儀・法要サポート LINE</dd>
+          <dt>対象事業所</dt><dd id="heroOffice">確認前</dd>
+          <dt>Worker</dt><dd id="heroVersion">確認前</dd>
+          <dt>基準日</dt><dd id="heroDate">—</dd>
+          <dt>最終確認</dt><dd id="heroLast">未実行</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section class="status-strip" aria-label="確認状況">
+      <div class="metric" id="overallMetric"><div class="metric-main"><div class="metric-icon" id="overallIcon">?</div><div><div class="metric-label">総合判定</div><div class="metric-value" id="overallValue">未確認</div><div class="metric-note" id="overallNote">自動チェックを実行してください</div></div></div></div>
+      <div class="metric"><div class="metric-label">自動チェック</div><div class="metric-value"><span id="autoDone">0</span>/<span id="autoTotal">9</span></div><div class="metric-note" id="autoNote">未実行</div></div>
+      <div class="metric"><div class="metric-label">手動チェック</div><div class="metric-value"><span id="manualDone">0</span>/8</div><div class="metric-note">営業担当が操作確認</div></div>
+      <div class="metric"><div class="metric-label">API・DB</div><div class="metric-value" id="apiDbValue">—</div><div class="metric-note" id="apiDbNote">未確認</div></div>
+      <div class="metric"><div class="metric-label">デモデータ</div><div class="metric-value" id="demoValue">—</div><div class="metric-note" id="demoNote">準備前</div></div>
+    </section>
+
+    <div class="actionbar">
+      <button class="btn btn-primary btn-wide" id="runAllBtn" type="button">すべて自動チェック</button>
+      <button class="btn btn-gold btn-wide" id="prepareDemoBtn" type="button">営業デモを再準備</button>
+      <button class="btn" id="resetManualBtn" type="button">手動確認をリセット</button>
+      <div class="spacer"></div>
+      <div class="last-run" id="lastRunText">自動チェックはまだ実行されていません。</div>
+    </div>
+
+    <section class="section" id="autoSection">
+      <div class="section-head"><div><h3>1. 自動チェック</h3><p>Worker、Supabase、公開設定、安全制御、画面ファイルを自動確認します。</p></div><div class="section-count" id="autoCountLabel">0 / 9 OK</div></div>
+      <div class="checks-grid" id="autoChecks"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h3>2. 営業デモデータ準備</h3><p>本日基準の予約・タスク・葬儀後フォロー・法要候補を作り直します。</p></div></div>
+      <div class="notice"><strong>営業デモ専用です</strong>デモ事業所かつ本番誤操作防止が有効な場合だけ実行できます。デモ行だけを初期化し、本番データは削除しません。</div>
+      <div id="demoResult" class="demo-result">まだ実行していません。「営業デモを再準備」を押すと、デモご家族4件・相談3件・未完了タスク6件などを本日基準で準備します。</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h3>3. 手動チェック</h3><p>各画面を実際に開いて確認し、問題なければ「確認済み」にします。</p></div><div class="section-count"><span id="manualCountLabel">0</span> / 8 OK</div></div>
+      <div class="manual-panel" id="manualChecks"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h3>4. 確認用URL</h3><p>営業前チェックと商談デモで使用する画面を直接開けます。</p></div></div>
+      <div class="urls-grid" id="urlsGrid"></div>
+    </section>
+  </main>
+
+  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-9 / 営業前システムチェック</span></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="gate hidden" id="loginGate">
+    <div class="gate-card">
+      <div class="gate-head"><span class="step-badge">INTERNAL CHECK</span><h2>管理コードを入力</h2><p>この画面は営業担当・管理者向けです。</p></div>
+      <div class="gate-body">
+        <div class="field"><label for="adminCodeInput">管理コード</label><div class="field-line"><input id="adminCodeInput" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="管理コードを入力"><button class="btn" id="eraseInputBtn" type="button">消去</button></div></div>
+        <div class="gate-error" id="loginError"></div>
+        <button class="btn btn-primary" id="loginBtn" type="button" style="width:100%;margin-top:8px">システムチェックを開く</button>
+        <div class="gate-note">管理コード以外の個人情報は端末へ保存しません。営業デモURLでは管理コードを自動設定できます。</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+  const STEP = 'FUNERAL-9';
+  const API_BASE = 'https://dpro-funeral-line-api.dpromstk2000.workers.dev';
+  const SITE_BASE = 'https://dpromstk2000-lab.github.io/dpro-funeral-line';
+  const EXPECTED_VERSION = 'FUNERAL-3-WORKER-API-20260714';
+  const EXPECTED = {staff_count:3,service_count:7,family_count:4,case_count:4,consultation_count:3,open_task_count:6,memorial_count:1,aftercare_item_count:3};
+  const MANUAL_KEY = 'dpro_funeral_system_check_manual_v1';
+  const CODE_KEY = 'dpro_funeral_admin_code_session';
+
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  let adminCode = params.get('admin_key') || (params.get('demo') === '1' ? '1234' : '') || sessionStorage.getItem(CODE_KEY) || '';
+  let isRunning = false;
+  let checkResults = {};
+  let lastHealth = null;
+
+  const checkDefs = [
+    {id:'health',icon:'心',title:'Worker・Supabase接続',desc:'API稼働、DB接続、事業所、バージョン、安全設定を確認します。'},
+    {id:'config',icon:'設',title:'公開設定・営業時間',desc:'事業所、会館、予約設定、30分枠、営業時間を確認します。'},
+    {id:'options',icon:'相',title:'相談メニュー・担当者',desc:'公開相談メニュー7件と担当可能スタッフを確認します。'},
+    {id:'auth',icon:'鍵',title:'管理API認証',desc:'管理コードなしでは拒否され、正しいコードで取得できることを確認します。'},
+    {id:'dashboard',icon:'管',title:'PC管理ダッシュボード',desc:'本日の相談、タスク、葬儀後フォロー、法要、商品相談を取得します。'},
+    {id:'availability',icon:'枠',title:'空き枠・30分単位',desc:'次の営業日を探し、営業時間内の30分単位の空き枠を確認します。'},
+    {id:'phone',icon:'電',title:'電話番号正規化検索',desc:'ハイフン形式と+81形式が同じご家族へ一致することを確認します。'},
+    {id:'memorial',icon:'法',title:'法要候補の公開ガード',desc:'担当者未確認の候補日がご家族マイページへ出ないことを確認します。'},
+    {id:'pages',icon:'画',title:'全画面ファイル',desc:'ご家族、マイページ、PC、スタッフ、iPadの公開ファイルを確認します。'}
+  ];
+
+  const manualDefs = [
+    {title:'ご家族向け相談受付',help:'index.htmlで相談内容を選び、日時・ご家族情報・確認画面まで進める。'},
+    {title:'相談送信・受付番号',help:'相談を送信し、受付番号と顧客番号が完了画面に表示される。'},
+    {title:'ご家族マイページ',help:'相談予約デモで履歴が表示され、葬儀後フォローデモで3項目が表示される。'},
+    {title:'PC管理・電話受付',help:'電話番号検索で既存家族を選択し、30分単位・本日以降の日付だけ選べる。'},
+    {title:'PC管理・状態更新',help:'相談の来所、タスクの対応開始・完了が再読込後も反映される。'},
+    {title:'担当スタッフ画面',help:'担当者で絞り込まれ、相談・タスク・フォローの更新が反映される。'},
+    {title:'会館受付iPad',help:'来所受付で「来館前→来所済み」に変わり、次に相談開始が表示される。'},
+    {title:'法要案内の安全確認',help:'未確認の四十九日は非公開で、担当者確認前の公開操作が拒否される。'}
+  ];
+
+  const urls = [
+    {title:'ご家族向け相談受付',purpose:'事前相談・会館見学・資料請求',url:`${SITE_BASE}/?v=funeral-9-check`},
+    {title:'相談予約マイページ',purpose:'テスト家族の相談・予約履歴',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_999&v=funeral-9-check`},
+    {title:'葬儀後フォローマイページ',purpose:'田中美咲様のフォロー・非公開法要確認',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_002&v=funeral-9-check`},
+    {title:'PC総合管理',purpose:'今日の仕事・電話受付・法要・設定',url:`${SITE_BASE}/owner.html?demo=1&v=funeral-9-check`},
+    {title:'担当スタッフ画面',purpose:'田中担当者の今日の仕事',url:`${SITE_BASE}/staff.html?demo=1&staff=tanaka&v=funeral-9-check`},
+    {title:'会館受付iPad',purpose:'来館受付・相談開始・電話受付',url:`${SITE_BASE}/owner-ipad.html?demo=1&v=funeral-9-check`},
+    {title:'Workerヘルスチェック',purpose:'API・DBのJSON確認',url:`${API_BASE}/api/health`},
+    {title:'システムチェック',purpose:'この営業前確認画面',url:`${SITE_BASE}/system-check.html?demo=1&v=funeral-9`}
+  ];
+
+  function esc(v){return String(v ?? '').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+  function nowJp(){return new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date());}
+  function ymdJp(offset=0){const d=new Date(Date.now()+offset*86400000);const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const o=Object.fromEntries(parts.map(p=>[p.type,p.value]));return `${o.year}-${o.month}-${o.day}`;}
+  function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2800);}
+  function setBusy(btn,busy,label){if(!btn)return;if(busy){btn.dataset.label=btn.textContent;btn.disabled=true;btn.innerHTML='<span class="spinner"></span>'+esc(label||'処理中');}else{btn.disabled=false;btn.textContent=btn.dataset.label||label||'実行';}}
+  async function fetchJson(url, options={}){
+    const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),18000);
+    try{
+      const res=await fetch(url,{cache:'no-store',...options,signal:ctrl.signal});
+      const text=await res.text();let data;try{data=JSON.parse(text)}catch{data={ok:false,error:`JSONではない応答 (${res.status})`,raw:text.slice(0,300)}}
+      if(!res.ok){const e=new Error(data.error||`HTTP ${res.status}`);e.status=res.status;e.data=data;throw e;}
+      return data;
+    }finally{clearTimeout(timer)}
+  }
+  function adminHeaders(){return {'X-Admin-Code':adminCode,'Content-Type':'application/json'};}
+  function assert(cond,msg){if(!cond)throw new Error(msg);}
+  function result(status,detail,data=null){return {status,detail,data};}
+
+  function renderChecks(){
+    $('autoChecks').innerHTML=checkDefs.map(d=>`<article class="check-card" id="check-${d.id}" data-status="idle"><div class="check-icon">${esc(d.icon)}</div><div><div class="check-title">${esc(d.title)}</div><div class="check-desc">${esc(d.desc)}</div><div class="check-detail" id="detail-${d.id}">未実行</div></div><div class="status-pill" id="pill-${d.id}">未確認</div></article>`).join('');
+  }
+  function updateCheck(id,status,detail){const card=$(`check-${id}`);if(!card)return;card.dataset.status=status;$(`detail-${id}`).textContent=detail||'';$(`pill-${id}`).textContent={idle:'未確認',running:'確認中',pass:'OK',warn:'注意',fail:'NG'}[status]||status;}
+
+  function loadManual(){try{return JSON.parse(localStorage.getItem(MANUAL_KEY)||'{}')}catch{return {}}}
+  function renderManual(){const state=loadManual();$('manualChecks').innerHTML=manualDefs.map((m,i)=>{const done=!!state[i];return `<div class="manual-row ${done?'is-done':''}" data-index="${i}"><div class="manual-no">${done?'✓':i+1}</div><div><div class="manual-title">${esc(m.title)}</div><div class="manual-help">${esc(m.help)}</div></div><button class="btn manual-toggle ${done?'is-done':''}" type="button" aria-pressed="${done}" data-manual="${i}">${done?'確認済み':'未確認'}</button></div>`}).join('');
+    document.querySelectorAll('[data-manual]').forEach(btn=>btn.addEventListener('click',()=>{const s=loadManual();const i=btn.dataset.manual;s[i]=!s[i];localStorage.setItem(MANUAL_KEY,JSON.stringify(s));renderManual();updateSummary();}));
+    updateSummary();
+  }
+  function renderUrls(){$('urlsGrid').innerHTML=urls.map(u=>`<article class="url-card"><div><div class="url-title">${esc(u.title)}</div><div class="url-purpose">${esc(u.purpose)}</div><div class="url-text">${esc(u.url)}</div></div><div class="url-actions"><a class="btn btn-sm btn-primary" href="${esc(u.url)}" target="_blank" rel="noopener">開く</a><button class="btn btn-sm" type="button" data-copy-url="${esc(u.url)}">コピー</button></div></article>`).join('');document.querySelectorAll('[data-copy-url]').forEach(b=>b.addEventListener('click',async()=>{await navigator.clipboard.writeText(b.dataset.copyUrl);toast('URLをコピーしました。')}));}
+
+  async function checkHealth(){const d=await fetchJson(`${API_BASE}/api/health?t=${Date.now()}`);assert(d.ok&&d.database?.ok,'APIまたはDBがOKではありません。');assert(d.version===EXPECTED_VERSION,`Workerバージョンが不一致: ${d.version}`);assert(d.database.office_code==='dpro_funeral_demo','対象事業所が異なります。');assert(d.production_guard===true&&d.database.production_guard===true,'本番誤操作防止が無効です。');assert(d.features?.phone_normalization&&d.features?.memorial_publication_guard,'安全機能が無効です。');lastHealth=d;$('heroOffice').textContent=d.database.office_name||d.database.office_code;$('heroVersion').textContent=d.version;$('heroDate').textContent=d.jst_date||'—';return result('pass',`API・DB OK\n${d.database.office_name} / スタッフ${d.database.staff_count}名 / メニュー${d.database.service_count}件 / ご家族${d.database.family_count}件`,d);}
+  async function checkConfig(){const d=await fetchJson(`${API_BASE}/api/public/config?t=${Date.now()}`);assert(d.ok,'公開設定を取得できません。');assert(d.office?.office_code==='dpro_funeral_demo','事業所コードが不一致です。');assert((d.halls||[]).length>=1,'会館が登録されていません。');assert((d.business_hours||[]).length>=7,'営業時間が不足しています。');assert(Number(d.settings?.default_slot_minutes)===30,'標準予約枠が30分ではありません。');assert(d.settings?.booking_enabled===true,'Web予約が停止しています。');return result('pass',`会館${d.halls.length}件 / 営業時間${d.business_hours.length}件\n予約枠30分 / 受付期間${d.settings.booking_horizon_days}日`,d);}
+  async function checkOptions(){const d=await fetchJson(`${API_BASE}/api/public/consultation-options?t=${Date.now()}`);assert(d.ok,'相談メニューを取得できません。');assert((d.services||[]).length===7,`公開相談メニューが7件ではありません (${d.services?.length||0})`);assert((d.staff||[]).length>=2,'担当可能スタッフが不足しています。');const bad=(d.services||[]).filter(s=>s.requires_schedule&&Number(s.slot_minutes)!==30);assert(!bad.length,`30分単位でない相談があります: ${bad.map(x=>x.service_name).join('、')}`);return result('pass',`公開メニュー7件 / 担当可能スタッフ${d.staff.length}名\n日時予約が必要なメニューは30分単位`,d);}
+  async function checkAuth(){let rejected=false;try{await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`)}catch(e){rejected=e.status===401}assert(rejected,'管理コードなしのアクセスが拒否されませんでした。');const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok,'正しい管理コードで管理APIを取得できません。');return result('pass','未認証アクセス: 401で拒否\n管理コード認証: OK',d);}
+  async function checkDashboard(){const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok&&d.summary,'管理ダッシュボードを取得できません。');['today_consultations','open_tasks','aftercare_due','memorial_due','product_requests'].forEach(k=>assert(Array.isArray(d[k]),`${k}が配列ではありません。`));const s=d.summary;return result('pass',`本日の相談${s.today_consultation_count}件 / 未完了タスク${s.open_task_count}件\n葬儀後${s.aftercare_due_count}件 / 法要${s.memorial_due_count}件 / 商品${s.active_product_request_count}件`,d);}
+  async function checkAvailability(){let found=null;for(let i=0;i<15;i++){const date=ymdJp(i);const u=`${API_BASE}/api/public/availability?date=${encodeURIComponent(date)}&service_code=pre_consultation&hall_code=main_hall&t=${Date.now()}`;const d=await fetchJson(u);if(d.ok&&d.is_open&&(d.slots||[]).length){found=d;break;}}assert(found,'15日以内に予約可能な空き枠が見つかりません。');const times=(found.slots||[]).map(s=>s.start_time||s.time||s.label||'').filter(Boolean);assert(times.length>0,'空き時間が取得できません。');const minuteOk=times.every(t=>{const m=String(t).match(/(\d{1,2}):(\d{2})/);return m&&['00','30'].includes(m[2])});assert(minuteOk,'30分単位ではない空き枠があります。');return result('pass',`${found.date}：${found.slots.length}枠取得\n${times.slice(0,4).join(' / ')}${times.length>4?' …':''}`,found);}
+  async function checkPhone(){const q1=await fetchJson(`${API_BASE}/api/admin/search?q=${encodeURIComponent('090-9999-0000')}&limit=10&t=${Date.now()}`,{headers:adminHeaders()});const q2=await fetchJson(`${API_BASE}/api/admin/search?q=${encodeURIComponent('+81 90-9999-0000')}&limit=10&t=${Date.now()}`,{headers:adminHeaders()});const a=(q1.families||[]).find(x=>x.customer_no==='FUNERAL-DEMO-999');const b=(q2.families||[]).find(x=>x.customer_no==='FUNERAL-DEMO-999');assert(a&&b,'ハイフン形式または+81形式でテスト家族を検索できません。');assert(a.id===b.id,'電話番号形式によって別のご家族へ一致しました。');return result('pass',`090-9999-0000 → ${a.customer_no}\n+81 90-9999-0000 → 同じご家族`,{q1,q2});}
+  async function checkMemorial(){const d=await fetchJson(`${API_BASE}/api/member/dashboard?line_user_id=demo_funeral_line_002&t=${Date.now()}`);assert(d.ok,'葬儀後フォローデモを取得できません。');assert((d.aftercare?.items||[]).length===3,`葬儀後フォローが3件ではありません (${d.aftercare?.items?.length||0})`);assert((d.memorial?.services||[]).length===0,'担当者未確認の法要候補がご家族へ公開されています。');return result('pass','葬儀後フォロー3件を取得\n未確認の四十九日候補：ご家族には0件（非公開）',d);}
+  async function checkPages(){const defs=[['index.html','STEP FUNERAL-4'],['member.html','STEP FUNERAL-5'],['owner.html','STEP FUNERAL-6'],['staff.html','STEP FUNERAL-7'],['owner-ipad.html','STEP FUNERAL-8']];const rows=[];for(const [file,marker] of defs){const res=await fetch(`${SITE_BASE}/${file}?system_check=${Date.now()}`,{cache:'no-store'});assert(res.ok,`${file} がHTTP ${res.status}`);const text=await res.text();assert(text.includes(marker),`${file} のSTEP表記を確認できません。`);rows.push(file)}return result('pass',`${rows.join(' / ')}\n5画面すべて公開・STEP表記OK`,rows);}
+
+  const runners={health:checkHealth,config:checkConfig,options:checkOptions,auth:checkAuth,dashboard:checkDashboard,availability:checkAvailability,phone:checkPhone,memorial:checkMemorial,pages:checkPages};
+
+  async function runOne(id){updateCheck(id,'running','確認しています…');try{const r=await runners[id]();checkResults[id]=r;updateCheck(id,r.status,r.detail);return r}catch(e){const detail=e?.data?.details?`${e.message}\n${typeof e.data.details==='string'?e.data.details:JSON.stringify(e.data.details)}`:e.message||String(e);checkResults[id]=result('fail',detail);updateCheck(id,'fail',detail);return checkResults[id]}finally{updateSummary()}}
+  async function runAll(){if(isRunning)return;isRunning=true;setBusy($('runAllBtn'),true,'確認中');checkResults={};checkDefs.forEach(d=>updateCheck(d.id,'idle','待機中'));try{for(const d of checkDefs){await runOne(d.id)}$('heroLast').textContent=nowJp();$('lastRunText').textContent=`最終自動チェック：${nowJp()}`;toast(Object.values(checkResults).every(r=>r.status==='pass')?'自動チェックはすべてOKです。':'NG項目を確認してください。')}finally{isRunning=false;setBusy($('runAllBtn'),false);updateSummary()}}
+
+  function updateSummary(){const autoPass=checkDefs.filter(d=>checkResults[d.id]?.status==='pass').length;const autoFail=checkDefs.filter(d=>checkResults[d.id]?.status==='fail').length;const manualState=loadManual();const manualDone=manualDefs.filter((_,i)=>manualState[i]).length;$('autoDone').textContent=autoPass;$('autoTotal').textContent=checkDefs.length;$('autoCountLabel').textContent=`${autoPass} / ${checkDefs.length} OK`;$('manualDone').textContent=manualDone;$('manualCountLabel').textContent=manualDone;$('autoNote').textContent=autoFail?`NG ${autoFail}件`:autoPass===checkDefs.length?'すべてOK':'確認待ち';const health=checkResults.health;$('apiDbValue').textContent=health?.status==='pass'?'OK':health?.status==='fail'?'NG':'—';$('apiDbNote').textContent=health?.status==='pass'?'Worker・Supabase接続済み':health?.status==='fail'?'接続を確認':'未確認';const allAuto=autoPass===checkDefs.length;const allManual=manualDone===manualDefs.length;const metric=$('overallMetric');metric.className='metric';if(autoFail){metric.classList.add('is-fail');$('overallIcon').textContent='×';$('overallValue').textContent='要修正';$('overallNote').textContent='自動チェックのNG項目があります。'}else if(allAuto&&allManual){metric.classList.add('is-ok');$('overallIcon').textContent='✓';$('overallValue').textContent='営業OK';$('overallNote').textContent='自動・手動チェックがすべて完了しました。'}else if(isRunning){metric.classList.add('is-running');$('overallIcon').textContent='…';$('overallValue').textContent='確認中';$('overallNote').textContent='自動チェックを実行しています。'}else{metric.classList.add('is-warn');$('overallIcon').textContent='!';$('overallValue').textContent=allAuto?'手動確認待ち':'確認待ち';$('overallNote').textContent=allAuto?`残り手動チェック ${manualDefs.length-manualDone}件`:'自動チェックを実行してください。'}}
+
+  async function prepareDemo(){if(isRunning)return;if(!confirm('営業デモデータを本日基準で再準備します。\n\nデモ行だけを初期化します。続けますか？'))return;const btn=$('prepareDemoBtn');setBusy(btn,true,'準備中');$('demoResult').className='demo-result';$('demoResult').textContent='営業デモデータを準備しています…';try{const d=await fetchJson(`${API_BASE}/api/admin/demo/prepare`,{method:'POST',headers:adminHeaders(),body:JSON.stringify({step:STEP})});assert(d.ok,'営業デモ準備に失敗しました。');const c=d.counts||{};const exact=Object.entries(EXPECTED).every(([k,v])=>Number(c[k])===v);$('demoResult').className=`demo-result ${exact?'is-ok':'is-fail'}`;$('demoResult').textContent=`${d.message}\n基準日：${d.jst_date}\nスタッフ ${c.staff_count} / メニュー ${c.service_count} / ご家族 ${c.family_count} / 案件 ${c.case_count}\n相談 ${c.consultation_count} / 未完了タスク ${c.open_task_count} / 法要 ${c.memorial_count} / 葬儀後 ${c.aftercare_item_count}`;$('demoValue').textContent=exact?'OK':'注意';$('demoNote').textContent=exact?'期待件数と一致':'件数を確認';toast('営業デモデータを準備しました。');await runAll()}catch(e){$('demoResult').className='demo-result is-fail';$('demoResult').textContent=`営業デモ準備に失敗しました。\n${e.message||e}`;$('demoValue').textContent='NG';$('demoNote').textContent='デモ準備失敗';toast('営業デモ準備に失敗しました。')}finally{setBusy(btn,false)}}
+
+  async function verifyAndOpen(code){adminCode=String(code||'').trim();if(!adminCode){$('loginError').textContent='管理コードを入力してください。';return}setBusy($('loginBtn'),true,'確認中');$('loginError').textContent='';try{const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok,'管理画面を取得できません。');sessionStorage.setItem(CODE_KEY,adminCode);$('loginGate').classList.add('hidden');initAfterLogin()}catch(e){$('loginError').textContent=e.message||'管理コードを確認してください。'}finally{setBusy($('loginBtn'),false)}}
+  function clearCode(){sessionStorage.removeItem(CODE_KEY);adminCode='';$('adminCodeInput').value='';$('loginGate').classList.remove('hidden');$('loginError').textContent='';toast('管理コードを消去しました。')}
+
+  function initAfterLogin(){if(document.body.dataset.ready)return;document.body.dataset.ready='1';renderChecks();renderManual();renderUrls();$('runAllBtn').addEventListener('click',runAll);$('prepareDemoBtn').addEventListener('click',prepareDemo);$('resetManualBtn').addEventListener('click',()=>{if(confirm('手動チェック8項目を未確認へ戻しますか？')){localStorage.removeItem(MANUAL_KEY);renderManual();toast('手動チェックをリセットしました。')}});runAll()}
+
+  $('clearCodeBtn').addEventListener('click',clearCode);$('loginBtn').addEventListener('click',()=>verifyAndOpen($('adminCodeInput').value));$('eraseInputBtn').addEventListener('click',()=>{$('adminCodeInput').value='';$('adminCodeInput').focus()});$('adminCodeInput').addEventListener('keydown',e=>{if(e.key==='Enter')verifyAndOpen(e.currentTarget.value)});
+  renderChecks();renderManual();renderUrls();
+  if(adminCode){verifyAndOpen(adminCode)}else{$('loginGate').classList.remove('hidden');setTimeout(()=>$('adminCodeInput').focus(),50)}
+})();
+</script>
+</body>
+</html>
