@@ -81,7 +81,7 @@
   <main class="main">
     <section class="hero">
       <div>
-        <span class="step-badge">STEP FUNERAL-9 · SYSTEM CHECK</span>
+        <span class="step-badge">STEP FUNERAL-9-R1 · SYSTEM CHECK</span>
         <h2>営業前の確認を、<br>この1画面で完了</h2>
         <p>自動チェック、営業デモ準備、各画面の手動確認を順番に行います。</p>
       </div>
@@ -134,7 +134,7 @@
     </section>
   </main>
 
-  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-9 / 営業前システムチェック</span></footer>
+  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-9-R1 / 営業前システムチェック</span></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <div class="gate hidden" id="loginGate">
@@ -152,10 +152,10 @@
 <script>
 (() => {
   'use strict';
-  const STEP = 'FUNERAL-9';
+  const STEP = 'FUNERAL-9-R1';
   const API_BASE = 'https://dpro-funeral-line-api.dpromstk2000.workers.dev';
   const SITE_BASE = 'https://dpromstk2000-lab.github.io/dpro-funeral-line';
-  const EXPECTED_VERSION = 'FUNERAL-3-WORKER-API-20260714';
+  const EXPECTED_VERSION = 'FUNERAL-9-R1-WORKER-DEMO-RESET-20260714';
   const EXPECTED = {staff_count:3,service_count:7,family_count:4,case_count:4,consultation_count:3,open_task_count:6,memorial_count:1,aftercare_item_count:3};
   const MANUAL_KEY = 'dpro_funeral_system_check_manual_v1';
   const CODE_KEY = 'dpro_funeral_admin_code_session';
@@ -191,14 +191,14 @@
   ];
 
   const urls = [
-    {title:'ご家族向け相談受付',purpose:'事前相談・会館見学・資料請求',url:`${SITE_BASE}/?v=funeral-9-check`},
-    {title:'相談予約マイページ',purpose:'テスト家族の相談・予約履歴',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_999&v=funeral-9-check`},
-    {title:'葬儀後フォローマイページ',purpose:'田中美咲様のフォロー・非公開法要確認',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_002&v=funeral-9-check`},
-    {title:'PC総合管理',purpose:'今日の仕事・電話受付・法要・設定',url:`${SITE_BASE}/owner.html?demo=1&v=funeral-9-check`},
-    {title:'担当スタッフ画面',purpose:'田中担当者の今日の仕事',url:`${SITE_BASE}/staff.html?demo=1&staff=tanaka&v=funeral-9-check`},
-    {title:'会館受付iPad',purpose:'来館受付・相談開始・電話受付',url:`${SITE_BASE}/owner-ipad.html?demo=1&v=funeral-9-check`},
+    {title:'ご家族向け相談受付',purpose:'事前相談・会館見学・資料請求',url:`${SITE_BASE}/?v=funeral-9-r1-check`},
+    {title:'相談予約マイページ',purpose:'テスト家族の相談・予約履歴',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_999&v=funeral-9-r1-check`},
+    {title:'葬儀後フォローマイページ',purpose:'田中美咲様のフォロー・非公開法要確認',url:`${SITE_BASE}/member.html?line_user_id=demo_funeral_line_002&v=funeral-9-r1-check`},
+    {title:'PC総合管理',purpose:'今日の仕事・電話受付・法要・設定',url:`${SITE_BASE}/owner.html?demo=1&v=funeral-9-r1-check`},
+    {title:'担当スタッフ画面',purpose:'田中担当者の今日の仕事',url:`${SITE_BASE}/staff.html?demo=1&staff=tanaka&v=funeral-9-r1-check`},
+    {title:'会館受付iPad',purpose:'来館受付・相談開始・電話受付',url:`${SITE_BASE}/owner-ipad.html?demo=1&v=funeral-9-r1-check`},
     {title:'Workerヘルスチェック',purpose:'API・DBのJSON確認',url:`${API_BASE}/api/health`},
-    {title:'システムチェック',purpose:'この営業前確認画面',url:`${SITE_BASE}/system-check.html?demo=1&v=funeral-9`}
+    {title:'システムチェック',purpose:'この営業前確認画面',url:`${SITE_BASE}/system-check.html?demo=1&v=funeral-9-r1`}
   ];
 
   function esc(v){return String(v ?? '').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
@@ -238,7 +238,7 @@
   async function checkDashboard(){const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok&&d.summary,'管理ダッシュボードを取得できません。');['today_consultations','open_tasks','aftercare_due','memorial_due','product_requests'].forEach(k=>assert(Array.isArray(d[k]),`${k}が配列ではありません。`));const s=d.summary;return result('pass',`本日の相談${s.today_consultation_count}件 / 未完了タスク${s.open_task_count}件\n葬儀後${s.aftercare_due_count}件 / 法要${s.memorial_due_count}件 / 商品${s.active_product_request_count}件`,d);}
   async function checkAvailability(){let found=null;for(let i=0;i<15;i++){const date=ymdJp(i);const u=`${API_BASE}/api/public/availability?date=${encodeURIComponent(date)}&service_code=pre_consultation&hall_code=main_hall&t=${Date.now()}`;const d=await fetchJson(u);if(d.ok&&d.is_open&&(d.slots||[]).length){found=d;break;}}assert(found,'15日以内に予約可能な空き枠が見つかりません。');const times=(found.slots||[]).map(s=>s.start_time||s.time||s.label||'').filter(Boolean);assert(times.length>0,'空き時間が取得できません。');const minuteOk=times.every(t=>{const m=String(t).match(/(\d{1,2}):(\d{2})/);return m&&['00','30'].includes(m[2])});assert(minuteOk,'30分単位ではない空き枠があります。');return result('pass',`${found.date}：${found.slots.length}枠取得\n${times.slice(0,4).join(' / ')}${times.length>4?' …':''}`,found);}
   async function checkPhone(){const q1=await fetchJson(`${API_BASE}/api/admin/search?q=${encodeURIComponent('090-9999-0000')}&limit=10&t=${Date.now()}`,{headers:adminHeaders()});const q2=await fetchJson(`${API_BASE}/api/admin/search?q=${encodeURIComponent('+81 90-9999-0000')}&limit=10&t=${Date.now()}`,{headers:adminHeaders()});const a=(q1.families||[]).find(x=>x.customer_no==='FUNERAL-DEMO-999');const b=(q2.families||[]).find(x=>x.customer_no==='FUNERAL-DEMO-999');assert(a&&b,'ハイフン形式または+81形式でテスト家族を検索できません。');assert(a.id===b.id,'電話番号形式によって別のご家族へ一致しました。');return result('pass',`090-9999-0000 → ${a.customer_no}\n+81 90-9999-0000 → 同じご家族`,{q1,q2});}
-  async function checkMemorial(){const d=await fetchJson(`${API_BASE}/api/member/dashboard?line_user_id=demo_funeral_line_002&t=${Date.now()}`);assert(d.ok,'葬儀後フォローデモを取得できません。');assert((d.aftercare?.items||[]).length===3,`葬儀後フォローが3件ではありません (${d.aftercare?.items?.length||0})`);assert((d.memorial?.services||[]).length===0,'担当者未確認の法要候補がご家族へ公開されています。');return result('pass','葬儀後フォロー3件を取得\n未確認の四十九日候補：ご家族には0件（非公開）',d);}
+  async function checkMemorial(){const d=await fetchJson(`${API_BASE}/api/member/dashboard?line_user_id=demo_funeral_line_002&t=${Date.now()}`);assert(d.ok,'葬儀後フォローデモを取得できません。');const aftercareCount=(d.aftercare?.items||[]).length;assert(aftercareCount===3,`営業デモデータが不足しています。葬儀後フォロー ${aftercareCount}/3件。先に「営業デモを再準備」を実行してください。`);const memorialCount=(d.memorial?.services||[]).length;assert(memorialCount===0,`担当者未確認の法要候補がご家族へ公開されています (${memorialCount}件)`);return result('pass','葬儀後フォロー3件を取得\n未確認の四十九日候補：ご家族には0件（非公開）',d);}
   async function checkPages(){const defs=[['index.html','STEP FUNERAL-4'],['member.html','STEP FUNERAL-5'],['owner.html','STEP FUNERAL-6'],['staff.html','STEP FUNERAL-7'],['owner-ipad.html','STEP FUNERAL-8']];const rows=[];for(const [file,marker] of defs){const res=await fetch(`${SITE_BASE}/${file}?system_check=${Date.now()}`,{cache:'no-store'});assert(res.ok,`${file} がHTTP ${res.status}`);const text=await res.text();assert(text.includes(marker),`${file} のSTEP表記を確認できません。`);rows.push(file)}return result('pass',`${rows.join(' / ')}\n5画面すべて公開・STEP表記OK`,rows);}
 
   const runners={health:checkHealth,config:checkConfig,options:checkOptions,auth:checkAuth,dashboard:checkDashboard,availability:checkAvailability,phone:checkPhone,memorial:checkMemorial,pages:checkPages};
@@ -248,7 +248,7 @@
 
   function updateSummary(){const autoPass=checkDefs.filter(d=>checkResults[d.id]?.status==='pass').length;const autoFail=checkDefs.filter(d=>checkResults[d.id]?.status==='fail').length;const manualState=loadManual();const manualDone=manualDefs.filter((_,i)=>manualState[i]).length;$('autoDone').textContent=autoPass;$('autoTotal').textContent=checkDefs.length;$('autoCountLabel').textContent=`${autoPass} / ${checkDefs.length} OK`;$('manualDone').textContent=manualDone;$('manualCountLabel').textContent=manualDone;$('autoNote').textContent=autoFail?`NG ${autoFail}件`:autoPass===checkDefs.length?'すべてOK':'確認待ち';const health=checkResults.health;$('apiDbValue').textContent=health?.status==='pass'?'OK':health?.status==='fail'?'NG':'—';$('apiDbNote').textContent=health?.status==='pass'?'Worker・Supabase接続済み':health?.status==='fail'?'接続を確認':'未確認';const allAuto=autoPass===checkDefs.length;const allManual=manualDone===manualDefs.length;const metric=$('overallMetric');metric.className='metric';if(autoFail){metric.classList.add('is-fail');$('overallIcon').textContent='×';$('overallValue').textContent='要修正';$('overallNote').textContent='自動チェックのNG項目があります。'}else if(allAuto&&allManual){metric.classList.add('is-ok');$('overallIcon').textContent='✓';$('overallValue').textContent='営業OK';$('overallNote').textContent='自動・手動チェックがすべて完了しました。'}else if(isRunning){metric.classList.add('is-running');$('overallIcon').textContent='…';$('overallValue').textContent='確認中';$('overallNote').textContent='自動チェックを実行しています。'}else{metric.classList.add('is-warn');$('overallIcon').textContent='!';$('overallValue').textContent=allAuto?'手動確認待ち':'確認待ち';$('overallNote').textContent=allAuto?`残り手動チェック ${manualDefs.length-manualDone}件`:'自動チェックを実行してください。'}}
 
-  async function prepareDemo(){if(isRunning)return;if(!confirm('営業デモデータを本日基準で再準備します。\n\nデモ行だけを初期化します。続けますか？'))return;const btn=$('prepareDemoBtn');setBusy(btn,true,'準備中');$('demoResult').className='demo-result';$('demoResult').textContent='営業デモデータを準備しています…';try{const d=await fetchJson(`${API_BASE}/api/admin/demo/prepare`,{method:'POST',headers:adminHeaders(),body:JSON.stringify({step:STEP})});assert(d.ok,'営業デモ準備に失敗しました。');const c=d.counts||{};const exact=Object.entries(EXPECTED).every(([k,v])=>Number(c[k])===v);$('demoResult').className=`demo-result ${exact?'is-ok':'is-fail'}`;$('demoResult').textContent=`${d.message}\n基準日：${d.jst_date}\nスタッフ ${c.staff_count} / メニュー ${c.service_count} / ご家族 ${c.family_count} / 案件 ${c.case_count}\n相談 ${c.consultation_count} / 未完了タスク ${c.open_task_count} / 法要 ${c.memorial_count} / 葬儀後 ${c.aftercare_item_count}`;$('demoValue').textContent=exact?'OK':'注意';$('demoNote').textContent=exact?'期待件数と一致':'件数を確認';toast('営業デモデータを準備しました。');await runAll()}catch(e){$('demoResult').className='demo-result is-fail';$('demoResult').textContent=`営業デモ準備に失敗しました。\n${e.message||e}`;$('demoValue').textContent='NG';$('demoNote').textContent='デモ準備失敗';toast('営業デモ準備に失敗しました。')}finally{setBusy(btn,false)}}
+  async function prepareDemo(){if(isRunning)return;if(!confirm('営業デモデータを本日基準で再準備します。\n\nデモ行だけを初期化します。続けますか？'))return;const btn=$('prepareDemoBtn');setBusy(btn,true,'準備中');$('demoResult').className='demo-result';$('demoResult').textContent='営業デモデータを準備しています…';try{const d=await fetchJson(`${API_BASE}/api/admin/demo/prepare`,{method:'POST',headers:adminHeaders(),body:JSON.stringify({step:STEP})});assert(d.ok,'営業デモ準備に失敗しました。');const c=d.counts||{};const exact=Object.entries(EXPECTED).every(([k,v])=>Number(c[k])===v);$('demoResult').className=`demo-result ${exact?'is-ok':'is-fail'}`;$('demoResult').textContent=`${d.message}\n基準日：${d.jst_date}\nスタッフ ${c.staff_count} / メニュー ${c.service_count} / ご家族 ${c.family_count} / 案件 ${c.case_count}\n相談 ${c.consultation_count} / 未完了タスク ${c.open_task_count} / 法要 ${c.memorial_count} / 葬儀後 ${c.aftercare_item_count}`;$('demoValue').textContent=exact?'OK':'注意';$('demoNote').textContent=exact?'期待件数と一致':'件数を確認';toast('営業デモデータを準備しました。');await runAll()}catch(e){const detail=e?.data?.details||null;const table=detail&&typeof detail==='object'?detail.table:null;const dbMessage=detail&&typeof detail==='object'?(detail.response?.message||detail.response?.details||detail.response?.hint||''):'';$('demoResult').className='demo-result is-fail';$('demoResult').textContent=`営業デモ準備に失敗しました。\n${e.message||e}${table?`\n確認テーブル：${table}`:''}${dbMessage?`\nDB詳細：${dbMessage}`:''}`;$('demoValue').textContent='NG';$('demoNote').textContent='デモ準備失敗';toast('営業デモ準備に失敗しました。')}finally{setBusy(btn,false)}}
 
   async function verifyAndOpen(code){adminCode=String(code||'').trim();if(!adminCode){$('loginError').textContent='管理コードを入力してください。';return}setBusy($('loginBtn'),true,'確認中');$('loginError').textContent='';try{const d=await fetchJson(`${API_BASE}/api/admin/dashboard?t=${Date.now()}`,{headers:adminHeaders()});assert(d.ok,'管理画面を取得できません。');sessionStorage.setItem(CODE_KEY,adminCode);$('loginGate').classList.add('hidden');initAfterLogin()}catch(e){$('loginError').textContent=e.message||'管理コードを確認してください。'}finally{setBusy($('loginBtn'),false)}}
   function clearCode(){sessionStorage.removeItem(CODE_KEY);adminCode='';$('adminCodeInput').value='';$('loginGate').classList.remove('hidden');$('loginError').textContent='';toast('管理コードを消去しました。')}
