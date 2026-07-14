@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#263c35">
+  <meta name="description" content="DPRO葬祭サポートの事前相談・会館見学・資料請求・葬儀後・法要相談受付ページです。">
+  <title>DPRO葬祭サポート｜ご相談受付</title>
+  <style>
+    :root {
+      --bg: #f5f2ec;
+      --surface: #ffffff;
+      --surface-soft: #faf8f4;
+      --ink: #242a27;
+      --muted: #626b66;
+      --line: #d9ded9;
+      --brand: #2f4b42;
+      --brand-dark: #223a33;
+      --brand-soft: #e8f0ec;
+      --accent: #a37642;
+      --accent-soft: #f5ecdf;
+      --danger: #a33a36;
+      --danger-soft: #f9e9e7;
+      --success: #287053;
+      --success-soft: #e7f4ed;
+      --warning: #8c5b19;
+      --warning-soft: #fff3d7;
+      --shadow: 0 14px 36px rgba(35, 49, 43, 0.09);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 13px;
+      --content: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(163, 118, 66, 0.10), transparent 28rem),
+        linear-gradient(180deg, #f7f5f0 0%, var(--bg) 100%);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      font-size: 16px;
+      line-height: 1.72;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    img, svg { display: block; }
+    [hidden] { display: none !important; }
+
+    .skip-link {
+      position: fixed;
+      left: 12px;
+      top: -80px;
+      z-index: 1000;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--brand-dark);
+      box-shadow: var(--shadow);
+      font-weight: 800;
+    }
+    .skip-link:focus { top: 12px; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(47, 75, 66, 0.12);
+      background: rgba(250, 248, 244, 0.94);
+      backdrop-filter: blur(16px);
+    }
+    .header-inner {
+      width: min(calc(100% - 32px), var(--content));
+      min-height: 72px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      min-width: 0;
+    }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--brand);
+      color: #fff;
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+    .brand-copy { min-width: 0; }
+    .brand-name {
+      display: block;
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand-sub {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.3;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+
+    .btn {
+      min-height: 48px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      padding: 11px 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.35;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:focus-visible, .service-card:focus-visible, .choice-card:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid rgba(47, 75, 66, .22);
+      outline-offset: 2px;
+    }
+    .btn-primary {
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(47, 75, 66, .20);
+    }
+    .btn-primary:hover { background: var(--brand-dark); }
+    .btn-secondary {
+      border-color: var(--line);
+      background: #fff;
+      color: var(--brand-dark);
+    }
+    .btn-soft {
+      background: var(--brand-soft);
+      color: var(--brand-dark);
+    }
+    .btn-danger-soft {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+    .btn-wide { width: 100%; }
+    .btn-large { min-height: 56px; padding: 14px 22px; font-size: 17px; }
+    .btn[disabled] { cursor: not-allowed; opacity: .52; transform: none; box-shadow: none; }
+
+    .icon {
+      width: 21px;
+      height: 21px;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .emergency-bar {
+      border-bottom: 1px solid rgba(163, 58, 54, .10);
+      background: #fff8f7;
+    }
+    .emergency-inner {
+      width: min(calc(100% - 32px), var(--content));
+      margin: 0 auto;
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .emergency-copy {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #66312f;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+    .emergency-dot {
+      width: 10px;
+      height: 10px;
+      margin-top: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--danger);
+      box-shadow: 0 0 0 5px rgba(163, 58, 54, .10);
+    }
+    .emergency-call {
+      white-space: nowrap;
+      color: var(--danger);
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    main { overflow: hidden; }
+    .hero {
+      position: relative;
+      padding: 64px 0 38px;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      right: -180px;
+      top: -140px;
+      width: 560px;
+      height: 560px;
+      border: 1px solid rgba(47, 75, 66, .10);
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 80px rgba(47, 75, 66, .025), inset 0 0 0 160px rgba(47, 75, 66, .018);
+      pointer-events: none;
+    }
+    .container {
+      position: relative;
+      width: min(calc(100% - 32px), var(--content));
+      margin: 0 auto;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(310px, .8fr);
+      gap: 46px;
+      align-items: center;
+    }
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 20px;
+      font-size: clamp(34px, 5.2vw, 58px);
+      line-height: 1.22;
+      letter-spacing: -.035em;
+    }
+    .hero-lead {
+      max-width: 700px;
+      margin-bottom: 26px;
+      color: #4f5853;
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.9;
+    }
+    .hero-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .hero-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(47, 75, 66, .13);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .70);
+      color: var(--brand-dark);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .hero-panel {
+      position: relative;
+      padding: 26px;
+      border: 1px solid rgba(47, 75, 66, .10);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, .86);
+      box-shadow: var(--shadow);
+    }
+    .hero-panel-title {
+      margin-bottom: 16px;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+    .hero-panel-list {
+      margin: 0 0 20px;
+      padding: 0;
+      list-style: none;
+    }
+    .hero-panel-list li {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 9px 0;
+      color: #4b544f;
+      font-weight: 700;
+    }
+    .number-dot {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--brand-soft);
+      color: var(--brand-dark);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .section { padding: 48px 0; }
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      margin-bottom: 10px;
+      font-size: clamp(27px, 4vw, 38px);
+      line-height: 1.35;
+      letter-spacing: -.025em;
+    }
+    .section-description {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .service-card {
+      position: relative;
+      min-height: 208px;
+      width: 100%;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: var(--ink);
+      text-align: left;
+      box-shadow: 0 7px 20px rgba(35, 49, 43, .045);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(47, 75, 66, .35);
+      box-shadow: var(--shadow);
+    }
+    .service-card.selected {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(47, 75, 66, .10), var(--shadow);
+    }
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: var(--brand-soft);
+      color: var(--brand);
+    }
+    .service-icon .icon { width: 25px; height: 25px; }
+    .service-name {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1.45;
+    }
+    .service-description {
+      display: block;
+      padding-right: 24px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .service-arrow {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      color: var(--accent);
+    }
+    .service-general {
+      grid-column: 1 / -1;
+      min-height: auto;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      background: var(--accent-soft);
+      border-color: rgba(163, 118, 66, .22);
+    }
+    .service-general .service-icon { margin: 0; background: #fff; color: var(--accent); }
+    .service-general .service-name { margin-bottom: 3px; }
+    .service-general .service-arrow { position: static; }
+
+    .connection-notice {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 13px;
+      background: var(--warning-soft);
+      color: #684516;
+      font-weight: 700;
+    }
+
+    .form-shell {
+      margin-top: 20px;
+      border: 1px solid rgba(47, 75, 66, .12);
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .form-top {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-soft);
+    }
+    .selected-service-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    .selected-service-copy {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .selected-service-mini-icon {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--brand-soft);
+      color: var(--brand);
+    }
+    .selected-service-title {
+      display: block;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+    .selected-service-note {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .text-button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: transparent;
+      color: var(--brand);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .text-button:hover { background: var(--brand-soft); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .step-indicator {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      color: #8a928e;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+    }
+    .step-indicator::after {
+      content: "";
+      position: absolute;
+      left: calc(50% + 20px);
+      right: calc(-50% + 20px);
+      top: 16px;
+      height: 2px;
+      background: #dce1dd;
+    }
+    .step-indicator:last-child::after { display: none; }
+    .step-dot {
+      position: relative;
+      z-index: 1;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 2px solid #cfd6d1;
+      border-radius: 50%;
+      background: #fff;
+      color: #7c8580;
+      font-weight: 900;
+    }
+    .step-indicator.active, .step-indicator.done { color: var(--brand-dark); }
+    .step-indicator.active .step-dot {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 0 0 5px rgba(47, 75, 66, .10);
+    }
+    .step-indicator.done .step-dot {
+      border-color: var(--success);
+      background: var(--success-soft);
+      color: var(--success);
+    }
+    .step-indicator.done::after { background: rgba(40, 112, 83, .35); }
+
+    .form-body { padding: 34px 30px 30px; }
+    .form-step { animation: fadeIn .22s ease; }
+    @keyframes fadeIn { from { opacity: .35; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+    .form-step-head { margin-bottom: 26px; }
+    .form-step-title {
+      margin-bottom: 8px;
+      font-size: 27px;
+      line-height: 1.4;
+    }
+    .form-step-description { margin: 0; color: var(--muted); font-size: 16px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .field { min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    .field-label {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 8px;
+      color: #333a36;
+      font-size: 16px;
+      font-weight: 900;
+    }
+    .required {
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--danger-soft);
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.5;
+    }
+    .optional {
+      color: #7c8580;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .input, .select, .textarea {
+      width: 100%;
+      min-height: 52px;
+      border: 1px solid #cfd6d1;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      padding: 12px 14px;
+      font-size: 16px;
+      line-height: 1.5;
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .textarea { min-height: 132px; resize: vertical; }
+    .input:hover, .select:hover, .textarea:hover { border-color: #aab6af; }
+    .input:focus, .select:focus, .textarea:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(47, 75, 66, .10);
+      outline: none;
+    }
+    .input[readonly] { background: #f4f6f4; color: #47504b; }
+    .field-help {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .field-error {
+      margin: 7px 0 0;
+      color: var(--danger);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .input.invalid, .select.invalid, .textarea.invalid { border-color: var(--danger); background: #fffafa; }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .choice-card {
+      position: relative;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      border: 1px solid #cfd6d1;
+      border-radius: 13px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .choice-card:hover { border-color: rgba(47, 75, 66, .45); }
+    .choice-card.selected {
+      border-color: var(--brand);
+      background: var(--brand-soft);
+      box-shadow: 0 0 0 3px rgba(47, 75, 66, .08);
+    }
+    .choice-card input {
+      width: 19px;
+      height: 19px;
+      margin: 0;
+      accent-color: var(--brand);
+      flex: 0 0 auto;
+    }
+    .choice-copy { min-width: 0; }
+    .choice-title { display: block; color: #303733; font-weight: 900; line-height: 1.4; }
+    .choice-note { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    .time-slot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .time-slot {
+      min-height: 50px;
+      border: 1px solid #cfd6d1;
+      border-radius: 12px;
+      background: #fff;
+      color: #343b37;
+      font-size: 16px;
+      font-weight: 900;
+    }
+    .time-slot:hover { border-color: var(--brand); }
+    .time-slot.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .empty-slots {
+      padding: 18px;
+      border-radius: 13px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      text-align: center;
+      font-weight: 700;
+    }
+    .slot-loading {
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .spinner {
+      width: 21px;
+      height: 21px;
+      border: 3px solid #d8ded9;
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .info-box {
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: var(--brand-soft);
+      color: #345047;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.7;
+    }
+    .info-box.warning { background: var(--warning-soft); color: #674715; }
+    .info-box.danger { background: var(--danger-soft); color: #743633; }
+    .info-box.success { background: var(--success-soft); color: #245d47; }
+
+    .profile-banner {
+      margin-bottom: 24px;
+      padding: 17px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border: 1px solid rgba(40, 112, 83, .20);
+      border-radius: 14px;
+      background: var(--success-soft);
+    }
+    .profile-banner-copy { min-width: 0; }
+    .profile-banner-title { display: block; color: #235b45; font-weight: 900; }
+    .profile-banner-note { display: block; margin-top: 2px; color: #4d6b5e; font-size: 14px; }
+
+    .context-box {
+      margin-top: 24px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface-soft);
+    }
+    .context-title { margin-bottom: 16px; font-size: 19px; }
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 14px;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .check-item input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--brand); flex: 0 0 auto; }
+    .check-item span { font-weight: 700; line-height: 1.55; }
+
+    .privacy-box {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-soft);
+    }
+    .privacy-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      cursor: pointer;
+    }
+    .privacy-check input { width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--brand); flex: 0 0 auto; }
+    .privacy-check span { font-weight: 800; line-height: 1.65; }
+    .privacy-note { margin: 9px 0 0 31px; color: var(--muted); font-size: 13px; }
+
+    .form-actions {
+      margin-top: 30px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .form-actions-right { display: flex; gap: 12px; margin-left: auto; }
+
+    .summary-list {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .summary-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 20px;
+      padding: 15px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .summary-row:last-child { border-bottom: 0; }
+    .summary-row dt { color: var(--muted); font-weight: 800; }
+    .summary-row dd { margin: 0; color: #303733; font-weight: 800; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    .complete-panel {
+      padding: 42px 30px;
+      text-align: center;
+    }
+    .complete-icon {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--success-soft);
+      color: var(--success);
+    }
+    .complete-icon .icon { width: 38px; height: 38px; stroke-width: 2.3; }
+    .complete-title { margin-bottom: 10px; font-size: clamp(28px, 4vw, 38px); }
+    .complete-lead { max-width: 620px; margin: 0 auto 26px; color: var(--muted); font-size: 17px; }
+    .receipt {
+      max-width: 720px;
+      margin: 0 auto 22px;
+      text-align: left;
+    }
+    .complete-actions {
+      max-width: 720px;
+      margin: 22px auto 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .support-section { padding: 30px 0 74px; }
+    .support-card {
+      padding: 26px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      border: 1px solid rgba(47, 75, 66, .12);
+      border-radius: var(--radius-xl);
+      background: var(--brand-dark);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .support-card h2 { margin-bottom: 7px; font-size: 24px; }
+    .support-card p { margin: 0; color: rgba(255,255,255,.76); }
+    .support-card .btn { background: #fff; color: var(--brand-dark); }
+
+    footer {
+      padding: 28px 0 max(28px, env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(47, 75, 66, .10);
+      background: #efede7;
+    }
+    .footer-inner {
+      width: min(calc(100% - 32px), var(--content));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .toast-region {
+      position: fixed;
+      left: 50%;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      z-index: 200;
+      width: min(calc(100% - 32px), 520px);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .toast {
+      margin-top: 10px;
+      padding: 14px 16px;
+      border-radius: 13px;
+      background: #26332e;
+      color: #fff;
+      box-shadow: 0 14px 35px rgba(0,0,0,.22);
+      font-weight: 800;
+      line-height: 1.55;
+      animation: toastIn .22s ease;
+    }
+    .toast.error { background: #7f3330; }
+    .toast.success { background: #2b664f; }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(27, 36, 32, .48);
+      backdrop-filter: blur(4px);
+    }
+    .loading-card {
+      width: min(100%, 360px);
+      padding: 28px;
+      border-radius: 20px;
+      background: #fff;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .loading-card .spinner { width: 34px; height: 34px; margin: 0 auto 14px; border-width: 4px; }
+    .loading-card strong { display: block; font-size: 18px; }
+    .loading-card span { display: block; margin-top: 5px; color: var(--muted); font-size: 14px; }
+
+    @media (max-width: 900px) {
+      .hero { padding-top: 44px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+      .hero-panel { max-width: 640px; }
+      .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .service-general { grid-column: 1 / -1; }
+      .time-slot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      body { font-size: 16px; }
+      .header-inner { width: min(calc(100% - 24px), var(--content)); min-height: 66px; }
+      .brand-mark { width: 39px; height: 39px; border-radius: 12px; }
+      .brand-name { font-size: 15px; }
+      .brand-sub { display: none; }
+      .header-actions .btn { min-height: 42px; padding: 8px 12px; font-size: 14px; }
+      .emergency-inner { width: min(calc(100% - 24px), var(--content)); align-items: flex-start; flex-direction: column; gap: 7px; }
+      .emergency-call { margin-left: 20px; }
+      .container { width: min(calc(100% - 24px), var(--content)); }
+      .hero { padding: 34px 0 26px; }
+      .hero::before { right: -350px; }
+      h1 { font-size: 34px; }
+      .hero-lead { font-size: 17px; }
+      .hero-panel { padding: 21px; }
+      .section { padding: 36px 0; }
+      .section-title { font-size: 28px; }
+      .section-description { font-size: 16px; }
+      .service-grid { grid-template-columns: 1fr; gap: 12px; }
+      .service-card { min-height: auto; padding: 18px; display: grid; grid-template-columns: 44px 1fr auto; gap: 13px; align-items: center; }
+      .service-icon { width: 44px; height: 44px; margin: 0; }
+      .service-card > span:nth-child(2) { min-width: 0; }
+      .service-name { font-size: 17px; margin-bottom: 4px; }
+      .service-description { padding: 0; font-size: 14px; }
+      .service-arrow { position: static; }
+      .service-general { grid-column: auto; }
+      .form-shell { margin-left: -4px; margin-right: -4px; border-radius: 19px; }
+      .form-top { padding: 20px 18px; }
+      .selected-service-bar { align-items: flex-start; }
+      .selected-service-mini-icon { width: 40px; height: 40px; }
+      .selected-service-title { font-size: 16px; }
+      .selected-service-note { font-size: 13px; }
+      .step-label { display: none; }
+      .step-indicator { gap: 0; }
+      .form-body { padding: 26px 18px 22px; }
+      .form-step-title { font-size: 23px; }
+      .form-grid { grid-template-columns: 1fr; gap: 17px; }
+      .field.full { grid-column: auto; }
+      .choice-grid { grid-template-columns: 1fr; }
+      .time-slot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .check-grid { grid-template-columns: 1fr; }
+      .context-box { padding: 18px; }
+      .form-actions { align-items: stretch; flex-direction: column-reverse; }
+      .form-actions-right { width: 100%; margin: 0; flex-direction: column-reverse; }
+      .form-actions .btn { width: 100%; min-height: 54px; font-size: 16px; }
+      .summary-row { grid-template-columns: 1fr; gap: 4px; padding: 14px 15px; }
+      .summary-row dt { font-size: 13px; }
+      .complete-panel { padding: 34px 18px; }
+      .complete-actions { grid-template-columns: 1fr; }
+      .support-card { grid-template-columns: 1fr; padding: 22px; }
+      .support-card .btn { width: 100%; }
+      .footer-inner { width: min(calc(100% - 24px), var(--content)); flex-direction: column; gap: 8px; }
+      .profile-banner { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (max-width: 390px) {
+      .time-slot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .header-actions .btn span { display: none; }
+      .header-actions .btn { width: 44px; padding: 8px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="ご相談受付ページの先頭へ">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span class="brand-copy">
+          <span class="brand-name" id="brandName">DPRO葬祭サポート</span>
+          <span class="brand-sub">葬儀・法要サポート LINE</span>
+        </span>
+      </a>
+      <div class="header-actions">
+        <a class="btn btn-secondary" id="memberLink" href="member.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>マイページ</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="emergency-bar" id="emergencyBar">
+    <div class="emergency-inner">
+      <div class="emergency-copy">
+        <span class="emergency-dot" aria-hidden="true"></span>
+        <span id="emergencyText">ご逝去直後など、お急ぎの場合はフォームを使わずお電話ください。</span>
+      </div>
+      <a class="emergency-call" id="emergencyPhone" href="tel:">電話で相談する</a>
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">FUNERAL &amp; MEMORIAL SUPPORT</p>
+          <h1>まだ決まっていなくても、<br>落ち着いてご相談ください。</h1>
+          <p class="hero-lead">葬儀の事前相談、会館見学、葬儀後のお困りごと、法要の準備まで。内容を選び、必要なことだけ入力してご相談いただけます。</p>
+          <div class="hero-points" aria-label="ご相談受付の特徴">
+            <span class="hero-point">相談だけでも大丈夫</span>
+            <span class="hero-point">入力は約3分</span>
+            <span class="hero-point">担当者が内容を確認</span>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-label="ご相談の流れ">
+          <h2 class="hero-panel-title">ご相談は4つの手順で完了します</h2>
+          <ol class="hero-panel-list">
+            <li><span class="number-dot">1</span><span>相談したい内容を選ぶ</span></li>
+            <li><span class="number-dot">2</span><span>方法・日時を選ぶ</span></li>
+            <li><span class="number-dot">3</span><span>ご連絡先と相談内容を入力</span></li>
+            <li><span class="number-dot">4</span><span>内容を確認して送信</span></li>
+          </ol>
+          <a class="btn btn-primary btn-wide btn-large" href="#consultationMenu">相談内容を選ぶ</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="consultationMenu">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">STEP 1</p>
+          <h2 class="section-title">相談したい内容を選んでください</h2>
+          <p class="section-description">どれを選ぶか迷う場合は、最後の「まだ決まっていない・まず相談」をお選びください。</p>
+        </div>
+
+        <div class="service-grid" id="serviceGrid" aria-live="polite"></div>
+        <div class="connection-notice" id="connectionNotice" hidden></div>
+
+        <section class="form-shell" id="formShell" hidden aria-labelledby="formTitle">
+          <div class="form-top">
+            <div class="selected-service-bar">
+              <div class="selected-service-copy">
+                <span class="selected-service-mini-icon" id="selectedServiceIcon" aria-hidden="true"></span>
+                <span>
+                  <span class="selected-service-title" id="selectedServiceTitle"></span>
+                  <span class="selected-service-note" id="selectedServiceNote"></span>
+                </span>
+              </div>
+              <button class="text-button" type="button" id="changeServiceButton">相談内容を変更</button>
+            </div>
+
+            <div class="steps" aria-label="入力の進み具合">
+              <div class="step-indicator active" data-step-indicator="1"><span class="step-dot">1</span><span class="step-label">方法・日時</span></div>
+              <div class="step-indicator" data-step-indicator="2"><span class="step-dot">2</span><span class="step-label">ご家族情報</span></div>
+              <div class="step-indicator" data-step-indicator="3"><span class="step-dot">3</span><span class="step-label">内容確認</span></div>
+              <div class="step-indicator" data-step-indicator="4"><span class="step-dot">4</span><span class="step-label">受付完了</span></div>
+            </div>
+          </div>
+
+          <div class="form-body">
+            <form id="consultationForm" novalidate>
+              <section class="form-step" data-form-step="1">
+                <div class="form-step-head">
+                  <h2 class="form-step-title" id="formTitle">相談方法・日時を選ぶ</h2>
+                  <p class="form-step-description" id="scheduleDescription">ご都合のよい相談方法と日時をお選びください。</p>
+                </div>
+
+                <div class="form-grid">
+                  <div class="field full">
+                    <span class="field-label">相談方法 <span class="required">必須</span></span>
+                    <div class="choice-grid" id="methodChoices"></div>
+                    <p class="field-error" id="methodError" hidden></p>
+                  </div>
+
+                  <div class="field full" id="materialDeliveryField" hidden>
+                    <span class="field-label">資料の受け取り方法 <span class="required">必須</span></span>
+                    <div class="choice-grid" id="deliveryChoices"></div>
+                    <p class="field-error" id="deliveryError" hidden></p>
+                  </div>
+
+                  <div class="field" id="hallField">
+                    <label class="field-label" for="hallSelect">相談会館 <span class="required">必須</span></label>
+                    <select class="select" id="hallSelect" name="hall_id"></select>
+                    <p class="field-help" id="hallHelp">会館での相談・見学場所を選択してください。</p>
+                    <p class="field-error" id="hallError" hidden></p>
+                  </div>
+
+                  <div class="field" id="dateField">
+                    <label class="field-label" for="dateInput">希望日 <span class="required">必須</span></label>
+                    <input class="input" id="dateInput" name="date" type="date" autocomplete="off">
+                    <p class="field-help" id="dateHelp">予約可能な日付を選ぶと、空き時間が表示されます。</p>
+                    <p class="field-error" id="dateError" hidden></p>
+                  </div>
+
+                  <div class="field full" id="timeField">
+                    <span class="field-label">希望時間 <span class="required">必須</span></span>
+                    <div id="timeSlots"><div class="empty-slots">日付を選ぶと空き時間が表示されます。</div></div>
+                    <p class="field-error" id="timeError" hidden></p>
+                  </div>
+
+                  <div class="field full" id="nonScheduleInfo" hidden>
+                    <div class="info-box">日時予約は不要です。送信後、担当者が内容を確認してご連絡します。</div>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button class="btn btn-secondary" type="button" id="step1Cancel">相談内容を選び直す</button>
+                  <div class="form-actions-right">
+                    <button class="btn btn-primary btn-large" type="button" id="toStep2">次へ進む</button>
+                  </div>
+                </div>
+              </section>
+
+              <section class="form-step" data-form-step="2" hidden>
+                <div class="form-step-head">
+                  <h2 class="form-step-title">ご連絡先・相談内容を入力</h2>
+                  <p class="form-step-description">初回のみ基本情報をご登録いただきます。LINE連携済みの場合は登録情報を自動表示します。</p>
+                </div>
+
+                <div class="profile-banner" id="profileBanner" hidden>
+                  <div class="profile-banner-copy">
+                    <span class="profile-banner-title" id="profileBannerTitle">登録済みのご家族情報を使用します</span>
+                    <span class="profile-banner-note" id="profileBannerNote"></span>
+                  </div>
+                  <button class="btn btn-secondary" type="button" id="editProfileButton">内容を確認・編集</button>
+                </div>
+
+                <div class="form-grid" id="familyFields">
+                  <div class="field">
+                    <label class="field-label" for="familyName">お名前 <span class="required">必須</span></label>
+                    <input class="input" id="familyName" name="family_name" type="text" autocomplete="name" maxlength="255" placeholder="例：佐藤 太郎">
+                    <p class="field-error" id="familyNameError" hidden></p>
+                  </div>
+                  <div class="field">
+                    <label class="field-label" for="familyNameKana">フリガナ <span class="optional">任意</span></label>
+                    <input class="input" id="familyNameKana" name="family_name_kana" type="text" maxlength="255" placeholder="例：サトウ タロウ">
+                  </div>
+                  <div class="field">
+                    <label class="field-label" for="phoneInput">電話番号 <span class="required">必須</span></label>
+                    <input class="input" id="phoneInput" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="50" placeholder="例：090-1234-5678">
+                    <p class="field-help">ハイフンあり・なし、全角数字、+81形式でも登録できます。</p>
+                    <p class="field-error" id="phoneError" hidden></p>
+                  </div>
+                  <div class="field">
+                    <label class="field-label" for="emailInput">メールアドレス <span class="optional">任意</span></label>
+                    <input class="input" id="emailInput" name="email" type="email" autocomplete="email" maxlength="255" placeholder="例：example@example.com">
+                    <p class="field-error" id="emailError" hidden></p>
+                  </div>
+                  <div class="field">
+                    <label class="field-label" for="relationInput">故人様とのご関係 <span class="optional">任意</span></label>
+                    <input class="input" id="relationInput" name="relation_to_deceased" type="text" maxlength="255" placeholder="例：長男、配偶者、ご本人">
+                  </div>
+                  <div class="field">
+                    <label class="field-label" for="preferredTime">連絡しやすい時間帯 <span class="optional">任意</span></label>
+                    <input class="input" id="preferredTime" name="preferred_contact_time" type="text" maxlength="255" placeholder="例：平日17時以降、午前中">
+                  </div>
+                  <div class="field full">
+                    <span class="field-label">希望する連絡方法 <span class="required">必須</span></span>
+                    <div class="choice-grid" id="contactChoices"></div>
+                    <p class="field-error" id="contactError" hidden></p>
+                  </div>
+                  <div class="field" id="postalCodeField" hidden>
+                    <label class="field-label" for="postalCode">郵便番号 <span class="required">必須</span></label>
+                    <input class="input" id="postalCode" name="postal_code" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="30" placeholder="例：123-4567">
+                    <p class="field-error" id="postalCodeError" hidden></p>
+                  </div>
+                  <div class="field" id="addressField" hidden>
+                    <label class="field-label" for="addressInput">送付先住所 <span class="required">必須</span></label>
+                    <input class="input" id="addressInput" name="address" type="text" autocomplete="street-address" maxlength="1000" placeholder="都道府県・市区町村・番地・建物名">
+                    <p class="field-error" id="addressError" hidden></p>
+                  </div>
+                </div>
+
+                <div class="context-box" id="contextBox"></div>
+
+                <div class="form-grid" style="margin-top: 22px;">
+                  <div class="field full">
+                    <label class="field-label" for="requestSummary">相談したいこと・確認したいこと <span class="required">必須</span></label>
+                    <textarea class="textarea" id="requestSummary" name="request_summary" maxlength="5000" placeholder="まだ整理できていなくても大丈夫です。分かる範囲でご入力ください。"></textarea>
+                    <p class="field-help">担当者が事前に確認し、必要な内容を整理してご連絡します。</p>
+                    <p class="field-error" id="requestSummaryError" hidden></p>
+                  </div>
+                  <div class="field full">
+                    <div class="privacy-box">
+                      <label class="privacy-check" for="privacyConsent">
+                        <input id="privacyConsent" name="consent_privacy" type="checkbox">
+                        <span>入力した情報を、相談受付・ご連絡・継続支援のために利用することに同意します。</span>
+                      </label>
+                      <p class="privacy-note" id="privacyNotice">必要な範囲で情報を保存し、担当者が相談対応に利用します。</p>
+                      <p class="field-error" id="privacyError" hidden></p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button class="btn btn-secondary" type="button" id="backToStep1">前へ戻る</button>
+                  <div class="form-actions-right">
+                    <button class="btn btn-primary btn-large" type="button" id="toStep3">入力内容を確認</button>
+                  </div>
+                </div>
+              </section>
+
+              <section class="form-step" data-form-step="3" hidden>
+                <div class="form-step-head">
+                  <h2 class="form-step-title">入力内容を確認してください</h2>
+                  <p class="form-step-description">送信後、担当者が内容を確認します。予約日時は受付完了画面にも表示されます。</p>
+                </div>
+
+                <dl class="summary-list" id="confirmationList"></dl>
+                <div class="info-box warning" style="margin-top: 18px;" id="confirmationNotice">送信後に変更が必要な場合は、マイページまたはお電話からご相談ください。</div>
+
+                <div class="form-actions">
+                  <button class="btn btn-secondary" type="button" id="backToStep2">入力内容を修正</button>
+                  <div class="form-actions-right">
+                    <button class="btn btn-primary btn-large" type="submit" id="submitButton">この内容で送信する</button>
+                  </div>
+                </div>
+              </section>
+            </form>
+
+            <section class="complete-panel" id="completePanel" hidden aria-live="polite">
+              <div class="complete-icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+              </div>
+              <h2 class="complete-title">ご相談を受け付けました</h2>
+              <p class="complete-lead" id="completeLead">担当者が内容を確認し、ご希望の方法でご連絡します。</p>
+              <dl class="summary-list receipt" id="receiptList"></dl>
+              <div class="info-box success" id="completeNotice">受付内容を控えておくと、変更やお問い合わせの際にスムーズです。</div>
+              <div class="complete-actions">
+                <button class="btn btn-secondary btn-large" type="button" id="copyReceiptButton">受付内容をコピー</button>
+                <a class="btn btn-primary btn-large" id="completeMemberLink" href="member.html">マイページを開く</a>
+                <button class="btn btn-soft btn-large" type="button" id="newConsultationButton">別の相談をする</button>
+                <a class="btn btn-danger-soft btn-large" id="completeCallLink" href="tel:">電話で確認する</a>
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="support-section">
+      <div class="container">
+        <div class="support-card">
+          <div>
+            <h2>入力が難しい場合は、お電話でも承ります</h2>
+            <p>相談内容がまとまっていなくても大丈夫です。担当者が順番にお伺いします。</p>
+          </div>
+          <a class="btn btn-large" id="supportCallLink" href="tel:">電話で相談する</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span id="footerOfficeName">DPRO葬祭サポート</span>
+      <span>STEP FUNERAL-4 / ご家族向け相談受付</span>
+    </div>
+  </footer>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="loading-overlay" id="loadingOverlay" hidden>
+    <div class="loading-card" role="status" aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <strong id="loadingTitle">送信しています</strong>
+      <span id="loadingNote">画面を閉じずにお待ちください。</span>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const VERSION = "FUNERAL-4-FAMILY-CONSULTATION-FORM-20260714";
+      const API_BASE = "https://dpro-funeral-line-api.dpromstk2000.workers.dev";
+      const LIFF_ID = window.DPRO_FUNERAL_CONFIG?.liffId || new URLSearchParams(location.search).get("liff_id") || "";
+      const ALLOWED_METHODS = new Set(["in_person", "phone", "online", "home_visit", "line", "email", "other"]);
+
+      const ICONS = {
+        pre_consultation: '<svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5V8.8a2 2 0 0 1 .9-1.7L12 2.5l7.1 4.6a2 2 0 0 1 .9 1.7v10.7"></path><path d="M2 19.5h20"></path><path d="M9 19.5v-6h6v6"></path></svg>',
+        hall_tour: '<svg class="icon" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"></path><path d="M5 9v11h14V9"></path><path d="M8 20v-6h8v6"></path></svg>',
+        material_request: '<svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6z"></path><path d="M14 2v5h5"></path><path d="M9 12h6M9 16h6"></path></svg>',
+        aftercare: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10.2A4.8 4.8 0 0 1 12 6.4a4.8 4.8 0 0 1 7 4.4C19 16.6 12 21 12 21Z"></path><path d="M9 12h6"></path></svg>',
+        memorial: '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>',
+        product: '<svg class="icon" viewBox="0 0 24 24"><path d="M4 8h16v13H4z"></path><path d="M2 5h20v3H2z"></path><path d="M12 5v16"></path><path d="M12 5c-1.5-3-5-3-5 0M12 5c1.5-3 5-3 5 0"></path></svg>',
+        general: '<svg class="icon" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path><path d="M8 9h8M8 13h5"></path></svg>',
+        arrow: '<svg class="icon" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>',
+        phone: '<svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 5.2 2 2 0 0 1 5.1 3h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.7 2.6a2 2 0 0 1-.5 2.1L9 10.7a16 16 0 0 0 4.3 4.3l1.3-1.3a2 2 0 0 1 2.1-.5c.8.4 1.7.6 2.6.7a2 2 0 0 1 1.7 2Z"></path></svg>',
+        online: '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>',
+        in_person: '<svg class="icon" viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+        line: '<svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-9 8.5 10.7 10.7 0 0 1-3-.4L4 22l1.4-4A8 8 0 0 1 3 11.5a8.5 8.5 0 0 1 9-8.5 8.5 8.5 0 0 1 9 8.5Z"></path></svg>',
+        email: '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>'
+      };
+
+      const METHOD_LABELS = {
+        in_person: ["会館で相談", "担当者と対面で相談します"],
+        phone: ["電話相談", "ご希望の時間に担当者から連絡します"],
+        online: ["オンライン相談", "スマートフォン・パソコンから相談します"],
+        home_visit: ["訪問相談", "担当者がご指定場所へ伺います"],
+        line: ["LINEで相談", "LINEを中心に担当者が返信します"],
+        email: ["メールで相談", "メールで担当者が返信します"],
+        other: ["その他", "ご希望を相談内容へご記入ください"]
+      };
+
+      const CONTACT_LABELS = {
+        line: ["LINE", "LINEで連絡を希望"],
+        phone: ["電話", "電話で連絡を希望"],
+        email: ["メール", "メールで連絡を希望"],
+        postal: ["郵送", "書面での案内を希望"],
+        in_person: ["来館時", "会館での案内を希望"]
+      };
+
+      const FALLBACK_SERVICES = [
+        { service_code: "pre_consultation", service_name: "葬儀の事前相談", service_category: "pre_consultation", description: "費用や流れ、家族葬について落ち着いて相談します。", duration_minutes: 60, requires_schedule: true, available_methods: ["in_person", "phone", "online"], sort_order: 10 },
+        { service_code: "hall_tour", service_name: "会館見学", service_category: "hall_tour", description: "会館設備や控室などをご案内します。", duration_minutes: 60, requires_schedule: true, available_methods: ["in_person"], sort_order: 20 },
+        { service_code: "material_request", service_name: "資料請求", service_category: "material_request", description: "家族葬や会館の資料をご案内します。", duration_minutes: 30, requires_schedule: false, available_methods: ["line", "phone", "email"], sort_order: 30 },
+        { service_code: "aftercare_consultation", service_name: "葬儀後の相談", service_category: "aftercare", description: "葬儀後のお困りごとや必要な案内を整理します。", duration_minutes: 30, requires_schedule: true, available_methods: ["in_person", "phone", "online", "line"], sort_order: 40 },
+        { service_code: "memorial_consultation", service_name: "法要の相談", service_category: "memorial", description: "四十九日や一周忌などの準備について相談します。", duration_minutes: 60, requires_schedule: true, available_methods: ["in_person", "phone", "online", "line"], sort_order: 50 },
+        { service_code: "product_consultation", service_name: "返礼品・供花・供物等の相談", service_category: "product", description: "返礼品、供花、供物、会食、仏壇仏具、納骨等について相談します。", duration_minutes: 30, requires_schedule: true, available_methods: ["in_person", "phone", "online", "line"], sort_order: 60 },
+        { service_code: "general_consultation", service_name: "まだ決まっていない・まず相談", service_category: "general", description: "相談内容が決まっていない場合も、担当者が内容を整理します。", duration_minutes: 30, requires_schedule: true, available_methods: ["in_person", "phone", "online", "line"], sort_order: 70 }
+      ];
+
+      const CONTEXTS = {
+        pre_consultation: {
+          title: "分かる範囲でお選びください",
+          checks: ["費用の目安", "家族葬の流れ", "事前に準備すること", "会館・設備", "会員制度・積立", "もしもの時の連絡方法"],
+          fields: [
+            { id: "planning_timing", label: "ご検討時期", type: "select", options: ["まだ決まっていない", "半年以内", "1年以内", "情報収集中"] }
+          ]
+        },
+        hall_tour: {
+          title: "見学時に確認したいこと",
+          checks: ["式場", "控室", "安置設備", "駐車場", "バリアフリー", "費用の相談"],
+          fields: [
+            { id: "visitor_count", label: "見学人数", type: "text", placeholder: "例：2名" }
+          ]
+        },
+        material_request: {
+          title: "ご希望の資料",
+          checks: ["家族葬の案内", "会館案内", "費用の目安", "事前相談の案内", "葬儀後サポート", "法要サポート"],
+          fields: []
+        },
+        aftercare: {
+          title: "ご相談したい項目",
+          checks: ["葬儀後の手続き", "返礼品", "仏壇・仏具", "納骨・墓地", "相続相談窓口", "供花・供物・会食", "何から始めるか整理したい"],
+          fields: []
+        },
+        memorial: {
+          title: "法要について分かる範囲で入力",
+          checks: ["四十九日", "一周忌", "三回忌", "寺院・宗教者への確認", "会場", "会食", "返礼品", "案内状"],
+          fields: [
+            { id: "deceased_display_name", label: "故人様のお名前", type: "text", placeholder: "例：故 佐藤 一郎" },
+            { id: "reference_date", label: "ご逝去日・基準日", type: "date" },
+            { id: "religion", label: "宗教・宗派", type: "text", placeholder: "分からない場合は空欄で大丈夫です" },
+            { id: "temple_or_region_note", label: "寺院・地域について", type: "text", placeholder: "例：菩提寺あり、地域の慣習を確認したい" }
+          ],
+          note: "宗派・地域・ご家族の事情により時期や進め方が異なる場合があります。入力した日付から自動で確定することはありません。担当者、寺院・宗教者へ確認しながら進めます。"
+        },
+        product: {
+          title: "ご相談したい項目",
+          checks: ["返礼品", "供花", "供物", "会食", "仏壇・仏具", "納骨", "墓地", "その他"],
+          fields: [
+            { id: "quantity_text", label: "数量・人数の目安", type: "text", placeholder: "例：30名分、まだ未定" },
+            { id: "budget_text", label: "ご予算の目安", type: "text", placeholder: "例：1件3,000円前後、相談して決めたい" }
+          ]
+        },
+        general: {
+          title: "今の状況に近いもの",
+          checks: ["何から始めるか分からない", "費用だけ確認したい", "家族と相談するために情報がほしい", "葬儀後のことを相談したい", "法要について聞きたい", "担当者と話しながら整理したい"],
+          fields: []
+        }
+      };
+
+      const state = {
+        config: null,
+        options: null,
+        services: [...FALLBACK_SERVICES],
+        halls: [],
+        selectedService: null,
+        selectedMethod: "",
+        selectedDelivery: "postal",
+        selectedHallId: "",
+        selectedDate: "",
+        selectedTime: "",
+        selectedSlot: null,
+        currentStep: 1,
+        lineUserId: "",
+        profile: null,
+        profileEditing: true,
+        lastResult: null,
+        receiptText: "",
+        connectionOk: false,
+        availabilityRequestId: 0
+      };
+
+      const $ = (id) => document.getElementById(id);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+      document.addEventListener("DOMContentLoaded", init);
+
+      async function init() {
+        bindEvents();
+        setDateLimits();
+        state.lineUserId = new URLSearchParams(location.search).get("line_user_id") || "";
+        if (!state.lineUserId) state.lineUserId = await resolveLineUserIdFromLiff();
+        updateMemberLinks();
+        renderServices();
+        await loadPublicData();
+        await loadExistingProfile();
+        autoOpenServiceFromQuery();
+      }
+
+      function bindEvents() {
+        $("changeServiceButton").addEventListener("click", chooseAnotherService);
+        $("step1Cancel").addEventListener("click", chooseAnotherService);
+        $("toStep2").addEventListener("click", () => {
+          if (validateSchedule()) showStep(2);
+        });
+        $("backToStep1").addEventListener("click", () => showStep(1));
+        $("toStep3").addEventListener("click", () => {
+          if (validateDetails()) {
+            renderConfirmation();
+            showStep(3);
+          }
+        });
+        $("backToStep2").addEventListener("click", () => showStep(2));
+        $("consultationForm").addEventListener("submit", submitConsultation);
+        $("hallSelect").addEventListener("change", async (event) => {
+          state.selectedHallId = event.target.value;
+          clearFieldError("hall");
+          await refreshAvailability();
+        });
+        $("dateInput").addEventListener("change", async (event) => {
+          state.selectedDate = event.target.value;
+          state.selectedTime = "";
+          state.selectedSlot = null;
+          clearFieldError("date");
+          await refreshAvailability();
+        });
+        $("editProfileButton").addEventListener("click", () => setProfileEditing(!state.profileEditing));
+        $("copyReceiptButton").addEventListener("click", copyReceipt);
+        $("newConsultationButton").addEventListener("click", resetForNewConsultation);
+        $("phoneInput").addEventListener("blur", () => {
+          const normalized = normalizePhone($("phoneInput").value);
+          if (normalized && normalized.length >= 10) clearFieldError("phone");
+        });
+      }
+
+
+      async function resolveLineUserIdFromLiff() {
+        if (!LIFF_ID) return "";
+        try {
+          await loadExternalScript("https://static.line-scdn.net/liff/edge/2/sdk.js");
+          if (!window.liff) return "";
+          await window.liff.init({ liffId: LIFF_ID });
+          if (!window.liff.isLoggedIn()) {
+            window.liff.login({ redirectUri: location.href });
+            return "";
+          }
+          const profile = await window.liff.getProfile();
+          return profile?.userId || "";
+        } catch (error) {
+          console.warn("FUNERAL_LIFF_INIT_ERROR", error);
+          return "";
+        }
+      }
+
+      function loadExternalScript(src) {
+        if ([...document.scripts].some((script) => script.src === src)) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = src;
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = () => reject(new Error("LINE連携の初期化に失敗しました。"));
+          document.head.appendChild(script);
+        });
+      }
+
+      async function loadPublicData() {
+        try {
+          const [configResult, optionResult] = await Promise.all([
+            apiGet("/api/public/config"),
+            apiGet("/api/public/consultation-options")
+          ]);
+          state.config = configResult;
+          state.options = optionResult;
+          state.services = Array.isArray(optionResult.services) && optionResult.services.length ? optionResult.services : [...FALLBACK_SERVICES];
+          state.halls = Array.isArray(optionResult.halls) ? optionResult.halls : [];
+          state.connectionOk = true;
+          applyOfficeConfig();
+          renderServices();
+          renderHallOptions();
+        } catch (error) {
+          state.connectionOk = false;
+          showConnectionNotice("現在、相談受付情報を読み込めませんでした。通信環境をご確認のうえ、再読み込みしてください。急ぎの場合はお電話ください。");
+          console.error("FUNERAL_PUBLIC_DATA_ERROR", error);
+        }
+      }
+
+      function applyOfficeConfig() {
+        const office = state.config?.office || {};
+        const settings = state.config?.settings || {};
+        const officeName = office.office_name || "DPRO葬祭サポート";
+        const phone = office.emergency_phone || office.phone || "";
+        $("brandName").textContent = officeName;
+        $("footerOfficeName").textContent = officeName;
+        document.title = `${officeName}｜ご相談受付`;
+        if (settings.emergency_notice) $("emergencyText").textContent = settings.emergency_notice;
+        if (settings.privacy_notice) $("privacyNotice").textContent = settings.privacy_notice;
+        setPhoneLinks(phone);
+        setDateLimits();
+      }
+
+      function setPhoneLinks(phone) {
+        const clean = String(phone || "").replace(/[^0-9+]/g, "");
+        const href = clean ? `tel:${clean}` : "tel:";
+        [$("emergencyPhone"), $("supportCallLink"), $("completeCallLink")].forEach((element) => {
+          element.href = href;
+          if (phone) element.textContent = element === $("completeCallLink") ? `電話で確認する（${phone}）` : `電話で相談する（${phone}）`;
+        });
+      }
+
+      function setDateLimits() {
+        const input = $("dateInput");
+        const settings = state.config?.settings || {};
+        const startDays = Number(settings.booking_start_days || 0);
+        const horizonDays = Number(settings.booking_horizon_days || 60);
+        input.min = formatYmd(addDays(new Date(), startDays));
+        input.max = formatYmd(addDays(new Date(), horizonDays));
+      }
+
+      function renderServices() {
+        const services = [...state.services].sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+        $("serviceGrid").innerHTML = services.map((service) => {
+          const category = service.service_category || "general";
+          const generalClass = category === "general" ? " service-general" : "";
+          return `
+            <button class="service-card${generalClass}" type="button" data-service-code="${escapeHtml(service.service_code)}" aria-label="${escapeHtml(service.service_name)}を選ぶ">
+              <span class="service-icon" aria-hidden="true">${ICONS[category] || ICONS.general}</span>
+              <span>
+                <span class="service-name">${escapeHtml(service.service_name)}</span>
+                <span class="service-description">${escapeHtml(service.description || "担当者が内容を確認してご案内します。")}</span>
+              </span>
+              <span class="service-arrow" aria-hidden="true">${ICONS.arrow}</span>
+            </button>`;
+        }).join("");
+        $$(".service-card", $("serviceGrid")).forEach((button) => {
+          button.addEventListener("click", () => selectService(button.dataset.serviceCode));
+        });
+      }
+
+      function selectService(serviceCode) {
+        const service = state.services.find((item) => item.service_code === serviceCode) || FALLBACK_SERVICES.find((item) => item.service_code === serviceCode);
+        if (!service) return;
+        state.selectedService = service;
+        state.selectedMethod = "";
+        state.selectedTime = "";
+        state.selectedSlot = null;
+        state.selectedDate = "";
+        $("dateInput").value = "";
+        $$(".service-card").forEach((card) => card.classList.toggle("selected", card.dataset.serviceCode === serviceCode));
+        const category = service.service_category || "general";
+        $("selectedServiceIcon").innerHTML = ICONS[category] || ICONS.general;
+        $("selectedServiceTitle").textContent = service.service_name;
+        $("selectedServiceNote").textContent = service.requires_schedule ? `所要時間の目安：${service.duration_minutes || 30}分` : "日時予約は不要です";
+        renderMethods();
+        renderHallOptions();
+        renderContextFields();
+        applyServiceMode();
+        $("formShell").hidden = false;
+        showStep(1, false);
+        setTimeout(() => $("formShell").scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+      }
+
+      function autoOpenServiceFromQuery() {
+        const code = new URLSearchParams(location.search).get("service");
+        if (code && state.services.some((service) => service.service_code === code)) selectService(code);
+      }
+
+      function chooseAnotherService() {
+        $("formShell").hidden = true;
+        state.selectedService = null;
+        $$(".service-card").forEach((card) => card.classList.remove("selected"));
+        $("consultationMenu").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function renderMethods() {
+        const service = state.selectedService;
+        if (!service) return;
+        let methods = Array.isArray(service.available_methods) ? service.available_methods.filter((method) => ALLOWED_METHODS.has(method)) : [];
+        if (service.service_category === "material_request") methods = ["line", "phone", "email"];
+        if (!methods.length) methods = ["in_person"];
+        if (!methods.includes(state.selectedMethod)) state.selectedMethod = methods[0];
+        $("methodChoices").innerHTML = methods.map((method) => {
+          const [title, note] = METHOD_LABELS[method] || [method, ""];
+          return choiceMarkup("consultation_method", method, title, note, state.selectedMethod === method, ICONS[method] || "");
+        }).join("");
+        bindChoiceGroup("consultation_method", (value) => {
+          state.selectedMethod = value;
+          clearFieldError("method");
+          updateHallVisibility();
+        });
+
+        $("deliveryChoices").innerHTML = [
+          ["postal", "郵送", "ご指定住所へ資料をお送りします"],
+          ["line", "LINE", "LINEで確認できる内容をご案内します"],
+          ["email", "メール", "メールで資料・案内をお送りします"]
+        ].map(([value, title, note]) => choiceMarkup("material_delivery", value, title, note, state.selectedDelivery === value)).join("");
+        bindChoiceGroup("material_delivery", (value) => {
+          state.selectedDelivery = value;
+          clearFieldError("delivery");
+          updateAddressVisibility();
+        });
+      }
+
+      function choiceMarkup(name, value, title, note, selected, icon = "") {
+        return `<label class="choice-card${selected ? " selected" : ""}">
+          <input type="radio" name="${escapeHtml(name)}" value="${escapeHtml(value)}"${selected ? " checked" : ""}>
+          ${icon ? `<span aria-hidden="true">${icon}</span>` : ""}
+          <span class="choice-copy"><span class="choice-title">${escapeHtml(title)}</span><span class="choice-note">${escapeHtml(note)}</span></span>
+        </label>`;
+      }
+
+      function bindChoiceGroup(name, callback) {
+        $$(`input[name="${name}"]`).forEach((input) => {
+          input.addEventListener("change", () => {
+            $$(`input[name="${name}"]`).forEach((item) => item.closest(".choice-card").classList.toggle("selected", item.checked));
+            callback(input.value);
+          });
+        });
+      }
+
+      function renderHallOptions() {
+        const halls = state.halls;
+        if (!halls.length) {
+          $("hallSelect").innerHTML = '<option value="">会館情報を読み込み中です</option>';
+          state.selectedHallId = "";
+          return;
+        }
+        if (!halls.some((hall) => hall.id === state.selectedHallId)) state.selectedHallId = halls[0].id;
+        $("hallSelect").innerHTML = halls.map((hall) => `<option value="${escapeHtml(hall.id)}"${hall.id === state.selectedHallId ? " selected" : ""}>${escapeHtml(hall.hall_name)}${hall.address ? `（${escapeHtml(hall.address)}）` : ""}</option>`).join("");
+      }
+
+      function applyServiceMode() {
+        const requiresSchedule = Boolean(state.selectedService?.requires_schedule);
+        $("materialDeliveryField").hidden = state.selectedService?.service_category !== "material_request";
+        $("hallField").hidden = !requiresSchedule;
+        $("dateField").hidden = !requiresSchedule;
+        $("timeField").hidden = !requiresSchedule;
+        $("nonScheduleInfo").hidden = requiresSchedule;
+        $("scheduleDescription").textContent = requiresSchedule ? "ご都合のよい相談方法と日時をお選びください。" : "資料の受け取り方法と、担当者からの連絡方法をお選びください。";
+        updateHallVisibility();
+        updateAddressVisibility();
+      }
+
+      function updateHallVisibility() {
+        if (!state.selectedService?.requires_schedule) return;
+        const isInPerson = state.selectedMethod === "in_person";
+        $("hallHelp").textContent = isInPerson ? "相談・見学を希望する会館を選択してください。" : "担当窓口となる会館です。電話・オンライン相談でも管理上選択します。";
+      }
+
+      function renderContactChoices() {
+        let contacts = ["line", "phone", "email"];
+        if (state.selectedService?.service_category === "material_request" && state.selectedDelivery === "postal") contacts = ["line", "phone", "email", "postal"];
+        const current = getCheckedValue("preferred_contact_method") || state.profile?.family?.preferred_contact_method || (state.lineUserId ? "line" : "phone");
+        const selected = contacts.includes(current) ? current : contacts[0];
+        $("contactChoices").innerHTML = contacts.map((value) => {
+          const [title, note] = CONTACT_LABELS[value];
+          return choiceMarkup("preferred_contact_method", value, title, note, selected === value, ICONS[value] || "");
+        }).join("");
+        bindChoiceGroup("preferred_contact_method", () => clearFieldError("contact"));
+      }
+
+      function updateAddressVisibility() {
+        const needsAddress = state.selectedService?.service_category === "material_request" && state.selectedDelivery === "postal";
+        $("postalCodeField").hidden = !needsAddress;
+        $("addressField").hidden = !needsAddress;
+        renderContactChoices();
+      }
+
+      async function refreshAvailability() {
+        if (!state.selectedService?.requires_schedule) return;
+        if (!state.selectedDate || !state.selectedHallId) {
+          renderTimeMessage("日付を選ぶと空き時間が表示されます。");
+          return;
+        }
+        const requestId = ++state.availabilityRequestId;
+        $("timeSlots").innerHTML = '<div class="slot-loading"><span class="spinner" aria-hidden="true"></span><span>空き時間を確認しています</span></div>';
+        try {
+          const query = new URLSearchParams({
+            date: state.selectedDate,
+            hall_id: state.selectedHallId,
+            service_code: state.selectedService.service_code
+          });
+          const result = await apiGet(`/api/public/availability?${query.toString()}`);
+          if (requestId !== state.availabilityRequestId) return;
+          state.selectedTime = "";
+          state.selectedSlot = null;
+          if (!result.is_open || !Array.isArray(result.slots) || !result.slots.length) {
+            renderTimeMessage(result.reason || "この日は選択できる時間がありません。別の日をお選びください。");
+            return;
+          }
+          $("timeSlots").innerHTML = `<div class="time-slot-grid">${result.slots.map((slot) => `<button class="time-slot" type="button" data-time="${escapeHtml(slot.time)}">${escapeHtml(slot.time)}</button>`).join("")}</div>`;
+          $$(".time-slot", $("timeSlots")).forEach((button) => {
+            button.addEventListener("click", () => {
+              state.selectedTime = button.dataset.time;
+              state.selectedSlot = result.slots.find((slot) => slot.time === state.selectedTime) || null;
+              $$(".time-slot", $("timeSlots")).forEach((item) => item.classList.toggle("selected", item === button));
+              clearFieldError("time");
+            });
+          });
+        } catch (error) {
+          if (requestId !== state.availabilityRequestId) return;
+          renderTimeMessage(error.message || "空き時間を取得できませんでした。もう一度お試しください。");
+        }
+      }
+
+      function renderTimeMessage(message) {
+        $("timeSlots").innerHTML = `<div class="empty-slots">${escapeHtml(message)}</div>`;
+      }
+
+      function renderContextFields() {
+        const category = state.selectedService?.service_category || "general";
+        const context = CONTEXTS[category] || CONTEXTS.general;
+        const note = context.note ? `<div class="info-box warning" style="margin-bottom: 18px;">${escapeHtml(context.note)}</div>` : "";
+        const checks = context.checks?.length ? `<div class="check-grid" data-context-checks>${context.checks.map((label, index) => `<label class="check-item"><input type="checkbox" value="${escapeHtml(label)}" data-question-code="topic_${index + 1}"><span>${escapeHtml(label)}</span></label>`).join("")}</div>` : "";
+        const fields = context.fields?.length ? `<div class="form-grid" style="margin-top: 18px;">${context.fields.map(contextFieldMarkup).join("")}</div>` : "";
+        $("contextBox").innerHTML = `<h3 class="context-title">${escapeHtml(context.title)}</h3>${note}${checks}${fields}`;
+      }
+
+      function contextFieldMarkup(field) {
+        const required = field.required ? '<span class="required">必須</span>' : '<span class="optional">任意</span>';
+        if (field.type === "select") {
+          return `<div class="field"><label class="field-label" for="context_${escapeHtml(field.id)}">${escapeHtml(field.label)} ${required}</label><select class="select" id="context_${escapeHtml(field.id)}" data-context-field="${escapeHtml(field.id)}" data-context-label="${escapeHtml(field.label)}"><option value="">選択してください</option>${field.options.map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join("")}</select></div>`;
+        }
+        return `<div class="field"><label class="field-label" for="context_${escapeHtml(field.id)}">${escapeHtml(field.label)} ${required}</label><input class="input" id="context_${escapeHtml(field.id)}" data-context-field="${escapeHtml(field.id)}" data-context-label="${escapeHtml(field.label)}" type="${field.type === "date" ? "date" : "text"}" placeholder="${escapeHtml(field.placeholder || "")}"></div>`;
+      }
+
+      async function loadExistingProfile() {
+        if (!state.lineUserId) return;
+        try {
+          const query = new URLSearchParams({ line_user_id: state.lineUserId });
+          const profile = await apiGet(`/api/member/profile?${query.toString()}`);
+          state.profile = profile;
+          fillProfile(profile.family || {});
+          setProfileEditing(false);
+          updateMemberLinks();
+        } catch (error) {
+          if (error.status !== 404) console.warn("FUNERAL_PROFILE_LOAD_ERROR", error);
+        }
+      }
+
+      function fillProfile(family) {
+        $("familyName").value = family.family_name || "";
+        $("familyNameKana").value = family.family_name_kana || "";
+        $("phoneInput").value = family.phone || "";
+        $("emailInput").value = family.email || "";
+        $("relationInput").value = family.relation_to_deceased || "";
+        $("preferredTime").value = family.preferred_contact_time || "";
+        $("postalCode").value = family.postal_code || "";
+        $("addressInput").value = family.address || "";
+        $("privacyConsent").checked = true;
+        $("profileBannerTitle").textContent = `${family.family_name || "ご登録者"}様の登録情報を使用します`;
+        $("profileBannerNote").textContent = family.customer_no ? `顧客番号：${family.customer_no}` : "LINE連携済み";
+        renderContactChoices();
+      }
+
+      function setProfileEditing(editing) {
+        state.profileEditing = editing;
+        $("profileBanner").hidden = !state.profile;
+        $("familyFields").hidden = Boolean(state.profile) && !editing;
+        $("editProfileButton").textContent = editing ? "登録情報を使用" : "内容を確認・編集";
+      }
+
+      function validateSchedule() {
+        let valid = true;
+        clearErrors();
+        if (!state.selectedMethod) {
+          setFieldError("method", "相談方法を選んでください。");
+          valid = false;
+        }
+        if (state.selectedService?.service_category === "material_request" && !state.selectedDelivery) {
+          setFieldError("delivery", "資料の受け取り方法を選んでください。");
+          valid = false;
+        }
+        if (state.selectedService?.requires_schedule) {
+          if (!state.selectedHallId) {
+            setFieldError("hall", "相談会館を選んでください。", $("hallSelect"));
+            valid = false;
+          }
+          if (!state.selectedDate) {
+            setFieldError("date", "希望日を選んでください。", $("dateInput"));
+            valid = false;
+          }
+          if (!state.selectedTime) {
+            setFieldError("time", "空き時間を選んでください。");
+            valid = false;
+          }
+        }
+        if (!valid) focusFirstError();
+        return valid;
+      }
+
+      function validateDetails() {
+        clearErrors();
+        let valid = true;
+        const hasProfile = Boolean(state.profile) && !state.profileEditing;
+        if (!hasProfile && !$("familyName").value.trim()) {
+          setFieldError("familyName", "お名前を入力してください。", $("familyName"));
+          valid = false;
+        }
+        if (!hasProfile) {
+          const phone = normalizePhone($("phoneInput").value);
+          if (!phone || phone.length < 10) {
+            setFieldError("phone", "電話番号を正しく入力してください。", $("phoneInput"));
+            valid = false;
+          }
+        }
+        if ($("emailInput").value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("emailInput").value.trim())) {
+          setFieldError("email", "メールアドレスの形式を確認してください。", $("emailInput"));
+          valid = false;
+        }
+        if (!getCheckedValue("preferred_contact_method")) {
+          setFieldError("contact", "希望する連絡方法を選んでください。");
+          valid = false;
+        }
+        if (state.selectedService?.service_category === "material_request" && state.selectedDelivery === "postal") {
+          if (!$("postalCode").value.trim()) {
+            setFieldError("postalCode", "郵便番号を入力してください。", $("postalCode"));
+            valid = false;
+          }
+          if (!$("addressInput").value.trim()) {
+            setFieldError("address", "送付先住所を入力してください。", $("addressInput"));
+            valid = false;
+          }
+        }
+        if (!$("requestSummary").value.trim()) {
+          setFieldError("requestSummary", "相談したいことを入力してください。", $("requestSummary"));
+          valid = false;
+        }
+        if (!state.profile && !$("privacyConsent").checked) {
+          setFieldError("privacy", "個人情報の取り扱いへの同意が必要です。");
+          valid = false;
+        }
+        if (!valid) focusFirstError();
+        return valid;
+      }
+
+      function renderConfirmation() {
+        const service = state.selectedService;
+        const hall = state.halls.find((item) => item.id === state.selectedHallId);
+        const method = METHOD_LABELS[state.selectedMethod]?.[0] || state.selectedMethod;
+        const contact = CONTACT_LABELS[getCheckedValue("preferred_contact_method")]?.[0] || "";
+        const rows = [
+          ["相談内容", service.service_name],
+          ["相談方法", method]
+        ];
+        if (service.requires_schedule) {
+          rows.push(["希望日時", `${formatJapaneseDate(state.selectedDate)} ${state.selectedTime}`]);
+          rows.push(["相談会館", hall?.hall_name || ""]);
+        } else {
+          rows.push(["資料の受け取り", deliveryLabel(state.selectedDelivery)]);
+        }
+        rows.push(["お名前", $("familyName").value.trim() || state.profile?.family?.family_name || ""]);
+        rows.push(["電話番号", $("phoneInput").value.trim() || state.profile?.family?.phone || ""]);
+        rows.push(["希望連絡方法", contact]);
+        if ($("preferredTime").value.trim()) rows.push(["連絡しやすい時間", $("preferredTime").value.trim()]);
+        const contextSummary = collectContextSummary();
+        if (contextSummary) rows.push(["事前確認", contextSummary]);
+        rows.push(["相談したいこと", $("requestSummary").value.trim()]);
+        $("confirmationList").innerHTML = rows.map(summaryRowMarkup).join("");
+      }
+
+      function summaryRowMarkup([label, value]) {
+        return `<div class="summary-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value || "—")}</dd></div>`;
+      }
+
+      async function submitConsultation(event) {
+        event.preventDefault();
+        if (!validateSchedule() || !validateDetails()) return;
+        const submitButton = $("submitButton");
+        submitButton.disabled = true;
+        showLoading("送信しています", "ご相談内容を安全に登録しています。");
+        try {
+          const payload = buildPayload();
+          const endpoint = state.selectedService.service_category === "material_request" ? "/api/public/material-requests" : "/api/public/consultations";
+          const result = await apiPost(endpoint, payload);
+          state.lastResult = result;
+          showComplete(result);
+        } catch (error) {
+          showToast(error.message || "送信できませんでした。時間をおいてもう一度お試しください。", "error", 6200);
+          if (error.status === 409) {
+            showStep(1);
+            await refreshAvailability();
+          }
+        } finally {
+          submitButton.disabled = false;
+          hideLoading();
+        }
+      }
+
+      function buildPayload() {
+        const preferredContact = getCheckedValue("preferred_contact_method") || "phone";
+        const family = state.profile?.family || {};
+        const payload = {
+          line_user_id: state.lineUserId || undefined,
+          family_name: $("familyName").value.trim() || family.family_name,
+          family_name_kana: $("familyNameKana").value.trim() || family.family_name_kana || undefined,
+          phone: $("phoneInput").value.trim() || family.phone,
+          email: $("emailInput").value.trim() || family.email || undefined,
+          relation_to_deceased: $("relationInput").value.trim() || family.relation_to_deceased || undefined,
+          preferred_contact_method: preferredContact,
+          contact_preference: preferredContact,
+          preferred_contact_time: $("preferredTime").value.trim() || family.preferred_contact_time || undefined,
+          postal_code: $("postalCode").value.trim() || family.postal_code || undefined,
+          address: $("addressInput").value.trim() || family.address || undefined,
+          consent_privacy: Boolean(state.profile) || $("privacyConsent").checked,
+          service_code: state.selectedService.service_code,
+          consultation_method: state.selectedService.service_category === "material_request" ? (preferredContact === "email" ? "email" : preferredContact === "phone" ? "phone" : "line") : state.selectedMethod,
+          hall_id: state.selectedService.requires_schedule ? state.selectedHallId : undefined,
+          date: state.selectedService.requires_schedule ? state.selectedDate : undefined,
+          time: state.selectedService.requires_schedule ? state.selectedTime : undefined,
+          request_summary: $("requestSummary").value.trim(),
+          material_delivery_method: state.selectedService.service_category === "material_request" ? state.selectedDelivery : undefined,
+          intake_answers: collectIntakeAnswers()
+        };
+        const contextValues = Object.fromEntries($$("[data-context-field]", $("contextBox")).map((field) => [field.dataset.contextField, field.value.trim()]));
+        ["deceased_display_name", "reference_date", "religion", "denomination", "temple_or_region_note"].forEach((key) => {
+          if (contextValues[key]) payload[key] = contextValues[key];
+        });
+        return removeUndefined(payload);
+      }
+
+      function collectIntakeAnswers() {
+        const answers = [];
+        const checked = $$("[data-context-checks] input:checked", $("contextBox")).map((input) => input.value);
+        if (checked.length) {
+          answers.push({ question_code: "selected_topics", question_label: "相談したい項目", answer_text: checked.join("、"), answer_json: { selected: checked } });
+        }
+        $$("[data-context-field]", $("contextBox")).forEach((field) => {
+          const value = field.value.trim();
+          if (value) answers.push({ question_code: field.dataset.contextField, question_label: field.dataset.contextLabel, answer_text: value });
+        });
+        return answers;
+      }
+
+      function collectContextSummary() {
+        const parts = [];
+        const checked = $$("[data-context-checks] input:checked", $("contextBox")).map((input) => input.value);
+        if (checked.length) parts.push(checked.join("、"));
+        $$("[data-context-field]", $("contextBox")).forEach((field) => {
+          if (field.value.trim()) parts.push(`${field.dataset.contextLabel}：${field.value.trim()}`);
+        });
+        return parts.join("\n");
+      }
+
+      function showComplete(result) {
+        state.currentStep = 4;
+        updateStepIndicators();
+        $$("[data-form-step]").forEach((section) => section.hidden = true);
+        $("completePanel").hidden = false;
+        const consultation = result.consultation || {};
+        const family = result.family || {};
+        const rows = [];
+        if (consultation.consultation_no) rows.push(["受付番号", consultation.consultation_no]);
+        if (result.request?.request_no) rows.push(["受付番号", result.request.request_no]);
+        rows.push(["相談内容", consultation.service_name || state.selectedService.service_name]);
+        if (consultation.start_at) rows.push(["予約日時", formatJapaneseDateTime(consultation.start_at)]);
+        if (consultation.hall_name) rows.push(["相談会館", consultation.hall_name]);
+        if (family.family_name) rows.push(["お名前", `${family.family_name}様`]);
+        if (family.customer_no) rows.push(["顧客番号", family.customer_no]);
+        $("receiptList").innerHTML = rows.map(summaryRowMarkup).join("");
+        $("completeLead").textContent = result.message || "担当者が内容を確認し、ご希望の方法でご連絡します。";
+        state.receiptText = buildReceiptText(result, rows);
+        updateMemberLinks(result);
+        $("completePanel").scrollIntoView({ behavior: "smooth", block: "start" });
+        showToast("ご相談を受け付けました。", "success");
+      }
+
+      function buildReceiptText(result, rows) {
+        const officeName = state.config?.office?.office_name || "DPRO葬祭サポート";
+        return `${officeName}\nご相談受付内容\n\n${rows.map(([label, value]) => `${label}：${value}`).join("\n")}\n\n${result.message || "担当者が内容を確認してご連絡します。"}`;
+      }
+
+      async function copyReceipt() {
+        try {
+          await navigator.clipboard.writeText(state.receiptText);
+          showToast("受付内容をコピーしました。", "success");
+        } catch {
+          const textarea = document.createElement("textarea");
+          textarea.value = state.receiptText;
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          textarea.remove();
+          showToast("受付内容をコピーしました。", "success");
+        }
+      }
+
+      function resetForNewConsultation() {
+        state.lastResult = null;
+        state.selectedService = null;
+        state.selectedMethod = "";
+        state.selectedDate = "";
+        state.selectedTime = "";
+        state.selectedSlot = null;
+        $("consultationForm").reset();
+        $("completePanel").hidden = true;
+        $("formShell").hidden = true;
+        if (state.profile) {
+          fillProfile(state.profile.family || {});
+          setProfileEditing(false);
+        }
+        $$(".service-card").forEach((card) => card.classList.remove("selected"));
+        $("consultationMenu").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function showStep(step, scroll = true) {
+        state.currentStep = step;
+        $("completePanel").hidden = true;
+        $$("[data-form-step]").forEach((section) => section.hidden = Number(section.dataset.formStep) !== step);
+        if (step === 2) {
+          renderContactChoices();
+          updateAddressVisibility();
+          setProfileEditing(Boolean(state.profile) ? state.profileEditing : true);
+        }
+        updateStepIndicators();
+        if (scroll) setTimeout(() => $("formShell").scrollIntoView({ behavior: "smooth", block: "start" }), 30);
+      }
+
+      function updateStepIndicators() {
+        $$("[data-step-indicator]").forEach((indicator) => {
+          const step = Number(indicator.dataset.stepIndicator);
+          indicator.classList.toggle("active", step === state.currentStep);
+          indicator.classList.toggle("done", step < state.currentStep);
+          const dot = indicator.querySelector(".step-dot");
+          dot.textContent = step < state.currentStep ? "✓" : String(step);
+        });
+      }
+
+      function updateMemberLinks(result = null) {
+        const params = new URLSearchParams();
+        const customerNo = result?.family?.customer_no || state.profile?.family?.customer_no || "";
+        const phone = $("phoneInput")?.value?.trim() || state.profile?.family?.phone || "";
+        if (state.lineUserId) params.set("line_user_id", state.lineUserId);
+        else if (customerNo && phone) {
+          params.set("customer_no", customerNo);
+          params.set("phone", phone);
+        }
+        const href = params.toString() ? `member.html?${params.toString()}` : "member.html";
+        $("memberLink").href = href;
+        $("completeMemberLink").href = href;
+      }
+
+      function setFieldError(key, message, input = null) {
+        const error = $(`${key}Error`);
+        if (error) {
+          error.textContent = message;
+          error.hidden = false;
+        }
+        if (input) {
+          input.classList.add("invalid");
+          input.setAttribute("aria-invalid", "true");
+          input.dataset.errorTarget = "true";
+        } else if (error) {
+          error.dataset.errorTarget = "true";
+        }
+      }
+
+      function clearFieldError(key) {
+        const error = $(`${key}Error`);
+        if (error) {
+          error.hidden = true;
+          error.textContent = "";
+          delete error.dataset.errorTarget;
+        }
+        const map = { hall: "hallSelect", date: "dateInput", familyName: "familyName", phone: "phoneInput", email: "emailInput", postalCode: "postalCode", address: "addressInput", requestSummary: "requestSummary" };
+        const input = map[key] ? $(map[key]) : null;
+        if (input) {
+          input.classList.remove("invalid");
+          input.removeAttribute("aria-invalid");
+          delete input.dataset.errorTarget;
+        }
+      }
+
+      function clearErrors() {
+        $$(".field-error").forEach((error) => {
+          error.hidden = true;
+          error.textContent = "";
+          delete error.dataset.errorTarget;
+        });
+        $$(".invalid").forEach((input) => {
+          input.classList.remove("invalid");
+          input.removeAttribute("aria-invalid");
+          delete input.dataset.errorTarget;
+        });
+      }
+
+      function focusFirstError() {
+        const target = $("consultationForm").querySelector('[data-error-target="true"]');
+        if (!target) return;
+        if (typeof target.focus === "function") target.focus({ preventScroll: true });
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function getCheckedValue(name) {
+        return document.querySelector(`input[name="${name}"]:checked`)?.value || "";
+      }
+
+      function showConnectionNotice(message) {
+        $("connectionNotice").textContent = message;
+        $("connectionNotice").hidden = false;
+      }
+
+      function showLoading(title, note) {
+        $("loadingTitle").textContent = title;
+        $("loadingNote").textContent = note;
+        $("loadingOverlay").hidden = false;
+        document.body.style.overflow = "hidden";
+      }
+
+      function hideLoading() {
+        $("loadingOverlay").hidden = true;
+        document.body.style.overflow = "";
+      }
+
+      function showToast(message, type = "", duration = 3600) {
+        const toast = document.createElement("div");
+        toast.className = `toast${type ? ` ${type}` : ""}`;
+        toast.textContent = message;
+        $("toastRegion").appendChild(toast);
+        setTimeout(() => toast.remove(), duration);
+      }
+
+      async function apiGet(path) {
+        const response = await fetch(`${API_BASE}${path}`, { method: "GET", headers: { Accept: "application/json" }, cache: "no-store" });
+        return parseResponse(response);
+      }
+
+      async function apiPost(path, body) {
+        const response = await fetch(`${API_BASE}${path}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(body)
+        });
+        return parseResponse(response);
+      }
+
+      async function parseResponse(response) {
+        let data = null;
+        try { data = await response.json(); } catch { data = null; }
+        if (!response.ok || !data?.ok) {
+          const error = new Error(data?.error || `通信エラーが発生しました（${response.status}）`);
+          error.status = response.status;
+          error.details = data?.details || null;
+          throw error;
+        }
+        return data;
+      }
+
+      function normalizePhone(value) {
+        let normalized = String(value || "").normalize("NFKC").replace(/[ー―‐‑‒–—−]/g, "-").replace(/[^0-9+]/g, "");
+        if (normalized.startsWith("+81")) {
+          const rest = normalized.slice(3);
+          normalized = rest.startsWith("0") ? rest : `0${rest}`;
+        }
+        return normalized.replace(/^\+/, "");
+      }
+
+      function formatYmd(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function addDays(date, days) {
+        const next = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        next.setDate(next.getDate() + Number(days || 0));
+        return next;
+      }
+
+      function formatJapaneseDate(ymd) {
+        if (!ymd) return "";
+        const date = new Date(`${ymd}T12:00:00+09:00`);
+        return new Intl.DateTimeFormat("ja-JP", { year: "numeric", month: "long", day: "numeric", weekday: "short", timeZone: "Asia/Tokyo" }).format(date);
+      }
+
+      function formatJapaneseDateTime(iso) {
+        if (!iso) return "";
+        const date = new Date(iso);
+        return new Intl.DateTimeFormat("ja-JP", { year: "numeric", month: "long", day: "numeric", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Tokyo" }).format(date);
+      }
+
+      function deliveryLabel(value) {
+        return { postal: "郵送", line: "LINE", email: "メール" }[value] || value;
+      }
+
+      function removeUndefined(object) {
+        return Object.fromEntries(Object.entries(object).filter(([, value]) => value !== undefined && value !== null && value !== ""));
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
+      }
+
+      window.DPRO_FUNERAL_FORM = { version: VERSION, apiBase: API_BASE, liffId: LIFF_ID };
+    })();
+  </script>
+</body>
+</html>
