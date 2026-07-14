@@ -37,7 +37,7 @@
     .topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:25}
     .topbar h1{font-size:22px;margin:0}.topbar p{margin:0;color:var(--muted);font-size:13px}
     .top-actions{display:flex;gap:10px;align-items:center}
-    .top-actions select,.date-input{min-height:44px;border:1px solid #cfd9d4;border-radius:10px;padding:0 12px;background:#fff;font-weight:700}
+    .top-actions select,.date-input{min-height:44px;border:1px solid #cfd9d4;border-radius:10px;padding:0 12px;background:#fff;font-weight:700}.date-input{min-width:205px;font-variant-numeric:tabular-nums}
     .btn{min-height:42px;border:1px solid #cfd9d4;border-radius:10px;background:#fff;padding:9px 16px;font-weight:800;color:var(--ink)}
     .btn:hover{filter:brightness(.98)}
     .btn.primary{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 7px 16px rgba(11,107,95,.18)}
@@ -79,7 +79,7 @@
 <body>
 <div id="login" class="login hidden">
   <div class="login-card">
-    <div class="login-head"><span class="step">STEP FUNERAL-7</span><h1>担当スタッフ画面</h1><p>管理コードを入力して、担当業務を開きます。</p></div>
+    <div class="login-head"><span class="step">STEP FUNERAL-10</span><h1>担当スタッフ画面</h1><p>管理コードを入力して、担当業務を開きます。</p></div>
     <div class="login-body">
       <label for="loginKey"><b>管理コード</b></label>
       <input id="loginKey" type="password" inputmode="numeric" autocomplete="off" placeholder="管理コードを入力">
@@ -117,7 +117,7 @@
     </header>
     <div class="content">
       <section class="hero">
-        <div><span class="step">STEP FUNERAL-7 · STAFF</span><h2>今日やる仕事を、<br>担当者ごとにまとめて確認</h2><p>相談対応、期限タスク、葬儀後フォロー、法要確認、返礼品相談をこの画面で更新できます。</p></div>
+        <div><span class="step">STEP FUNERAL-10 · STAFF</span><h2>今日やる仕事を、<br>担当者ごとにまとめて確認</h2><p>相談対応、期限タスク、葬儀後フォロー、法要確認、返礼品相談をこの画面で更新できます。</p></div>
         <div class="hero-info"><dl><div><dt>担当者</dt><dd id="heroStaff">—</dd></div><div><dt>対象日</dt><dd id="heroDate">—</dd></div><div><dt>最終更新</dt><dd id="lastUpdated">—</dd></div></dl></div>
       </section>
       <div class="toolbar"><input id="workDate" class="date-input" type="date"><button class="btn primary" id="showDate">この日を表示</button><button class="btn" id="todayBtn">今日へ戻る</button><button class="btn" data-jump="consultations">担当相談を見る</button><button class="btn" data-jump="tasks">未完了タスクを見る</button><span class="spacer"></span><span id="dataNote" class="badge green">データ取得前</span></div>
@@ -155,7 +155,7 @@
 <script>
 'use strict';
 const API_BASE='https://dpro-funeral-line-api.dpromstk2000.workers.dev';
-const VERSION='STEP FUNERAL-7';
+const VERSION='STEP FUNERAL-10-STAFF-FINAL';
 const qs=new URLSearchParams(location.search);
 const DEMO=qs.get('demo')==='1';
 const state={key:'',staff:[],selected:null,today:null,work:null,templates:[],view:'today',caseFilter:'all',taskFilter:'all'};

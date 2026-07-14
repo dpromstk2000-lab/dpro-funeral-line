@@ -81,7 +81,7 @@
   <main class="main">
     <section class="hero">
       <div>
-        <span class="step-badge">STEP FUNERAL-9-R2 · SYSTEM CHECK</span>
+        <span class="step-badge">STEP FUNERAL-10 · FINAL SYSTEM CHECK</span>
         <h2>営業前の確認を、<br>この1画面で完了</h2>
         <p>自動チェック、営業デモ準備、各画面の手動確認を順番に行います。</p>
       </div>
@@ -134,7 +134,7 @@
     </section>
   </main>
 
-  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-9-R2 / 営業前システムチェック</span></footer>
+  <footer class="footer"><span>DPRO葬祭サポート</span><span>STEP FUNERAL-10 / 最終・営業前システムチェック</span></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <div class="gate hidden" id="loginGate">
@@ -154,7 +154,7 @@
 <script>
 (() => {
   'use strict';
-  const STEP = 'FUNERAL-9-R2';
+  const STEP = 'FUNERAL-10';
   const API_BASE = 'https://dpro-funeral-line-api.dpromstk2000.workers.dev';
   const SITE_BASE = 'https://dpromstk2000-lab.github.io/dpro-funeral-line';
   const EXPECTED_VERSION = 'FUNERAL-9-R2-WORKER-BULK-INSERT-NORMALIZE-20260714';
@@ -178,7 +178,7 @@
     {id:'availability',icon:'枠',title:'空き枠・30分単位',desc:'次の営業日を探し、営業時間内の30分単位の空き枠を確認します。'},
     {id:'phone',icon:'電',title:'電話番号正規化検索',desc:'ハイフン形式と+81形式が同じご家族へ一致することを確認します。'},
     {id:'memorial',icon:'法',title:'法要候補の公開ガード',desc:'担当者未確認の候補日がご家族マイページへ出ないことを確認します。'},
-    {id:'pages',icon:'画',title:'全画面ファイル',desc:'ご家族、マイページ、PC、スタッフ、iPadの公開ファイルを確認します。'}
+    {id:'pages',icon:'画',title:'全画面ファイル',desc:'ご家族、マイページ、PC、スタッフ、iPad、システムチェックの公開ファイルを確認します。'}
   ];
 
   const manualDefs = [
@@ -241,7 +241,7 @@
   async function checkAvailability(){let found=null;for(let i=0;i<15;i++){const date=ymdJp(i);const u=`${API_BASE}/api/public/availability?date=${encodeURIComponent(date)}&service_code=pre_consultation&hall_code=main_hall&t=${Date.now()}`;const d=await fetchJson(u);if(d.ok&&d.is_open&&(d.slots||[]).length){found=d;break;}}assert(found,'15日以内に予約可能な空き枠が見つかりません。');const times=(found.slots||[]).map(s=>s.start_time||s.time||s.label||'').filter(Boolean);assert(times.length>0,'空き時間が取得できません。');const minuteOk=times.every(t=>{const m=String(t).match(/(\d{1,2}):(\d{2})/);return m&&['00','30'].includes(m[2])});assert(minuteOk,'30分単位ではない空き枠があります。');return result('pass',`${found.date}：${found.slots.length}枠取得\n${times.slice(0,4).join(' / ')}${times.length>4?' …':''}`,found);}
   async function checkPhone(){const q1=await fetchJson(`${API_BASE}/api/admin/search?q=${encodeURIComponent('090-9999-0000')}&limit=10&t=${Date.now()}`,{headers:adminHeaders()});const q2=await fetchJson(`${API_BASE}/api/admin/search?q=${encodeURIComponent('+81 90-9999-0000')}&limit=10&t=${Date.now()}`,{headers:adminHeaders()});const a=(q1.families||[]).find(x=>x.customer_no==='FUNERAL-DEMO-999');const b=(q2.families||[]).find(x=>x.customer_no==='FUNERAL-DEMO-999');assert(a&&b,'ハイフン形式または+81形式でテスト家族を検索できません。');assert(a.id===b.id,'電話番号形式によって別のご家族へ一致しました。');return result('pass',`090-9999-0000 → ${a.customer_no}\n+81 90-9999-0000 → 同じご家族`,{q1,q2});}
   async function checkMemorial(){const d=await fetchJson(`${API_BASE}/api/member/dashboard?line_user_id=demo_funeral_line_002&t=${Date.now()}`);assert(d.ok,'葬儀後フォローデモを取得できません。');const aftercareCount=(d.aftercare?.items||[]).length;assert(aftercareCount===3,`営業デモデータが不足しています。葬儀後フォロー ${aftercareCount}/3件。先に「営業デモを再準備」を実行してください。`);const memorialCount=(d.memorial?.services||[]).length;assert(memorialCount===0,`担当者未確認の法要候補がご家族へ公開されています (${memorialCount}件)`);return result('pass','葬儀後フォロー3件を取得\n未確認の四十九日候補：ご家族には0件（非公開）',d);}
-  async function checkPages(){const defs=[['index.html','STEP FUNERAL-4'],['member.html','STEP FUNERAL-5'],['owner.html','STEP FUNERAL-6'],['staff.html','STEP FUNERAL-7'],['owner-ipad.html','STEP FUNERAL-8']];const rows=[];for(const [file,marker] of defs){const res=await fetch(`${SITE_BASE}/${file}?system_check=${Date.now()}`,{cache:'no-store'});assert(res.ok,`${file} がHTTP ${res.status}`);const text=await res.text();assert(text.includes(marker),`${file} のSTEP表記を確認できません。`);rows.push(file)}return result('pass',`${rows.join(' / ')}\n5画面すべて公開・STEP表記OK`,rows);}
+  async function checkPages(){const defs=[['index.html','STEP FUNERAL-10'],['member.html','STEP FUNERAL-10'],['owner.html','STEP FUNERAL-10'],['staff.html','STEP FUNERAL-10'],['owner-ipad.html','STEP FUNERAL-10'],['system-check.html','STEP FUNERAL-10']];const rows=[];for(const [file,marker] of defs){const res=await fetch(`${SITE_BASE}/${file}?system_check=${Date.now()}`,{cache:'no-store'});assert(res.ok,`${file} がHTTP ${res.status}`);const text=await res.text();assert(text.includes(marker),`${file} のSTEP表記を確認できません。`);rows.push(file)}return result('pass',`${rows.join(' / ')}\n6画面すべて公開・STEP表記OK`,rows);}
 
   const runners={health:checkHealth,config:checkConfig,options:checkOptions,auth:checkAuth,dashboard:checkDashboard,availability:checkAvailability,phone:checkPhone,memorial:checkMemorial,pages:checkPages};
 
