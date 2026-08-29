@@ -1,0 +1,353 @@
+name: FUNERAL R4 Guide Center + LIVE QA
+
+on:
+  push:
+    paths:
+      - '.github/workflows/funeral-r4-guide-center-live-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: funeral-r4-guide-center-live-qa
+  cancel-in-progress: false
+
+jobs:
+  live-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Implement Guide Center from authoritative Tutorial
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin main
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64
+          p=Path('demo-guide.html')
+          s=p.read_text(encoding='utf-8')
+          if 'DPRO_FUNERAL_TUTORIAL_R3_20260829_V2' not in Path('tutorial.js').read_text(encoding='utf-8'):
+              raise SystemExit('R3 V2 Tutorial is not current; forward-only guard stopped R4.')
+          marker='data-guide-version="DPRO_FUNERAL_GUIDE_R4_20260829_V1"'
+          if marker in s:
+              print('R4 Guide Center already present.')
+          else:
+              css=base64.b64decode('LyogRFBSTyBGVU5FUkFMIFI0IEdVSURFIENFTlRFUiBWMSAqLwouZ3VpZGUtY2VudGVye21hcmdpbi10b3A6MzJweDtwYWRkaW5nOjIycHg7Ym9yZGVyOjFweCBzb2xpZCB2YXIoLS1saW5lKTtib3JkZXItcmFkaXVzOjIycHg7YmFja2dyb3VuZDpyZ2JhKDI1NSwyNTUsMjU1LC45OCk7Ym94LXNoYWRvdzp2YXIoLS1zaGFkb3cpfQouZ3VpZGUtY2VudGVyLWhlYWR7ZGlzcGxheTpmbGV4O2FsaWduLWl0ZW1zOmZsZXgtZW5kO2p1c3RpZnktY29udGVudDpzcGFjZS1iZXR3ZWVuO2dhcDoxOHB4O2ZsZXgtd3JhcDp3cmFwfQouZ3VpZGUtY2VudGVyLWhlYWQgc21hbGx7Y29sb3I6dmFyKC0tYnJhbmQpO2ZvbnQtc2l6ZToxMHB4O2ZvbnQtd2VpZ2h0OjEwMDA7bGV0dGVyLXNwYWNpbmc6LjEyZW19Ci5ndWlkZS1jZW50ZXItaGVhZCBoMnttYXJnaW46NXB4IDAgMDtmb250LXNpemU6Y2xhbXAoMjNweCw0dncsMzRweCl9Ci5ndWlkZS1jZW50ZXItaGVhZCBwe21heC13aWR0aDo3NjBweDttYXJnaW46N3B4IDAgMDtjb2xvcjp2YXIoLS1tdXRlZCk7Zm9udC1zaXplOjEzcHh9Ci5ndWlkZS10b29sYmFye2Rpc3BsYXk6ZmxleDtnYXA6OHB4O2ZsZXgtd3JhcDp3cmFwfQouZ3VpZGUtYnRue21pbi1oZWlnaHQ6NDRweDtib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO2JvcmRlci1yYWRpdXM6MTJweDtwYWRkaW5nOjlweCAxNHB4O2JhY2tncm91bmQ6I2ZmZjtjb2xvcjp2YXIoLS1kZWVwKTtmb250OmluaGVyaXQ7Zm9udC1zaXplOjEycHg7Zm9udC13ZWlnaHQ6OTUwO2N1cnNvcjpwb2ludGVyfQouZ3VpZGUtYnRuW2RhdGEtcHJpbWFyeV17Ym9yZGVyLWNvbG9yOnZhcigtLWJyYW5kKTtiYWNrZ3JvdW5kOnZhcigtLWJyYW5kKTtjb2xvcjojZmZmfQouZ3VpZGUtYnRuW2hpZGRlbl17ZGlzcGxheTpub25lIWltcG9ydGFudH0KLmd1aWRlLWJ0bjpmb2N1cy12aXNpYmxlLC5ndWlkZS1pdGVtOmZvY3VzLXZpc2libGV7b3V0bGluZTozcHggc29saWQgI2Q1YTQ1MjtvdXRsaW5lLW9mZnNldDozcHh9Ci5ndWlkZS1zdGF0ZXttYXJnaW4tdG9wOjE0cHg7cGFkZGluZzoxMXB4IDEzcHg7Ym9yZGVyLXJhZGl1czoxMnB4O2JhY2tncm91bmQ6dmFyKC0tc29mdCk7Zm9udC1zaXplOjEycHg7Zm9udC13ZWlnaHQ6ODUwO2NvbG9yOiM1NjRiNDV9Ci5ndWlkZS1saXN0e2Rpc3BsYXk6Z3JpZDtncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KDIsbWlubWF4KDAsMWZyKSk7Z2FwOjEwcHg7bWFyZ2luLXRvcDoxNHB4fQouZ3VpZGUtaXRlbXttaW4td2lkdGg6MDtwYWRkaW5nOjE1cHg7Ym9yZGVyOjFweCBzb2xpZCB2YXIoLS1saW5lKTtib3JkZXItcmFkaXVzOjE1cHg7YmFja2dyb3VuZDojZmZmfQouZ3VpZGUtaXRlbVthcmlhLWN1cnJlbnQ9InN0ZXAiXXtib3JkZXItY29sb3I6dmFyKC0tYnJhbmQpO2JveC1zaGFkb3c6MCAwIDAgM3B4IHJnYmEoNDcsNzUsNjYsLjEwKX0KLmd1aWRlLWl0ZW0ta2lja2Vye2Rpc3BsYXk6ZmxleDthbGlnbi1pdGVtczpjZW50ZXI7anVzdGlmeS1jb250ZW50OnNwYWNlLWJldHdlZW47Z2FwOjhweDtjb2xvcjp2YXIoLS1icmFuZCk7Zm9udC1zaXplOjlweDtmb250LXdlaWdodDoxMDAwO2xldHRlci1zcGFjaW5nOi4wOGVtfQouZ3VpZGUtaXRlbSBoM3ttYXJnaW46NnB4IDAgMDtmb250LXNpemU6MTZweDtsaW5lLWhlaWdodDoxLjR9Ci5ndWlkZS1pdGVtIHB7bWFyZ2luOjZweCAwIDA7Y29sb3I6dmFyKC0tbXV0ZWQpO2ZvbnQtc2l6ZToxMXB4fQouZ3VpZGUtbWV0YXttYXJnaW4tdG9wOjlweDtwYWRkaW5nLXRvcDo5cHg7Ym9yZGVyLXRvcDoxcHggZGFzaGVkIHZhcigtLWxpbmUpO2Rpc3BsYXk6Z3JpZDtnYXA6M3B4O2NvbG9yOiM3MDY0NWQ7Zm9udC1zaXplOjlweDtvdmVyZmxvdy13cmFwOmFueXdoZXJlfQpAbWVkaWEobWF4LXdpZHRoOjc2MHB4KXsuZ3VpZGUtbGlzdHtncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyfS5ndWlkZS1jZW50ZXJ7cGFkZGluZzoxN3B4fX0=').decode('utf-8')
+              html=base64.b64decode('PHNlY3Rpb24gY2xhc3M9Imd1aWRlLWNlbnRlciIgaWQ9Imd1aWRlQ2VudGVyIiBhcmlhLWxhYmVsbGVkYnk9Imd1aWRlQ2VudGVyVGl0bGUiIGRhdGEtZ3VpZGUtdmVyc2lvbj0iRFBST19GVU5FUkFMX0dVSURFX1I0XzIwMjYwODI5X1YxIj4KICA8ZGl2IGNsYXNzPSJndWlkZS1jZW50ZXItaGVhZCI+CiAgICA8ZGl2PgogICAgICA8c21hbGw+R1VJREUgQ0VOVEVSIC8gRklSU1QxMDwvc21hbGw+CiAgICAgIDxoMiBpZD0iZ3VpZGVDZW50ZXJUaXRsZSI+5pON5L2c44Ks44Kk44OJ44K744Oz44K/44O8PC9oMj4KICAgICAgPHA+Rmlyc3QxMOOBrjEw44K544OG44OD44OX44KS44CB5a6f6KOF5riI44G/VHV0b3JpYWzjgajlkIzjgZjpoIbluo/jg7vlkIzjgZjnirbmhYvjgafnorroqo3jgafjgY3jgb7jgZnjgILjgZPjgZPjgYvjgonplovlp4vjg7vlho3plovjg7vjg6rjg5fjg6zjgqTjgZfjgabjgoLjgIHliKXjga7pgLLmjZfjg4fjg7zjgr/jga/kvZzjgorjgb7jgZvjgpPjgII8L3A+CiAgICA8L2Rpdj4KICAgIDxkaXYgY2xhc3M9Imd1aWRlLXRvb2xiYXIiIGFyaWEtbGFiZWw9IuaTjeS9nOOCrOOCpOODieOBrumWi+Wni+ODu+WGjemWiyI+CiAgICAgIDxidXR0b24gY2xhc3M9Imd1aWRlLWJ0biIgZGF0YS1wcmltYXJ5IGlkPSJndWlkZVN0YXJ0IiB0eXBlPSJidXR0b24iPlN0YXJ0PC9idXR0b24+CiAgICAgIDxidXR0b24gY2xhc3M9Imd1aWRlLWJ0biIgaWQ9Imd1aWRlUmVzdW1lIiB0eXBlPSJidXR0b24iIGhpZGRlbj5SZXN1bWU8L2J1dHRvbj4KICAgICAgPGJ1dHRvbiBjbGFzcz0iZ3VpZGUtYnRuIiBpZD0iZ3VpZGVSZXBsYXkiIHR5cGU9ImJ1dHRvbiI+UmVwbGF5PC9idXR0b24+CiAgICA8L2Rpdj4KICA8L2Rpdj4KICA8ZGl2IGNsYXNzPSJndWlkZS1zdGF0ZSIgaWQ9Imd1aWRlUHJvZ3Jlc3MiIHJvbGU9InN0YXR1cyIgYXJpYS1saXZlPSJwb2xpdGUiPuaTjeS9nOOCrOOCpOODieOBrueKtuaFi+OCkueiuuiqjeOBl+OBpuOBhOOBvuOBmeKApjwvZGl2PgogIDxkaXYgY2xhc3M9Imd1aWRlLWxpc3QiIGlkPSJndWlkZUxpc3QiIGFyaWEtbGFiZWw9IkZpcnN0MTAg5pON5L2c44Ks44Kk44OJIDEw6aCF55uuIj48L2Rpdj4KPC9zZWN0aW9uPg==').decode('utf-8')
+              js=base64.b64decode('PHNjcmlwdD4KLyogRFBSTyBGVU5FUkFMIFI0IEdVSURFIENFTlRFUiBWMSDigJQgYWRhcHRlciBvbmx5OyBUdXRvcmlhbCBvd25zIGFsbCBzdGF0ZS4gKi8KKCgpID0+IHsKICAndXNlIHN0cmljdCc7CiAgY29uc3QgVkVSU0lPTiA9ICdEUFJPX0ZVTkVSQUxfR1VJREVfUjRfMjAyNjA4MjlfVjEnOwogIGNvbnN0IFQgPSB3aW5kb3cuRFBST19GVU5FUkFMX1RVVE9SSUFMOwogIGlmICghVCB8fCAhQXJyYXkuaXNBcnJheShULnN0ZXBzKSB8fCBULnN0ZXBzLmxlbmd0aCAhPT0gMTApIHsKICAgIGNvbnNvbGUuZXJyb3IoJ0RQUk8gRlVORVJBTCBHdWlkZSBDZW50ZXI6IGF1dGhvcml0YXRpdmUgVHV0b3JpYWwgRmlyc3QxMCBpcyB1bmF2YWlsYWJsZS4nKTsKICAgIHJldHVybjsKICB9CiAgY29uc3QgJCA9IGlkID0+IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKGlkKTsKICBjb25zdCBlc2MgPSB2ID0+IFN0cmluZyh2ID8/ICcnKS5yZXBsYWNlKC9bJjw+IiddL2csIGMgPT4gKHsnJic6JyZhbXA7JywnPCc6JyZsdDsnLCc+JzonJmd0OycsJyInOicmcXVvdDsnLCInIjonJiMzOTsnfVtjXSkpOwogIGNvbnN0IHJvdXRlVGV4dCA9IHN0ZXAgPT4gewogICAgY29uc3QgcCA9IG5ldyBVUkxTZWFyY2hQYXJhbXMoKTsKICAgIE9iamVjdC5lbnRyaWVzKHN0ZXAucXVlcnkgfHwge30pLmZvckVhY2goKFtrLHZdKSA9PiBwLnNldChrLHYpKTsKICAgIHJldHVybiBzdGVwLnJvdXRlICsgKHAudG9TdHJpbmcoKSA/ICc/JyArIHAudG9TdHJpbmcoKSA6ICcnKTsKICB9OwogIGNvbnN0IGxpc3QgPSAkKCdndWlkZUxpc3QnKTsKICBsaXN0LmlubmVySFRNTCA9IFQuc3RlcHMubWFwKChzLGkpID0+IGAKICAgIDxhcnRpY2xlIGNsYXNzPSJndWlkZS1pdGVtIiB0YWJpbmRleD0iMCIKICAgICAgZGF0YS1ndWlkZS1pbmRleD0iJHtpfSIKICAgICAgZGF0YS1zdGVwLWlkPSIke2VzYyhzLmlkKX0iCiAgICAgIGRhdGEtcm91dGU9IiR7ZXNjKHJvdXRlVGV4dChzKSl9IgogICAgICBkYXRhLXByaW1hcnk9IiR7ZXNjKHMucHJpbWFyeSl9IgogICAgICBkYXRhLWZhbGxiYWNrcz0iJHtlc2MoKHMuZmFsbGJhY2t8fFtdKS5qb2luKCd8JykpfSI+CiAgICAgIDxkaXYgY2xhc3M9Imd1aWRlLWl0ZW0ta2lja2VyIj48c3Bhbj5TVEVQICR7U3RyaW5nKGkrMSkucGFkU3RhcnQoMiwnMCcpfSAvIDEwPC9zcGFuPjxzcGFuPiR7ZXNjKHMuaWQpfTwvc3Bhbj48L2Rpdj4KICAgICAgPGgzPiR7ZXNjKHMudGl0bGUpfTwvaDM+CiAgICAgIDxwPiR7ZXNjKHMuaW5zdHJ1Y3Rpb24pfTwvcD4KICAgICAgPGRpdiBjbGFzcz0iZ3VpZGUtbWV0YSI+CiAgICAgICAgPHNwYW4+Uk9VVEU6ICR7ZXNjKHJvdXRlVGV4dChzKSl9PC9zcGFuPgogICAgICAgIDxzcGFuPlRBUkdFVDogJHtlc2Mocy5wcmltYXJ5KX08L3NwYW4+CiAgICAgICAgPHNwYW4+RkFMTEJBQ0s6ICR7ZXNjKChzLmZhbGxiYWNrfHxbXSkuam9pbignIC8gJykpfTwvc3Bhbj4KICAgICAgPC9kaXY+CiAgICA8L2FydGljbGU+YCkuam9pbignJyk7CgogIGZ1bmN0aW9uIHJlZnJlc2goKXsKICAgIGNvbnN0IHN0ID0gVC5nZXRTdGF0ZSgpOwogICAgY29uc3QgcmVzdW1hYmxlID0gISFzdC51cGRhdGVkQXQgJiYgIXN0LmFjdGl2ZSAmJiAhc3QuY29tcGxldGVkICYmICFzdC5za2lwcGVkOwogICAgJCgnZ3VpZGVSZXN1bWUnKS5oaWRkZW4gPSAhcmVzdW1hYmxlOwogICAgJCgnZ3VpZGVSZXN1bWUnKS50ZXh0Q29udGVudCA9IHJlc3VtYWJsZSA/IGBSZXN1bWUgJHtzdC5zdGVwSW5kZXgrMX0vMTBgIDogJ1Jlc3VtZSc7CiAgICBsZXQgbGFiZWwgPSAn5pyq6ZaL5aeLJzsKICAgIGlmIChzdC5hY3RpdmUpIGxhYmVsID0gYOmAsuihjOS4rSAke3N0LnN0ZXBJbmRleCsxfS8xMGA7CiAgICBlbHNlIGlmIChzdC5jb21wbGV0ZWQpIGxhYmVsID0gJ+WujOS6hiAxMC8xMCDigJQgUmVwbGF544Gn5pyA5Yid44GL44KJ56K66KqN44Gn44GN44G+44GZJzsKICAgIGVsc2UgaWYgKHN0LnNraXBwZWQpIGxhYmVsID0gYOOCueOCreODg+ODl+a4iOOBvyAke3N0LnN0ZXBJbmRleCsxfS8xMCDigJQgUmVwbGF544Gn5pyA5Yid44GL44KJ56K66KqN44Gn44GN44G+44GZYDsKICAgIGVsc2UgaWYgKHJlc3VtYWJsZSkgbGFiZWwgPSBg5LiA5pmC5YGc5q2iICR7c3Quc3RlcEluZGV4KzF9LzEwIOKAlCBSZXN1bWXjgaflkIzjgZjjgrnjg4bjg4Pjg5fjgYvjgonlho3plovjgafjgY3jgb7jgZlgOwogICAgJCgnZ3VpZGVQcm9ncmVzcycpLnRleHRDb250ZW50ID0gYFR1dG9yaWFsIHN0YXRlOiAke2xhYmVsfWA7CiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCcuZ3VpZGUtaXRlbScpLmZvckVhY2goKGVsLGkpPT57CiAgICAgIGlmIChpID09PSBzdC5zdGVwSW5kZXggJiYgKHN0LmFjdGl2ZSB8fCByZXN1bWFibGUpKSBlbC5zZXRBdHRyaWJ1dGUoJ2FyaWEtY3VycmVudCcsJ3N0ZXAnKTsKICAgICAgZWxzZSBlbC5yZW1vdmVBdHRyaWJ1dGUoJ2FyaWEtY3VycmVudCcpOwogICAgfSk7CiAgICByZXR1cm4ge3N0YXRlOnN0LHJlc3VtYWJsZX07CiAgfQoKICAkKCdndWlkZVN0YXJ0JykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCAoKSA9PiB7IFQuc3RhcnQoKTsgcmVmcmVzaCgpOyB9KTsKICAkKCdndWlkZVJlc3VtZScpLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywgKCkgPT4geyBULnJlc3VtZSgpOyByZWZyZXNoKCk7IH0pOwogICQoJ2d1aWRlUmVwbGF5JykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCAoKSA9PiB7IFQucmVwbGF5KCk7IHJlZnJlc2goKTsgfSk7CiAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ3N0b3JhZ2UnLCBlID0+IHsgaWYgKGUua2V5ID09PSBULnN0b3JhZ2VLZXkpIHJlZnJlc2goKTsgfSk7CiAgZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigndmlzaWJpbGl0eWNoYW5nZScsICgpID0+IHsgaWYgKCFkb2N1bWVudC5oaWRkZW4pIHJlZnJlc2goKTsgfSk7CiAgY29uc3QgdGltZXIgPSB3aW5kb3cuc2V0SW50ZXJ2YWwocmVmcmVzaCwgNTAwKTsKICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigncGFnZWhpZGUnLCAoKSA9PiBjbGVhckludGVydmFsKHRpbWVyKSwge29uY2U6dHJ1ZX0pOwoKICB3aW5kb3cuRFBST19GVU5FUkFMX0dVSURFX0NFTlRFUiA9IHsKICAgIHZlcnNpb246IFZFUlNJT04sCiAgICB0dXRvcmlhbFZlcnNpb246IFQudmVyc2lvbiwKICAgIHR1dG9yaWFsU3RvcmFnZUtleTogVC5zdG9yYWdlS2V5LAogICAgY291bnQ6IFQuc3RlcHMubGVuZ3RoLAogICAgcmVmcmVzaCwKICAgIGdldEl0ZW1zOiAoKSA9PiBbLi4uZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnLmd1aWRlLWl0ZW0nKV0ubWFwKGVsID0+ICh7CiAgICAgIGluZGV4Ok51bWJlcihlbC5kYXRhc2V0Lmd1aWRlSW5kZXgpLAogICAgICBpZDplbC5kYXRhc2V0LnN0ZXBJZCwKICAgICAgcm91dGU6ZWwuZGF0YXNldC5yb3V0ZSwKICAgICAgcHJpbWFyeTplbC5kYXRhc2V0LnByaW1hcnksCiAgICAgIGZhbGxiYWNrczooZWwuZGF0YXNldC5mYWxsYmFja3N8fCcnKS5zcGxpdCgnfCcpLmZpbHRlcihCb29sZWFuKSwKICAgICAgdGl0bGU6ZWwucXVlcnlTZWxlY3RvcignaDMnKT8udGV4dENvbnRlbnQgfHwgJycsCiAgICAgIGluc3RydWN0aW9uOmVsLnF1ZXJ5U2VsZWN0b3IoJ3AnKT8udGV4dENvbnRlbnQgfHwgJycKICAgIH0pKQogIH07CiAgcmVmcmVzaCgpOwp9KSgpOwo8L3NjcmlwdD4=').decode('utf-8')
+              if '</style>' not in s or '<div class="footer" id="footer"></div>' not in s:
+                  raise SystemExit('Unexpected demo-guide structure; R4 patch stopped.')
+              s=s.replace('</style>', css+'\n</style>', 1)
+              s=s.replace('<div class="footer" id="footer"></div>', html+'\n\n<div class="footer" id="footer"></div>', 1)
+              old='  <script src="./tutorial.js?v=funeral-r3-20260829-v1"></script>\n</body>'
+              new='  <script src="./tutorial.js?v=funeral-r3-20260829-v2"></script>\n'+js+'\n</body>'
+              if old not in s:
+                  old='  <script src="./tutorial.js?v=funeral-r3-20260829-v2"></script>\n</body>'
+              if old not in s:
+                  raise SystemExit('Tutorial script anchor missing; R4 patch stopped.')
+              s=s.replace(old,new,1)
+              p.write_text(s,encoding='utf-8')
+          text=p.read_text(encoding='utf-8')
+          assert text.count('data-guide-version="DPRO_FUNERAL_GUIDE_R4_20260829_V1"')==1
+          assert 'window.DPRO_FUNERAL_GUIDE_CENTER' in text
+          assert 'T.steps.map' in text
+          PY
+          test "$(git diff --name-only | tr -d '\r')" = 'demo-guide.html'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add demo-guide.html
+          if git diff --cached --quiet; then
+            echo 'Guide Center already committed.'
+          else
+            git commit -m 'Implement FUNERAL R4 Guide Center [skip ci]'
+            git push origin main
+          fi
+
+      - name: Wait until R4 is live on GitHub Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://dpromstk2000-lab.github.io/dpro-funeral-line/demo-guide.html'
+          for i in $(seq 1 72); do
+            if curl -fsSL --max-time 20 "$URL?qa=$(date +%s)" | grep -q 'DPRO_FUNERAL_GUIDE_R4_20260829_V1'; then
+              echo "R4 Guide Center is live."
+              exit 0
+            fi
+            echo "Waiting for GitHub Pages... ${i}/72"
+            sleep 10
+          done
+          echo 'R4 Guide Center did not become live within 12 minutes.' >&2
+          exit 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Run exact four-width R4 LIVE QA
+        shell: bash
+        run: |
+          mkdir -p qa
+          cat > qa/run-r4-qa.cjs <<'NODE'
+          const { chromium } = require('playwright');
+          const fs = require('fs');
+          const BASE='https://dpromstk2000-lab.github.io/dpro-funeral-line/';
+          const KEY='dpro_tutorial_funeral_v1';
+          const EXPECTED_IDS=[
+            'FUNERAL-FIRST10-01','FUNERAL-FIRST10-02','FUNERAL-FIRST10-03','FUNERAL-FIRST10-04','FUNERAL-FIRST10-05',
+            'FUNERAL-FIRST10-06','FUNERAL-FIRST10-07','FUNERAL-FIRST10-08','FUNERAL-FIRST10-09','FUNERAL-FIRST10-10'
+          ];
+          const VIEWPORTS=[{w:1440,h:1000},{w:1024,h:768},{w:390,h:844},{w:320,h:720}];
+          const report={system:'FUNERAL',batch:'08',stage:'R4',standard:'V1.1',generatedAt:new Date().toISOString(),viewports:[],global:{},failures:[]};
+          const fail=(scope,msg)=>report.failures.push(`${scope}: ${msg}`);
+          const pass=v=>v?'PASS':'FAIL';
+
+          async function waitGuide(page){
+            await page.waitForFunction(()=>window.DPRO_FUNERAL_TUTORIAL && window.DPRO_FUNERAL_GUIDE_CENTER && document.querySelectorAll('.guide-item').length===10,null,{timeout:20000});
+          }
+          async function waitCard(page,n){
+            await page.waitForFunction((i)=>{
+              const el=document.querySelector('#dpro-funeral-tutorial-card .dpro-tutorial-step');
+              return !!el && el.textContent.includes(`STEP ${String(i).padStart(2,'0')} / 10`);
+            },n,{timeout:20000});
+          }
+          async function gotoGuide(page){
+            await page.goto(BASE+'demo-guide.html?qa='+Date.now(),{waitUntil:'domcontentloaded',timeout:30000});
+            await waitGuide(page);
+          }
+          async function resetGuide(page){
+            await gotoGuide(page);
+            await page.evaluate(k=>{
+              localStorage.removeItem(k);
+              for(let i=1;i<=10;i++) localStorage.removeItem(`dpro_tutorial_funeral_first10_${String(i).padStart(2,'0')}`);
+            },KEY);
+            await page.reload({waitUntil:'domcontentloaded'});
+            await waitGuide(page);
+          }
+          async function alignment(page){
+            return page.evaluate(()=>{
+              const T=window.DPRO_FUNERAL_TUTORIAL;
+              const G=window.DPRO_FUNERAL_GUIDE_CENTER;
+              const route=s=>{
+                const p=new URLSearchParams();
+                Object.entries(s.query||{}).forEach(([k,v])=>p.set(k,v));
+                return s.route+(p.toString()?'?'+p.toString():'');
+              };
+              const tutorial=T.steps.map(s=>({
+                id:s.id,route:route(s),primary:s.primary,fallbacks:s.fallback||[],title:s.title,instruction:s.instruction
+              }));
+              return {
+                count:G.count,
+                tutorialStorageKey:G.tutorialStorageKey,
+                guide:G.getItems(),
+                tutorial
+              };
+            });
+          }
+          async function overflow(page){
+            return page.evaluate(()=>({
+              innerWidth:innerWidth,
+              documentElementScrollWidth:document.documentElement.scrollWidth,
+              bodyScrollWidth:document.body?.scrollWidth||0
+            }));
+          }
+
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            let allAlign=true,allStart=true,allResume=true,allReplay=true,allFocus=true,allOverflow=true,allErrors=true,allWrites=true,allProduct=true;
+            try{
+              for(const vp of VIEWPORTS){
+                const scope=`${vp.w}x${vp.h}`;
+                const context=await browser.newContext({viewport:{width:vp.w,height:vp.h},hasTouch:vp.w<=390,isMobile:vp.w<=390});
+                const page=await context.newPage();
+                const vr={viewport:scope,checks:{},pageErrors:[],consoleErrors:[],unsafeWriteRequests:[]};
+                let tracking=false;
+                page.on('pageerror',e=>vr.pageErrors.push(String(e.stack||e.message||e)));
+                page.on('console',m=>{if(m.type()==='error')vr.consoleErrors.push({text:m.text(),location:m.location()});});
+                page.on('request',r=>{if(tracking&&!['GET','HEAD','OPTIONS'].includes(r.method()))vr.unsafeWriteRequests.push({method:r.method(),url:r.url()});});
+                try{
+                  await resetGuide(page);
+                  tracking=true;
+
+                  const a=await alignment(page);
+                  const alignOk=a.count===10 && a.tutorialStorageKey===KEY &&
+                    JSON.stringify(a.guide)===JSON.stringify(a.tutorial.map((x,i)=>({index:i,...x}))) &&
+                    JSON.stringify(a.guide.map(x=>x.id))===JSON.stringify(EXPECTED_IDS);
+                  vr.checks.GUIDE_COUNT=pass(a.count===10);
+                  vr.checks.GUIDE_TUTORIAL_ALIGNMENT=pass(alignOk);
+                  if(!alignOk){allAlign=false;fail(scope,'Guide/Tutorial alignment mismatch '+JSON.stringify(a));}
+
+                  // Product regression guards for the pre-existing public demo guide.
+                  const product=await page.evaluate(()=>({
+                    screens:document.querySelectorAll('#screenGrid .card').length,
+                    flow:document.querySelectorAll('#flowGrid .flow-step').length,
+                    primary:document.getElementById('primaryDemoLink')?.getAttribute('href')||'',
+                    hero:!!document.querySelector('.hero'),
+                    quickInfo:document.querySelectorAll('#quickInfo>div').length
+                  }));
+                  const productOk=product.screens===4&&product.flow===5&&product.primary==='index.html?demo=1'&&product.hero&&product.quickInfo===3;
+                  vr.checks.PRODUCT_REGRESSION=pass(productOk);
+                  if(!productOk){allProduct=false;fail(scope,'Product regression guard failed '+JSON.stringify(product));}
+
+                  // Keyboard focus on Guide Center controls.
+                  await page.locator('#guideStart').focus();
+                  await page.keyboard.press('Tab');
+                  const focus=await page.evaluate(()=>({
+                    id:document.activeElement?.id||'',
+                    outline:getComputedStyle(document.activeElement).outlineWidth
+                  }));
+                  const focusOk=['guideReplay','guideResume'].includes(focus.id)&&parseFloat(focus.outline)>0;
+                  vr.checks.KEYBOARD_FOCUS=pass(focusOk);
+                  if(!focusOk){allFocus=false;fail(scope,'Guide keyboard focus not visibly styled '+JSON.stringify(focus));}
+
+                  // Start -> Step 1.
+                  await page.locator('#guideStart').click();
+                  await waitCard(page,1);
+                  let st=await page.evaluate(()=>window.DPRO_FUNERAL_TUTORIAL.getState());
+                  const startOk=st.active&&st.stepIndex===0;
+                  vr.checks.START=pass(startOk);
+                  if(!startOk){allStart=false;fail(scope,'Start did not open Step 1');}
+
+                  // Move to Step 3, close, return to Guide, Resume -> same Step 3 across page.
+                  await page.locator('[data-next]').click(); await waitCard(page,2);
+                  await Promise.all([
+                    page.waitForURL(/index\.html\?demo=1/,{timeout:20000}),
+                    page.locator('[data-next]').click()
+                  ]);
+                  await page.waitForFunction(()=>window.DPRO_FUNERAL_TUTORIAL,null,{timeout:20000});
+                  await waitCard(page,3);
+                  await page.locator('[data-close]').click();
+                  await gotoGuide(page);
+                  await page.waitForFunction(()=>!document.getElementById('guideResume').hidden,null,{timeout:5000});
+                  const resumeLabel=await page.locator('#guideResume').textContent();
+                  await page.locator('#guideResume').click();
+                  await page.waitForURL(/index\.html\?demo=1/,{timeout:20000});
+                  await page.waitForFunction(()=>window.DPRO_FUNERAL_TUTORIAL,null,{timeout:20000});
+                  await waitCard(page,3);
+                  st=await page.evaluate(()=>window.DPRO_FUNERAL_TUTORIAL.getState());
+                  const resumeOk=st.active&&st.stepIndex===2&&/3\/10/.test(resumeLabel||'');
+                  vr.checks.RESUME=pass(resumeOk);
+                  vr.checks.CROSS_PAGE_RESUME=pass(resumeOk);
+                  if(!resumeOk){allResume=false;fail(scope,'Guide Resume did not restore Step 3');}
+
+                  // Skip, return to Guide, Guide Replay -> Step 1.
+                  await page.locator('[data-skip]').click();
+                  await gotoGuide(page);
+                  await page.locator('#guideReplay').click();
+                  await waitCard(page,1);
+                  st=await page.evaluate(()=>window.DPRO_FUNERAL_TUTORIAL.getState());
+                  const replayOk=st.active&&st.stepIndex===0&&!st.skipped&&!st.completed;
+                  vr.checks.REPLAY=pass(replayOk);
+                  if(!replayOk){allReplay=false;fail(scope,'Guide Replay did not return to Step 1');}
+                  await page.locator('[data-close]').click();
+                  await gotoGuide(page);
+
+                  const m=await overflow(page);
+                  vr.metrics=m;
+                  const overflowOk=m.documentElementScrollWidth<=m.innerWidth&&m.bodyScrollWidth<=m.innerWidth;
+                  vr.checks.OVERFLOW=pass(overflowOk);
+                  if(!overflowOk){allOverflow=false;fail(scope,'horizontal overflow '+JSON.stringify(m));}
+                  if(vp.w===390||vp.w===320) vr.requiredWidthMetrics=m;
+
+                  await page.screenshot({path:`qa/FUNERAL_R4_${vp.w}x${vp.h}.png`,fullPage:false});
+                }catch(e){
+                  vr.fatal=String(e.stack||e);
+                  fail(scope,vr.fatal);
+                }finally{
+                  const errOk=vr.pageErrors.length===0&&vr.consoleErrors.length===0;
+                  const writeOk=vr.unsafeWriteRequests.length===0;
+                  vr.checks.PAGEERROR=pass(vr.pageErrors.length===0);
+                  vr.checks.TUTORIAL_GUIDE_CONSOLE_ERROR=pass(vr.consoleErrors.length===0);
+                  vr.checks.UNSAFE_WRITE_REQUEST=pass(writeOk);
+                  vr.checks.BUSINESS_MUTATION=pass(writeOk);
+                  if(!errOk){allErrors=false;fail(scope,'page/console error '+JSON.stringify({pageErrors:vr.pageErrors,consoleErrors:vr.consoleErrors}));}
+                  if(!writeOk){allWrites=false;fail(scope,'unsafe write request '+JSON.stringify(vr.unsafeWriteRequests));}
+                  report.viewports.push(vr);
+                  await context.close();
+                }
+              }
+            }finally{await browser.close();}
+
+            const by=Object.fromEntries(report.viewports.map(v=>[v.viewport,v]));
+            const widthPass=w=>!report.failures.some(x=>x.startsWith(w+':'))&&by[w]?.checks?.OVERFLOW==='PASS';
+            report.global={
+              GUIDE_COUNT:10,
+              GUIDE_COUNT_PASS:pass(report.viewports.every(v=>v.checks.GUIDE_COUNT==='PASS')),
+              GUIDE_TUTORIAL_ALIGNMENT:pass(allAlign),
+              START:pass(allStart),RESUME:pass(allResume),REPLAY:pass(allReplay),
+              KEYBOARD_FOCUS:pass(allFocus),
+              '1440x1000':pass(widthPass('1440x1000')),
+              '1024x768':pass(widthPass('1024x768')),
+              '390x844':pass(widthPass('390x844')),
+              '320x720':pass(widthPass('320x720')),
+              '390_INNER_WIDTH':by['390x844']?.requiredWidthMetrics?.innerWidth??null,
+              '390_DOCUMENT_ELEMENT_SCROLL_WIDTH':by['390x844']?.requiredWidthMetrics?.documentElementScrollWidth??null,
+              '390_BODY_SCROLL_WIDTH':by['390x844']?.requiredWidthMetrics?.bodyScrollWidth??null,
+              '390_OVERFLOW':pass(by['390x844']?.checks?.OVERFLOW==='PASS'),
+              '320_INNER_WIDTH':by['320x720']?.requiredWidthMetrics?.innerWidth??null,
+              '320_DOCUMENT_ELEMENT_SCROLL_WIDTH':by['320x720']?.requiredWidthMetrics?.documentElementScrollWidth??null,
+              '320_BODY_SCROLL_WIDTH':by['320x720']?.requiredWidthMetrics?.bodyScrollWidth??null,
+              '320_OVERFLOW':pass(by['320x720']?.checks?.OVERFLOW==='PASS'),
+              PAGEERROR:pass(allErrors),
+              TUTORIAL_GUIDE_CONSOLE_ERROR:pass(allErrors),
+              UNSAFE_WRITE_REQUEST:pass(allWrites),
+              BUSINESS_MUTATION:pass(allWrites),
+              PRODUCT_REGRESSION:pass(allProduct)
+            };
+            const required=['GUIDE_COUNT_PASS','GUIDE_TUTORIAL_ALIGNMENT','START','RESUME','REPLAY','KEYBOARD_FOCUS','1440x1000','1024x768','390x844','320x720','390_OVERFLOW','320_OVERFLOW','PAGEERROR','TUTORIAL_GUIDE_CONSOLE_ERROR','UNSAFE_WRITE_REQUEST','BUSINESS_MUTATION','PRODUCT_REGRESSION'];
+            report.result=required.every(k=>report.global[k]==='PASS')&&report.failures.length===0?'PASS':'HOLD';
+            fs.writeFileSync('qa/R4_QA_EVIDENCE.json',JSON.stringify(report,null,2));
+            const lines=[
+              'DPRO TUTORIAL BATCH-08 / FUNERAL / R4 GUIDE CENTER LIVE QA',
+              `RESULT=${report.result}`,
+              ...Object.entries(report.global).map(([k,v])=>`${k}=${v}`),
+              `FAILURE_COUNT=${report.failures.length}`,
+              ...report.failures.map((x,i)=>`FAIL_${i+1}=${x.replace(/\n/g,' | ')}`)
+            ];
+            fs.writeFileSync('qa/R4_QA_EVIDENCE.txt',lines.join('\n')+'\n');
+            console.log(lines.join('\n'));
+            if(report.result!=='PASS')process.exitCode=1;
+          })().catch(e=>{console.error(e);process.exit(1);});
+          NODE
+          node qa/run-r4-qa.cjs
+
+      - name: Upload R4 QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FUNERAL_R4_LIVE_QA_EVIDENCE
+          path: |
+            qa/R4_QA_EVIDENCE.json
+            qa/R4_QA_EVIDENCE.txt
+            qa/FUNERAL_R4_*.png
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Remove temporary R4 workflow
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin main
+          if [ -f .github/workflows/funeral-r4-guide-center-live-qa.yml ]; then
+            git rm .github/workflows/funeral-r4-guide-center-live-qa.yml
+            git commit -m 'Remove FUNERAL R4 Guide Center QA workflow [skip ci]'
+            git push origin main
+          fi
