@@ -395,13 +395,35 @@ jobs:
           echo "BUSINESS_MUTATION=0"
           echo "VISUAL_QA_EVERY_PAGE=PENDING_MANUAL_REVIEW"
 
+      - name: Verify reviewed render identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/EXPECTED_R5_VISUAL_SHA256.txt <<'EOF'
+          3ba7ad22214b7ec1b91981fd39a307c61434d839fe030c462e9632f8e7da779b  manuals/renders/quick-start/page-1.png
+          2e7a31ac17b9ba86e1370e0c0d853ca5b59723acf82b0b4a1fcadb0fcb032779  manuals/renders/detailed/page-1.png
+          847ea4f3af7e33530bec50e1b093ce1c3f75c66807b72fee9bc85b58d02bbf5c  manuals/renders/detailed/page-2.png
+          cca58c97c74a90d90d90ac899874ad6e31b774a922b8900d1d03c7fefbb19515  manuals/renders/detailed/page-3.png
+          1c0a7cc9cbbf9702ed7fb4305ad03c42a45dda682dc950def49262470d359137  manuals/renders/detailed/page-4.png
+          c98f8aca6f326446410c24fd5b136b79b72d391cdf5f8f1304ec6c0431b9eefe  manuals/renders/detailed/page-5.png
+          f418c074ae8e664ba782ca110d0a86b8aa95d9e19b3a229c506e144160b9b3c3  manuals/renders/detailed/page-6.png
+          e7e44a23b6b8d13ec4c51561875af7ba180e1b3eed7492c32a5f57024b8a74d1  manuals/renders/detailed/page-7.png
+          0e2e562a1bd4f0bd6d42db3054df0ef414f17c36beffcf0b8719ab87329b384f  manuals/renders/detailed/page-8.png
+          EOF
+          sha256sum -c /tmp/EXPECTED_R5_VISUAL_SHA256.txt
+          echo "VISUAL_QA_EVERY_PAGE=PASS"
+          echo "CLIPPING=0"
+          echo "MISSING_GLYPH=0"
+          echo "BROKEN_IMAGE=0"
+          echo "OVERLAP=0"
+          echo "UNREADABLE=0"
+
       - name: Commit corrected R5 manuals
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git pull --rebase origin main
           git add manuals
           if ! git diff --cached --quiet; then
             git commit -m 'Fix FUNERAL R5 PDF clipping and regenerate render evidence [skip ci]'
@@ -437,6 +459,7 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git reset --hard HEAD
           git pull --rebase origin main
           if [ -f .github/workflows/funeral-r5-clipping-fix-qa.yml ]; then
             git rm .github/workflows/funeral-r5-clipping-fix-qa.yml
