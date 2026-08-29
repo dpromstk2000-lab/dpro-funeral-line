@@ -1,0 +1,408 @@
+name: FUNERAL R3 LIVE QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/funeral-r3-live-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: funeral-r3-live-qa
+  cancel-in-progress: false
+
+jobs:
+  live-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Wait until R3 is live on GitHub Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://dpromstk2000-lab.github.io/dpro-funeral-line/tutorial.js'
+          for i in $(seq 1 72); do
+            if curl -fsSL --max-time 20 "$URL?qa=$(date +%s)" | grep -q 'DPRO_FUNERAL_TUTORIAL_R3_20260829_V1'; then
+              echo "R3 tutorial.js is live."
+              exit 0
+            fi
+            echo "Waiting for GitHub Pages... ${i}/72"
+            sleep 10
+          done
+          echo 'R3 tutorial.js did not become live within 12 minutes.' >&2
+          exit 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Run exact four-width R3 LIVE QA
+        id: qa
+        shell: bash
+        run: |
+          mkdir -p qa
+          cat > qa/run-r3-qa.cjs <<'NODE'
+          const { chromium } = require('playwright');
+          const fs = require('fs');
+          const BASE = 'https://dpromstk2000-lab.github.io/dpro-funeral-line/';
+          const KEY = 'dpro_tutorial_funeral_v1';
+          const EXPECTED = [
+            'FUNERAL-FIRST10-01','FUNERAL-FIRST10-02','FUNERAL-FIRST10-03','FUNERAL-FIRST10-04','FUNERAL-FIRST10-05',
+            'FUNERAL-FIRST10-06','FUNERAL-FIRST10-07','FUNERAL-FIRST10-08','FUNERAL-FIRST10-09','FUNERAL-FIRST10-10'
+          ];
+          const VIEWPORTS = [
+            {w:1440,h:1000,mode:'desktop'},
+            {w:1024,h:768,mode:'desktop'},
+            {w:390,h:844,mode:'mobile'},
+            {w:320,h:720,mode:'mobile'}
+          ];
+          const report = {
+            system:'FUNERAL', batch:'08', stage:'R3', standard:'V1.1', generatedAt:new Date().toISOString(),
+            baseUrl:BASE, first10Count:null, viewports:[], global:{}, failures:[]
+          };
+          const fail = (scope, msg) => { report.failures.push(`${scope}: ${msg}`); };
+          const passBool = v => v ? 'PASS' : 'FAIL';
+          const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
+          async function waitApi(page){
+            await page.waitForFunction(() => window.DPRO_FUNERAL_TUTORIAL && Array.isArray(window.DPRO_FUNERAL_TUTORIAL.steps), null, {timeout:20000});
+          }
+          async function waitCard(page, idx){
+            await page.waitForFunction((n) => {
+              const el=document.querySelector('#dpro-funeral-tutorial-card .dpro-tutorial-step');
+              return !!el && el.textContent.includes(`STEP ${String(n).padStart(2,'0')} / 10`);
+            }, idx, {timeout:20000});
+            await page.waitForFunction(() => {
+              const s=document.getElementById('dpro-tutorial-target-status');
+              return !!s && !s.textContent.includes('確認しています');
+            }, null, {timeout:20000});
+          }
+          async function stepInfo(page){
+            return page.evaluate(() => ({
+              stepText: document.querySelector('#dpro-funeral-tutorial-card .dpro-tutorial-step')?.textContent || '',
+              status: document.getElementById('dpro-tutorial-target-status')?.textContent || '',
+              highlighted: document.querySelectorAll('.dpro-tutorial-target-highlight').length,
+              state: window.DPRO_FUNERAL_TUTORIAL?.getState?.() || null,
+              url: location.href
+            }));
+          }
+          async function metrics(page){
+            return page.evaluate(() => ({
+              url:location.href,
+              innerWidth:window.innerWidth,
+              documentElementScrollWidth:document.documentElement.scrollWidth,
+              bodyScrollWidth:document.body ? document.body.scrollWidth : 0
+            }));
+          }
+          async function resetAtGuide(page){
+            await page.goto(BASE+'demo-guide.html?qa='+Date.now(), {waitUntil:'domcontentloaded', timeout:30000});
+            await waitApi(page);
+            await page.evaluate((k)=>localStorage.removeItem(k), KEY);
+            await page.reload({waitUntil:'domcontentloaded'});
+            await waitApi(page);
+          }
+          async function startByKeyboard(page){
+            const launcher=page.locator('#dpro-tutorial-launcher-button');
+            await launcher.waitFor({state:'visible', timeout:15000});
+            await launcher.focus();
+            await page.keyboard.press('Enter');
+            await waitCard(page,1);
+          }
+          async function cardRect(page){
+            return page.locator('#dpro-funeral-tutorial-card').boundingBox();
+          }
+          async function assertClamp(page, scope, vp){
+            const r=await cardRect(page);
+            const ok=!!r && r.x>=7 && r.y>=7 && r.x+r.width<=vp.w-7+1 && r.y+r.height<=vp.h-7+1;
+            if(!ok) fail(scope,`viewport clamp failed: ${JSON.stringify(r)}`);
+            return ok;
+          }
+          async function mouseDrag(page, scope, vp){
+            const handle=await page.locator('.dpro-tutorial-drag-handle').boundingBox();
+            if(!handle){fail(scope,'mouse drag handle missing');return false;}
+            await page.mouse.move(handle.x+handle.width/2, handle.y+handle.height/2);
+            await page.mouse.down();
+            await page.mouse.move(2,2,{steps:5});
+            await page.mouse.up();
+            const a=await assertClamp(page,scope,vp);
+            const handle2=await page.locator('.dpro-tutorial-drag-handle').boundingBox();
+            await page.mouse.move(handle2.x+handle2.width/2, handle2.y+handle2.height/2);
+            await page.mouse.down();
+            await page.mouse.move(vp.w-2,vp.h-2,{steps:5});
+            await page.mouse.up();
+            const b=await assertClamp(page,scope,vp);
+            return a&&b;
+          }
+          async function touchDrag(page, context, scope, vp){
+            const h=await page.locator('.dpro-tutorial-drag-handle').boundingBox();
+            if(!h){fail(scope,'touch drag handle missing');return false;}
+            const client=await context.newCDPSession(page);
+            const sx=Math.round(h.x+h.width/2), sy=Math.round(h.y+h.height/2);
+            await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:sx,y:sy,id:1,radiusX:2,radiusY:2,force:1}]});
+            await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:2,y:2,id:1,radiusX:2,radiusY:2,force:1}]});
+            await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+            const a=await assertClamp(page,scope,vp);
+            const h2=await page.locator('.dpro-tutorial-drag-handle').boundingBox();
+            const sx2=Math.round(h2.x+h2.width/2), sy2=Math.round(h2.y+h2.height/2);
+            await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:sx2,y:sy2,id:2,radiusX:2,radiusY:2,force:1}]});
+            await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:vp.w-2,y:vp.h-2,id:2,radiusX:2,radiusY:2,force:1}]});
+            await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+            const b=await assertClamp(page,scope,vp);
+            return a&&b;
+          }
+          async function nonHandleNoDrag(page, scope){
+            const before=await cardRect(page);
+            const result=await page.evaluate(() => {
+              const card=document.getElementById('dpro-funeral-tutorial-card');
+              const el=[...document.querySelectorAll('button,input,select,textarea,a')].find(x=>!card?.contains(x));
+              if(!el) return {found:false};
+              const r=el.getBoundingClientRect();
+              const base={bubbles:true,pointerId:88,pointerType:'mouse',button:0,clientX:r.left+2,clientY:r.top+2};
+              el.dispatchEvent(new PointerEvent('pointerdown',base));
+              el.dispatchEvent(new PointerEvent('pointermove',{...base,clientX:r.left+100,clientY:r.top+100}));
+              el.dispatchEvent(new PointerEvent('pointerup',{...base,clientX:r.left+100,clientY:r.top+100}));
+              return {found:true,tag:el.tagName};
+            });
+            await sleep(80);
+            const after=await cardRect(page);
+            const same=!!before&&!!after&&Math.abs(before.x-after.x)<1&&Math.abs(before.y-after.y)<1;
+            if(!same) fail(scope,`non-handle control initiated drag (${JSON.stringify(result)})`);
+            return same;
+          }
+
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            let globalMouse=false, globalTouch=false, allTarget=true, allKeyboard=true, allFocus=true, allResume=true,
+                allNextBack=true, allClose=true, allEsc=true, allSkip=true, allReplay=true, allClamp=true,
+                allNoWrites=true, allNoTutErrors=true;
+            try{
+              for(const vp of VIEWPORTS){
+                const scope=`${vp.w}x${vp.h}`;
+                const context=await browser.newContext({viewport:{width:vp.w,height:vp.h},hasTouch:vp.mode==='mobile',isMobile:vp.mode==='mobile'});
+                const page=await context.newPage();
+                const vr={viewport:scope,mode:vp.mode,steps:[],metrics:[],checks:{},unsafeWriteRequests:[],tutorialPageErrors:[],tutorialConsoleErrors:[]};
+                let tracking=false;
+                page.on('request',req=>{
+                  if(tracking && !['GET','HEAD','OPTIONS'].includes(req.method())) vr.unsafeWriteRequests.push({method:req.method(),url:req.url()});
+                });
+                page.on('pageerror',err=>{
+                  const s=String(err.stack||err.message||err);
+                  if(/tutorial\.js|DPRO_FUNERAL_TUTORIAL|dpro-funeral-tutorial/i.test(s)) vr.tutorialPageErrors.push(s);
+                });
+                page.on('console',msg=>{
+                  if(msg.type()!=='error') return;
+                  const loc=msg.location(); const s=msg.text();
+                  if(/tutorial\.js/i.test(loc.url||'') || /DPRO_FUNERAL_TUTORIAL|dpro-funeral-tutorial/i.test(s)) vr.tutorialConsoleErrors.push({text:s,location:loc});
+                });
+                try{
+                  await resetAtGuide(page);
+                  const meta=await page.evaluate(()=>({version:window.DPRO_FUNERAL_TUTORIAL.version,count:window.DPRO_FUNERAL_TUTORIAL.steps.length,ids:window.DPRO_FUNERAL_TUTORIAL.steps.map(s=>s.id)}));
+                  report.first10Count=meta.count;
+                  vr.version=meta.version;
+                  vr.checks.first10Count=passBool(meta.count===10 && JSON.stringify(meta.ids)===JSON.stringify(EXPECTED));
+                  if(vr.checks.first10Count==='FAIL') fail(scope,`First10 mismatch ${JSON.stringify(meta)}`);
+                  tracking=true;
+
+                  await startByKeyboard(page);
+                  vr.checks.start=passBool((await stepInfo(page)).state?.stepIndex===0);
+                  const focusStart=await page.evaluate(()=>({id:document.activeElement?.getAttribute('data-next')!==null,visible:document.activeElement?.matches?.(':focus-visible')||false,outline:getComputedStyle(document.activeElement).outlineWidth}));
+                  vr.checks.focusVisible=passBool(focusStart.id && (focusStart.visible || parseFloat(focusStart.outline)>0));
+                  if(vr.checks.focusVisible==='FAIL'){allFocus=false;fail(scope,`focus not visible at start ${JSON.stringify(focusStart)}`);}
+
+                  await page.locator('[data-next]').click(); await waitCard(page,2);
+                  await page.locator('[data-back]').click(); await waitCard(page,1);
+                  vr.checks.nextBack='PASS';
+
+                  await page.locator('[data-close]').click();
+                  const closed=await page.evaluate(()=>!window.DPRO_FUNERAL_TUTORIAL.getState().active && !document.getElementById('dpro-funeral-tutorial-card'));
+                  const launcherFocus=await page.evaluate(()=>document.activeElement?.id==='dpro-tutorial-launcher-button');
+                  vr.checks.close=passBool(closed); vr.checks.focusRecoverable=passBool(launcherFocus);
+                  if(!closed){allClose=false;fail(scope,'Close did not close tutorial');}
+                  if(!launcherFocus){allFocus=false;fail(scope,'focus did not recover to launcher after Close');}
+
+                  await page.keyboard.press('Enter'); await waitCard(page,1);
+                  await page.keyboard.press('Escape');
+                  const escClosed=await page.evaluate(()=>!window.DPRO_FUNERAL_TUTORIAL.getState().active && !document.getElementById('dpro-funeral-tutorial-card'));
+                  vr.checks.esc=passBool(escClosed);
+                  if(!escClosed){allEsc=false;fail(scope,'Esc did not close tutorial');}
+                  await page.locator('#dpro-tutorial-launcher-button').click(); await waitCard(page,1);
+
+                  const dragOk=vp.mode==='desktop' ? await mouseDrag(page,scope,vp) : await touchDrag(page,context,scope,vp);
+                  vr.checks[vp.mode==='desktop'?'mousePointerDrag':'touchPointerDrag']=passBool(dragOk);
+                  vr.checks.viewportClamp=passBool(await assertClamp(page,scope,vp));
+                  if(vp.mode==='desktop') globalMouse=globalMouse||dragOk; else globalTouch=globalTouch||dragOk;
+                  if(!dragOk){allClamp=false;}
+                  vr.checks.nonHandleNoDrag=passBool(await nonHandleNoDrag(page,scope));
+
+                  await page.locator('[data-skip]').click();
+                  const skipped=await page.evaluate(()=>{const s=window.DPRO_FUNERAL_TUTORIAL.getState();return s.skipped&&!s.active;});
+                  vr.checks.skip=passBool(skipped); if(!skipped){allSkip=false;fail(scope,'Skip state failed');}
+                  await page.locator('#dpro-tutorial-launcher-button').click(); await waitCard(page,1);
+                  vr.checks.replayAfterSkip=passBool((await stepInfo(page)).state?.stepIndex===0);
+                  await page.locator('[data-next]').click(); await waitCard(page,2);
+                  await page.locator('[data-replay]').click(); await waitCard(page,1);
+                  const replayOk=(await stepInfo(page)).state?.stepIndex===0;
+                  vr.checks.replay=passBool(replayOk); if(!replayOk){allReplay=false;fail(scope,'Replay did not return to step 1');}
+
+                  // Cross-page Resume: move to step 3, close, go back to guide, resume and expect navigation back to step 3.
+                  await page.locator('[data-next]').click(); await waitCard(page,2);
+                  await Promise.all([page.waitForURL(/index\.html\?demo=1/, {timeout:20000}), page.locator('[data-next]').click()]);
+                  await waitApi(page); await waitCard(page,3);
+                  await page.locator('[data-close]').click();
+                  await page.goto(BASE+'demo-guide.html?qa_resume='+Date.now(),{waitUntil:'domcontentloaded',timeout:30000}); await waitApi(page);
+                  const resumeLabel=await page.locator('#dpro-tutorial-launcher-button').textContent();
+                  await page.locator('#dpro-tutorial-launcher-button').click();
+                  await page.waitForURL(/index\.html\?demo=1/, {timeout:20000}); await waitApi(page); await waitCard(page,3);
+                  const resumeInfo=await stepInfo(page);
+                  const resumeOk=/再開\s*3\/10/.test(resumeLabel||'') && resumeInfo.state?.stepIndex===2;
+                  vr.checks.crossPageResume=passBool(resumeOk); if(!resumeOk){allResume=false;fail(scope,`cross-page Resume failed label=${resumeLabel}`);}
+
+                  // Walk every authoritative step and verify target/fallback resolution.
+                  await page.evaluate(()=>window.DPRO_FUNERAL_TUTORIAL.replay());
+                  if(!/demo-guide\.html/.test(page.url())){await page.waitForURL(/demo-guide\.html/,{timeout:20000}); await waitApi(page);}
+                  await waitCard(page,1);
+                  const seen=[];
+                  for(let i=1;i<=10;i++){
+                    await waitCard(page,i);
+                    const info=await stepInfo(page); const m=await metrics(page);
+                    seen.push(info.stepText.match(/FUNERAL-FIRST10-\d{2}/)?.[0]||'');
+                    vr.steps.push({index:i,...info}); vr.metrics.push(m);
+                    if(info.status.includes('見つからない') || info.highlighted!==1){allTarget=false;fail(scope,`step ${i} target resolution failed: ${info.status}, highlight=${info.highlighted}`);}
+                    if(i<10){
+                      const before=page.url(); await page.locator('[data-next]').click();
+                      const s=await page.evaluate(()=>window.DPRO_FUNERAL_TUTORIAL?.getState?.());
+                      if(page.url()===before && s?.stepIndex===i){await sleep(60);}
+                      await waitApi(page); await waitCard(page,i+1);
+                    }
+                  }
+                  vr.checks.stepTargets=passBool(JSON.stringify(seen)===JSON.stringify(EXPECTED) && vr.steps.every(x=>!x.status.includes('見つからない')&&x.highlighted===1));
+
+                  // Keyboard-only completion: replay then use only Enter on the focused Next/Complete buttons.
+                  await page.evaluate(()=>window.DPRO_FUNERAL_TUTORIAL.replay());
+                  if(!/demo-guide\.html/.test(page.url())){await page.waitForURL(/demo-guide\.html/,{timeout:20000}); await waitApi(page);}
+                  await waitCard(page,1);
+                  let keyboardOk=true;
+                  for(let i=1;i<=10;i++){
+                    const activeNext=await page.evaluate(()=>document.activeElement?.hasAttribute?.('data-next')||false);
+                    if(!activeNext){keyboardOk=false;fail(scope,`keyboard focus missing at step ${i}`);break;}
+                    await page.keyboard.press('Enter');
+                    if(i<10){await waitApi(page);await waitCard(page,i+1);} else {await page.waitForFunction(()=>window.DPRO_FUNERAL_TUTORIAL.getState().completed===true,null,{timeout:10000});}
+                  }
+                  vr.checks.keyboardOnly=passBool(keyboardOk); if(!keyboardOk)allKeyboard=false;
+                  const completed=await page.evaluate(()=>window.DPRO_FUNERAL_TUTORIAL.getState().completed===true);
+                  if(!completed){allKeyboard=false;fail(scope,'keyboard-only completion state not reached');}
+
+                  const launcher=page.locator('#dpro-tutorial-launcher-button'); await launcher.waitFor({state:'visible'}); await launcher.focus(); await page.keyboard.press('Enter');
+                  await waitApi(page); await waitCard(page,1);
+                  vr.checks.replayAfterComplete=passBool((await stepInfo(page)).state?.stepIndex===0);
+
+                  // Exact viewport overflow measurements. Require all visited route measurements to stay within innerWidth.
+                  const over=vr.metrics.filter(m=>m.documentElementScrollWidth>m.innerWidth || m.bodyScrollWidth>m.innerWidth);
+                  vr.checks.overflow=passBool(over.length===0);
+                  if(over.length) fail(scope,`horizontal overflow ${JSON.stringify(over)}`);
+                  if(vp.w===390||vp.w===320){
+                    vr.requiredWidthMetrics={
+                      innerWidth:vp.w,
+                      maxDocumentElementScrollWidth:Math.max(...vr.metrics.map(m=>m.documentElementScrollWidth)),
+                      maxBodyScrollWidth:Math.max(...vr.metrics.map(m=>m.bodyScrollWidth)),
+                      samples:vr.metrics
+                    };
+                  }
+
+                  await page.screenshot({path:`qa/FUNERAL_R3_${vp.w}x${vp.h}.png`,fullPage:false});
+                }catch(e){
+                  fail(scope,e.stack||String(e));
+                  vr.fatal=String(e.stack||e);
+                }finally{
+                  vr.checks.unsafeWriteRequests=passBool(vr.unsafeWriteRequests.length===0);
+                  vr.checks.tutorialPageError=passBool(vr.tutorialPageErrors.length===0);
+                  vr.checks.tutorialConsoleError=passBool(vr.tutorialConsoleErrors.length===0);
+                  if(vr.unsafeWriteRequests.length){allNoWrites=false;fail(scope,`unsafe write request(s): ${JSON.stringify(vr.unsafeWriteRequests)}`);}
+                  if(vr.tutorialPageErrors.length||vr.tutorialConsoleErrors.length){allNoTutErrors=false;fail(scope,'Tutorial-attributable page/console error detected');}
+                  report.viewports.push(vr);
+                  await context.close();
+                }
+              }
+            }finally{await browser.close();}
+
+            const byWidth=Object.fromEntries(report.viewports.map(v=>[v.viewport,v]));
+            report.global={
+              FIRST10_COUNT:report.first10Count,
+              FIRST10_COUNT_PASS:passBool(report.first10Count===10),
+              '1440x1000':passBool(report.viewports.find(v=>v.viewport==='1440x1000')?.checks?.overflow==='PASS' && !report.failures.some(x=>x.startsWith('1440x1000:'))),
+              '1024x768':passBool(report.viewports.find(v=>v.viewport==='1024x768')?.checks?.overflow==='PASS' && !report.failures.some(x=>x.startsWith('1024x768:'))),
+              '390x844':passBool(report.viewports.find(v=>v.viewport==='390x844')?.checks?.overflow==='PASS' && !report.failures.some(x=>x.startsWith('390x844:'))),
+              '320x720':passBool(report.viewports.find(v=>v.viewport==='320x720')?.checks?.overflow==='PASS' && !report.failures.some(x=>x.startsWith('320x720:'))),
+              MOUSE_POINTER_DRAG:passBool(globalMouse), TOUCH_POINTER_DRAG:passBool(globalTouch), VIEWPORT_CLAMP:passBool(allClamp),
+              NEXT_BACK:passBool(allNextBack), CLOSE:passBool(allClose), ESC:passBool(allEsc), SKIP:passBool(allSkip), RESUME:passBool(allResume), REPLAY:passBool(allReplay),
+              KEYBOARD_ONLY:passBool(allKeyboard), FOCUS_VISIBLE_RECOVERABLE:passBool(allFocus), CROSS_PAGE_RESUME:passBool(allResume),
+              TARGET_FALLBACK_RESOLUTION:passBool(allTarget), TUTORIAL_PAGEERROR:passBool(allNoTutErrors), TUTORIAL_CONSOLE_ERROR:passBool(allNoTutErrors),
+              UNSAFE_WRITE_REQUEST:passBool(allNoWrites), BUSINESS_MUTATION:passBool(allNoWrites),
+              '390_INNER_WIDTH':byWidth['390x844']?.requiredWidthMetrics?.innerWidth ?? null,
+              '390_DOCUMENT_ELEMENT_SCROLL_WIDTH':byWidth['390x844']?.requiredWidthMetrics?.maxDocumentElementScrollWidth ?? null,
+              '390_BODY_SCROLL_WIDTH':byWidth['390x844']?.requiredWidthMetrics?.maxBodyScrollWidth ?? null,
+              '390_OVERFLOW':passBool(byWidth['390x844']?.checks?.overflow==='PASS'),
+              '320_INNER_WIDTH':byWidth['320x720']?.requiredWidthMetrics?.innerWidth ?? null,
+              '320_DOCUMENT_ELEMENT_SCROLL_WIDTH':byWidth['320x720']?.requiredWidthMetrics?.maxDocumentElementScrollWidth ?? null,
+              '320_BODY_SCROLL_WIDTH':byWidth['320x720']?.requiredWidthMetrics?.maxBodyScrollWidth ?? null,
+              '320_OVERFLOW':passBool(byWidth['320x720']?.checks?.overflow==='PASS')
+            };
+            const required=['FIRST10_COUNT_PASS','1440x1000','1024x768','390x844','320x720','MOUSE_POINTER_DRAG','TOUCH_POINTER_DRAG','VIEWPORT_CLAMP','NEXT_BACK','CLOSE','ESC','SKIP','RESUME','REPLAY','KEYBOARD_ONLY','FOCUS_VISIBLE_RECOVERABLE','CROSS_PAGE_RESUME','TARGET_FALLBACK_RESOLUTION','TUTORIAL_PAGEERROR','TUTORIAL_CONSOLE_ERROR','UNSAFE_WRITE_REQUEST','BUSINESS_MUTATION','390_OVERFLOW','320_OVERFLOW'];
+            report.result=required.every(k=>report.global[k]==='PASS') && report.failures.length===0 ? 'PASS':'HOLD';
+            fs.writeFileSync('qa/R3_QA_EVIDENCE.json',JSON.stringify(report,null,2));
+            const lines=[
+              'DPRO TUTORIAL BATCH-08 / FUNERAL / R3 LIVE QA',
+              `RESULT=${report.result}`,
+              ...Object.entries(report.global).map(([k,v])=>`${k}=${v}`),
+              `FAILURE_COUNT=${report.failures.length}`,
+              ...report.failures.map((x,i)=>`FAIL_${i+1}=${x.replace(/\n/g,' | ')}`)
+            ];
+            fs.writeFileSync('qa/R3_QA_EVIDENCE.txt',lines.join('\n')+'\n');
+            console.log(lines.join('\n'));
+            if(report.result!=='PASS') process.exitCode=1;
+          })().catch(e=>{console.error(e);process.exit(1);});
+          NODE
+          node qa/run-r3-qa.cjs
+
+      - name: Upload R3 QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FUNERAL_R3_LIVE_QA_EVIDENCE
+          path: |
+            qa/R3_QA_EVIDENCE.json
+            qa/R3_QA_EVIDENCE.txt
+            qa/FUNERAL_R3_*.png
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Remove temporary QA workflow
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin main
+          if [ -f .github/workflows/funeral-r3-live-qa.yml ]; then
+            git rm .github/workflows/funeral-r3-live-qa.yml
+            git commit -m 'Remove FUNERAL R3 live QA workflow [skip ci]'
+            git push origin main
+          fi
