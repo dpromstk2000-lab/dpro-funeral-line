@@ -44,6 +44,26 @@ a{color:inherit}.page{width:min(1140px,calc(100% - 24px));margin:0 auto;padding:
 @media(max-width:900px){.flow-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.hero{padding:25px 20px}.demo-info,.grid,.flow-grid{grid-template-columns:1fr}}
 @media(max-width:420px){.page{width:min(100% - 16px,1140px)}.card-actions{grid-template-columns:1fr}}
+/* DPRO FUNERAL R4 GUIDE CENTER V1 */
+.guide-center{margin-top:32px;padding:22px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.98);box-shadow:var(--shadow)}
+.guide-center-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.guide-center-head small{color:var(--brand);font-size:10px;font-weight:1000;letter-spacing:.12em}
+.guide-center-head h2{margin:5px 0 0;font-size:clamp(23px,4vw,34px)}
+.guide-center-head p{max-width:760px;margin:7px 0 0;color:var(--muted);font-size:13px}
+.guide-toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.guide-btn{min-height:44px;border:1px solid var(--line);border-radius:12px;padding:9px 14px;background:#fff;color:var(--deep);font:inherit;font-size:12px;font-weight:950;cursor:pointer}
+.guide-btn[data-primary]{border-color:var(--brand);background:var(--brand);color:#fff}
+.guide-btn[hidden]{display:none!important}
+.guide-btn:focus-visible,.guide-item:focus-visible{outline:3px solid #d5a452;outline-offset:3px}
+.guide-state{margin-top:14px;padding:11px 13px;border-radius:12px;background:var(--soft);font-size:12px;font-weight:850;color:#564b45}
+.guide-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.guide-item{min-width:0;padding:15px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.guide-item[aria-current="step"]{border-color:var(--brand);box-shadow:0 0 0 3px rgba(47,75,66,.10)}
+.guide-item-kicker{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--brand);font-size:9px;font-weight:1000;letter-spacing:.08em}
+.guide-item h3{margin:6px 0 0;font-size:16px;line-height:1.4}
+.guide-item p{margin:6px 0 0;color:var(--muted);font-size:11px}
+.guide-meta{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);display:grid;gap:3px;color:#70645d;font-size:9px;overflow-wrap:anywhere}
+@media(max-width:760px){.guide-list{grid-template-columns:1fr}.guide-center{padding:17px}}
 </style>
 </head>
 <body>
@@ -76,6 +96,23 @@ a{color:inherit}.page{width:min(1140px,calc(100% - 24px));margin:0 auto;padding:
   <p id="journeyIntro"></p>
 </div>
 <section class="flow"><div class="flow-grid" id="flowGrid"></div></section>
+
+<section class="guide-center" id="guideCenter" aria-labelledby="guideCenterTitle" data-guide-version="DPRO_FUNERAL_GUIDE_R4_20260829_V1">
+  <div class="guide-center-head">
+    <div>
+      <small>GUIDE CENTER / FIRST10</small>
+      <h2 id="guideCenterTitle">操作ガイドセンター</h2>
+      <p>First10の10ステップを、実装済みTutorialと同じ順序・同じ状態で確認できます。ここから開始・再開・リプレイしても、別の進捗データは作りません。</p>
+    </div>
+    <div class="guide-toolbar" aria-label="操作ガイドの開始・再開">
+      <button class="guide-btn" data-primary id="guideStart" type="button">Start</button>
+      <button class="guide-btn" id="guideResume" type="button" hidden>Resume</button>
+      <button class="guide-btn" id="guideReplay" type="button">Replay</button>
+    </div>
+  </div>
+  <div class="guide-state" id="guideProgress" role="status" aria-live="polite">操作ガイドの状態を確認しています…</div>
+  <div class="guide-list" id="guideList" aria-label="First10 操作ガイド 10項目"></div>
+</section>
 
 <div class="footer" id="footer"></div>
 </main>
@@ -231,6 +268,86 @@ document.getElementById("flowGrid").innerHTML = CONFIG.journey.map(x => `
   </div>
 `).join("");
 </script>
-  <script src="./tutorial.js?v=funeral-r3-20260829-v1"></script>
+  <script src="./tutorial.js?v=funeral-r3-20260829-v2"></script>
+<script>
+/* DPRO FUNERAL R4 GUIDE CENTER V1 — adapter only; Tutorial owns all state. */
+(() => {
+  'use strict';
+  const VERSION = 'DPRO_FUNERAL_GUIDE_R4_20260829_V1';
+  const T = window.DPRO_FUNERAL_TUTORIAL;
+  if (!T || !Array.isArray(T.steps) || T.steps.length !== 10) {
+    console.error('DPRO FUNERAL Guide Center: authoritative Tutorial First10 is unavailable.');
+    return;
+  }
+  const $ = id => document.getElementById(id);
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const routeText = step => {
+    const p = new URLSearchParams();
+    Object.entries(step.query || {}).forEach(([k,v]) => p.set(k,v));
+    return step.route + (p.toString() ? '?' + p.toString() : '');
+  };
+  const list = $('guideList');
+  list.innerHTML = T.steps.map((s,i) => `
+    <article class="guide-item" tabindex="0"
+      data-guide-index="${i}"
+      data-step-id="${esc(s.id)}"
+      data-route="${esc(routeText(s))}"
+      data-primary="${esc(s.primary)}"
+      data-fallbacks="${esc((s.fallback||[]).join('|'))}">
+      <div class="guide-item-kicker"><span>STEP ${String(i+1).padStart(2,'0')} / 10</span><span>${esc(s.id)}</span></div>
+      <h3>${esc(s.title)}</h3>
+      <p>${esc(s.instruction)}</p>
+      <div class="guide-meta">
+        <span>ROUTE: ${esc(routeText(s))}</span>
+        <span>TARGET: ${esc(s.primary)}</span>
+        <span>FALLBACK: ${esc((s.fallback||[]).join(' / '))}</span>
+      </div>
+    </article>`).join('');
+
+  function refresh(){
+    const st = T.getState();
+    const resumable = !!st.updatedAt && !st.active && !st.completed && !st.skipped;
+    $('guideResume').hidden = !resumable;
+    $('guideResume').textContent = resumable ? `Resume ${st.stepIndex+1}/10` : 'Resume';
+    let label = '未開始';
+    if (st.active) label = `進行中 ${st.stepIndex+1}/10`;
+    else if (st.completed) label = '完了 10/10 — Replayで最初から確認できます';
+    else if (st.skipped) label = `スキップ済み ${st.stepIndex+1}/10 — Replayで最初から確認できます`;
+    else if (resumable) label = `一時停止 ${st.stepIndex+1}/10 — Resumeで同じステップから再開できます`;
+    $('guideProgress').textContent = `Tutorial state: ${label}`;
+    document.querySelectorAll('.guide-item').forEach((el,i)=>{
+      if (i === st.stepIndex && (st.active || resumable)) el.setAttribute('aria-current','step');
+      else el.removeAttribute('aria-current');
+    });
+    return {state:st,resumable};
+  }
+
+  $('guideStart').addEventListener('click', () => { T.start(); refresh(); });
+  $('guideResume').addEventListener('click', () => { T.resume(); refresh(); });
+  $('guideReplay').addEventListener('click', () => { T.replay(); refresh(); });
+  window.addEventListener('storage', e => { if (e.key === T.storageKey) refresh(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
+  const timer = window.setInterval(refresh, 500);
+  window.addEventListener('pagehide', () => clearInterval(timer), {once:true});
+
+  window.DPRO_FUNERAL_GUIDE_CENTER = {
+    version: VERSION,
+    tutorialVersion: T.version,
+    tutorialStorageKey: T.storageKey,
+    count: T.steps.length,
+    refresh,
+    getItems: () => [...document.querySelectorAll('.guide-item')].map(el => ({
+      index:Number(el.dataset.guideIndex),
+      id:el.dataset.stepId,
+      route:el.dataset.route,
+      primary:el.dataset.primary,
+      fallbacks:(el.dataset.fallbacks||'').split('|').filter(Boolean),
+      title:el.querySelector('h3')?.textContent || '',
+      instruction:el.querySelector('p')?.textContent || ''
+    }))
+  };
+  refresh();
+})();
+</script>
 </body>
 </html>
