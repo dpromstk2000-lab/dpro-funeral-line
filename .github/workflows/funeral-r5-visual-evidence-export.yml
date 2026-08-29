@@ -1,0 +1,60 @@
+name: FUNERAL R5 Visual Evidence Export
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/funeral-r5-visual-evidence-export.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify R5 render inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f manuals/renders/quick-start/page-1.png
+          for i in 1 2 3 4 5 6 7 8; do
+            test -f "manuals/renders/detailed/page-${i}.png"
+          done
+          test "$(find manuals/renders/quick-start manuals/renders/detailed -maxdepth 1 -type f -name '*.png' | wc -l)" -eq 9
+
+      - name: Upload R5 visual evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: FUNERAL_R5_VISUAL_EVIDENCE
+          path: |
+            manuals/renders/quick-start/page-1.png
+            manuals/renders/detailed/page-1.png
+            manuals/renders/detailed/page-2.png
+            manuals/renders/detailed/page-3.png
+            manuals/renders/detailed/page-4.png
+            manuals/renders/detailed/page-5.png
+            manuals/renders/detailed/page-6.png
+            manuals/renders/detailed/page-7.png
+            manuals/renders/detailed/page-8.png
+          retention-days: 30
+
+      - name: Remove temporary visual evidence workflow
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin main
+          if [ -f .github/workflows/funeral-r5-visual-evidence-export.yml ]; then
+            git rm .github/workflows/funeral-r5-visual-evidence-export.yml
+            git commit -m 'Remove FUNERAL R5 visual evidence workflow [skip ci]'
+            git push origin main
+          fi
