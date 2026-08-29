@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = 'DPRO_FUNERAL_TUTORIAL_R3_20260829_V1';
+  const VERSION = 'DPRO_FUNERAL_TUTORIAL_R3_20260829_V2';
   const STORAGE_KEY = 'dpro_tutorial_funeral_v1';
   const CARD_ID = 'dpro-funeral-tutorial-card';
   const LAUNCHER_ID = 'dpro-funeral-tutorial-launcher';
@@ -72,16 +72,20 @@
   async function resolveTarget(step){
     clearHighlight();
     const selectors = [step.primary, ...step.fallback];
-    for (const selector of selectors) {
-      const el = document.querySelector(selector);
-      if (!isRendered(el)) continue;
-      try { el.scrollIntoView({behavior:'instant',block:'center',inline:'nearest'}); } catch { el.scrollIntoView({block:'center'}); }
-      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-      if (!intersectsViewport(el)) continue;
-      currentTarget = el;
-      el.classList.add(HIGHLIGHT);
-      return {el, selector, fallback: selector !== step.primary};
-    }
+    const deadline = Date.now() + 12000;
+    do {
+      for (const selector of selectors) {
+        const el = document.querySelector(selector);
+        if (!isRendered(el)) continue;
+        try { el.scrollIntoView({behavior:'instant',block:'center',inline:'nearest'}); } catch { el.scrollIntoView({block:'center'}); }
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+        if (!intersectsViewport(el)) continue;
+        currentTarget = el;
+        el.classList.add(HIGHLIGHT);
+        return {el, selector, fallback: selector !== step.primary};
+      }
+      if (Date.now() < deadline) await new Promise(r => setTimeout(r, 250));
+    } while (Date.now() < deadline);
     return {el:null,selector:null,fallback:true};
   }
   function injectStyle(){
