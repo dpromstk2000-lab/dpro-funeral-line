@@ -1,0 +1,14 @@
+{
+  "expected": "https://dpromstk2000-lab.github.io/dpro-funeral-line/demo-guide.html#guideCenter",
+  "decoded": [
+    {
+      "file": "manuals/renders/quick-start/page-1.png",
+      "url": "https://dpromstk2000-lab.github.io/dpro-funeral-line/demo-guide.html#guideCenter"
+    },
+    {
+      "file": "manuals/renders/detailed/page-1.png",
+      "url": "https://dpromstk2000-lab.github.io/dpro-funeral-line/demo-guide.html#guideCenter"
+    }
+  ],
+  "result": "PASS"
+}

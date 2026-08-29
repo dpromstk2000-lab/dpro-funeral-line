@@ -1,0 +1,146 @@
+[
+  {
+    "id": "FUNERAL-FIRST10-01",
+    "route": "demo-guide.html",
+    "query": {},
+    "title": "まず全体像を確認",
+    "primary": ".hero",
+    "fallback": [
+      "#primaryDemoLink",
+      ".hero-actions"
+    ],
+    "instruction": "公開デモの目的と、安全な確認順を最初に把握します。ここでは画面を見るだけです。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-02",
+    "route": "demo-guide.html",
+    "query": {},
+    "title": "4つの実画面と役割を確認",
+    "primary": "#screenGrid",
+    "fallback": [
+      "#primaryDemoLink",
+      ".grid"
+    ],
+    "instruction": "ご家族・マイページ・スタッフ・オーナーの役割分担を確認します。ボタンは自動操作しません。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-03",
+    "route": "index.html",
+    "query": {
+      "demo": "1"
+    },
+    "title": "ご家族の相談入口を確認",
+    "primary": "#consultationMenu",
+    "fallback": [
+      "#serviceGrid",
+      "#main"
+    ],
+    "instruction": "事前相談・会館見学・資料請求などの相談入口を確認します。入力や送信は行いません。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-04",
+    "route": "index.html",
+    "query": {
+      "demo": "1"
+    },
+    "title": "相談メニューの選択肢を確認",
+    "primary": "#serviceGrid",
+    "fallback": [
+      "#consultationMenu",
+      "#main"
+    ],
+    "instruction": "相談メニューの種類を確認します。サービス選択・日時入力・「次へ」・送信は自動実行しません。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-05",
+    "route": "member.html",
+    "query": {
+      "line_user_id": "demo_funeral_line_999",
+      "v": "funeral-10-r1-check"
+    },
+    "title": "相談・予約の現在地を確認",
+    "primary": "#overview",
+    "fallback": [
+      "#dashboardView",
+      "#accessView"
+    ],
+    "instruction": "既存の営業デモ家族で、相談・予約の概要を読み取り専用で確認します。変更希望や問い合わせ送信は行いません。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-06",
+    "route": "member.html",
+    "query": {
+      "line_user_id": "demo_funeral_line_002",
+      "v": "funeral-10-r1-check"
+    },
+    "title": "葬儀後フォローを確認",
+    "primary": "#aftercareSection",
+    "fallback": [
+      "#dashboardView",
+      "#accessView"
+    ],
+    "instruction": "営業デモ家族の葬儀後サポート項目を確認します。準備状況更新・問い合わせ送信は行いません。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-07",
+    "route": "staff.html",
+    "query": {
+      "demo": "1",
+      "staff": "tanaka",
+      "v": "funeral-10-r1-check"
+    },
+    "title": "担当スタッフの今日の仕事を確認",
+    "primary": "#view-today",
+    "fallback": [
+      ".hero",
+      "#login"
+    ],
+    "instruction": "本日の相談・期限タスク・担当案件の見え方を確認します。来所・完了・進捗更新ボタンは押しません。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-08",
+    "route": "staff.html",
+    "query": {
+      "demo": "1",
+      "staff": "tanaka",
+      "v": "funeral-10-r1-check"
+    },
+    "title": "期限が近いフォローを確認",
+    "primary": "#nearFollow",
+    "fallback": [
+      "#view-today",
+      "#login"
+    ],
+    "instruction": "葬儀後・法要・商品相談を横断した期限確認欄を見ます。状態変更やLINE文面記録は行いません。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-09",
+    "route": "owner.html",
+    "query": {
+      "demo": "1",
+      "v": "funeral-10-r1-check"
+    },
+    "title": "オーナーの全体状況を確認",
+    "primary": "#stats",
+    "fallback": [
+      "#page-dashboard",
+      "#gate"
+    ],
+    "instruction": "相談、未完了タスク、葬儀後フォロー、法要確認などの件数を一覧で確認します。編集操作は行いません。"
+  },
+  {
+    "id": "FUNERAL-FIRST10-10",
+    "route": "owner.html",
+    "query": {
+      "demo": "1",
+      "v": "funeral-10-r1-check"
+    },
+    "title": "法要公開の安全状態を確認",
+    "primary": "#dashMemorial",
+    "fallback": [
+      "#page-dashboard",
+      "#gate"
+    ],
+    "instruction": "法要候補と確認状態を確認します。確認・確定・家族公開などの更新操作は行いません。"
+  }
+]

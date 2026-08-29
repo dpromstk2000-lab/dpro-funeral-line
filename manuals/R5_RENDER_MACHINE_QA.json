@@ -1,0 +1,59 @@
+{
+  "renderedPages": [
+    {
+      "file": "manuals/renders/quick-start/page-1.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    },
+    {
+      "file": "manuals/renders/detailed/page-1.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    },
+    {
+      "file": "manuals/renders/detailed/page-2.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    },
+    {
+      "file": "manuals/renders/detailed/page-3.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    },
+    {
+      "file": "manuals/renders/detailed/page-4.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    },
+    {
+      "file": "manuals/renders/detailed/page-5.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    },
+    {
+      "file": "manuals/renders/detailed/page-6.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    },
+    {
+      "file": "manuals/renders/detailed/page-7.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    },
+    {
+      "file": "manuals/renders/detailed/page-8.png",
+      "width": 1489,
+      "height": 2105,
+      "blank": false
+    }
+  ],
+  "pageCount": 9
+}
