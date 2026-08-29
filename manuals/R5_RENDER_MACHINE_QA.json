@@ -55,5 +55,10 @@
       "blank": false
     }
   ],
-  "pageCount": 9
+  "pageCount": 9,
+  "expectedQuickPages": 1,
+  "expectedDetailedPages": 8,
+  "blankPages": 0,
+  "result": "PASS",
+  "visualQAEveryPage": "PENDING_MANUAL_REVIEW"
 }

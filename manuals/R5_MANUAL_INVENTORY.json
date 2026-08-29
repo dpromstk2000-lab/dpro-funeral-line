@@ -1,27 +1,39 @@
 {
   "DPRO_TUTORIAL_FUNERAL_DETAILED_MANUAL_V1.0.pdf": {
-    "bytes": 664912,
-    "sha256": "77a5689cb18287c149f9f59512a1508a2fa20001f2d02368d7b3630f8f494e1a"
+    "bytes": 665057,
+    "sha256": "6547e8daf509f1fb24c5c52295b4a07fca6adc1d09f70505cae09bd5dcc4f119"
   },
   "DPRO_TUTORIAL_FUNERAL_QUICK_START_V1.0.pdf": {
-    "bytes": 259475,
-    "sha256": "26322b8f50e88f8eede09d47a495f5201a50395871cdd04582ab7b83e88cf156"
+    "bytes": 259892,
+    "sha256": "189af886e5a3805e774feaa5e3abde618d2772a124b73c47248ad90ddb34e751"
   },
   "DPRO_TUTORIAL_FUNERAL_QUICK_START_V1.0_PREVIEW.png": {
-    "bytes": 264433,
-    "sha256": "0ccab7c0d1aaadc8ca3c84807c0e8b04b7a9c8ed618b257d4320bbe7e4fa137d"
+    "bytes": 269928,
+    "sha256": "3ba7ad22214b7ec1b91981fd39a307c61434d839fe030c462e9632f8e7da779b"
   },
   "FIRST10_LIVE_CONTRACT.json": {
     "bytes": 4373,
     "sha256": "db0bd14fc5a35abcfd911e44e29a3c7cfe0c23cb1cf64813eb099073e6986b27"
+  },
+  "R5_CLIPPING_FIX_NOTES.txt": {
+    "bytes": 179,
+    "sha256": "d3e441eb4856e5e68c3e0495df7708b2ea817c559aa8e097cb7807f38c94edf2"
+  },
+  "R5_MANUAL_INVENTORY.json": {
+    "bytes": 3970,
+    "sha256": "5e3d438406046ca921407c85e4648462b800431b34df946d2ce3d1500235dadd"
+  },
+  "R5_PRIVACY_SAFETY.txt": {
+    "bytes": 135,
+    "sha256": "e5a648c182e6d9e18eb3168b546dc2017d7b2abae2bb1b692924cc3ec0d3f367"
   },
   "R5_QR_QA.json": {
     "bytes": 466,
     "sha256": "7a6d93010ce629f32355dcc6f675dfec56893cd3e3c5444c519d4d7413db4899"
   },
   "R5_RENDER_MACHINE_QA.json": {
-    "bytes": 1218,
-    "sha256": "ef7d05201684d3c2cac1b91b6e38ef9e20810155021b12dc4ecc81479d31d38a"
+    "bytes": 1362,
+    "sha256": "33555aab956e27056980bc5f7f8db7272b695c6ed5953fe3ab357b39de983cba"
   },
   "R5_REQUEST_AUDIT.json": {
     "bytes": 56,
@@ -32,40 +44,40 @@
     "sha256": "48fb8d964336aca4b4996aa0470171de20cca9c67474b1153dddf0125121a4d7"
   },
   "renders/detailed/page-1.png": {
-    "bytes": 259703,
-    "sha256": "d576e05f7dabe740b795e3739934571d7d9289ec0efea1dacc4add50b71e14b6"
+    "bytes": 284047,
+    "sha256": "2e7a31ac17b9ba86e1370e0c0d853ca5b59723acf82b0b4a1fcadb0fcb032779"
   },
   "renders/detailed/page-2.png": {
     "bytes": 236736,
     "sha256": "847ea4f3af7e33530bec50e1b093ce1c3f75c66807b72fee9bc85b58d02bbf5c"
   },
   "renders/detailed/page-3.png": {
-    "bytes": 251893,
-    "sha256": "e21de557e7b133cc0bdbb90bd791e705ce8526f4640f521dbe430182a74e6c07"
+    "bytes": 254088,
+    "sha256": "cca58c97c74a90d90d90ac899874ad6e31b774a922b8900d1d03c7fefbb19515"
   },
   "renders/detailed/page-4.png": {
-    "bytes": 270312,
-    "sha256": "6373f9fc8df697cae1c71c8b7128783202dfcf137cef08d7f04558118f448cf3"
+    "bytes": 272277,
+    "sha256": "1c0a7cc9cbbf9702ed7fb4305ad03c42a45dda682dc950def49262470d359137"
   },
   "renders/detailed/page-5.png": {
-    "bytes": 284991,
-    "sha256": "e369f3d27aee5d6dbb61bc28255ccb17e5cdbd7aa5a759d4b27a938a4b5ce93e"
+    "bytes": 287278,
+    "sha256": "c98f8aca6f326446410c24fd5b136b79b72d391cdf5f8f1304ec6c0431b9eefe"
   },
   "renders/detailed/page-6.png": {
-    "bytes": 261913,
-    "sha256": "d726f3bb0c3207ecc8acff2b5a53d9fd99e9468d4e1d6dad9737d7eff8aa1ae5"
+    "bytes": 264271,
+    "sha256": "f418c074ae8e664ba782ca110d0a86b8aa95d9e19b3a229c506e144160b9b3c3"
   },
   "renders/detailed/page-7.png": {
-    "bytes": 284401,
-    "sha256": "24e00b22a0c459eccaad9d9e0492a9ad42dde1b223426f6a7161057d80f4c1f6"
+    "bytes": 285986,
+    "sha256": "e7e44a23b6b8d13ec4c51561875af7ba180e1b3eed7492c32a5f57024b8a74d1"
   },
   "renders/detailed/page-8.png": {
-    "bytes": 228261,
-    "sha256": "ed6f7c154e4a342358bca74de39980176fe3e045016a8d7c9d58290869aa7f4d"
+    "bytes": 234013,
+    "sha256": "0e2e562a1bd4f0bd6d42db3054df0ef414f17c36beffcf0b8719ab87329b384f"
   },
   "renders/quick-start/page-1.png": {
-    "bytes": 264433,
-    "sha256": "0ccab7c0d1aaadc8ca3c84807c0e8b04b7a9c8ed618b257d4320bbe7e4fa137d"
+    "bytes": 269928,
+    "sha256": "3ba7ad22214b7ec1b91981fd39a307c61434d839fe030c462e9632f8e7da779b"
   },
   "source-screens/guide-center.png": {
     "bytes": 219602,
